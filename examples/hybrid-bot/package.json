@@ -1,0 +1,16 @@
+{
+  "name": "@shardix/example-hybrid-bot",
+  "private": true,
+  "version": "0.2.5",
+  "description": "Shardix Dogfooding App 3 — Hybrid Bot (Gateway + HTTP Interactions coexistence)",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/discordjs": "workspace:*",
+    "@shardix/http": "workspace:*",
+    "@shardix/transport": "workspace:*"
+  }
+}

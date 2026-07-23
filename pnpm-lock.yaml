@@ -45,6 +45,63 @@ importers:
         specifier: workspace:*
         version: link:../../packages/transport
 
+  examples/hybrid-bot:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@shardix/discordjs':
+        specifier: workspace:*
+        version: link:../../packages/discordjs
+      '@shardix/http':
+        specifier: workspace:*
+        version: link:../../packages/http
+      '@shardix/transport':
+        specifier: workspace:*
+        version: link:../../packages/transport
+
+  examples/large-bot-simulation:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+
+  examples/moderation-bot:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@shardix/discordjs':
+        specifier: workspace:*
+        version: link:../../packages/discordjs
+      '@shardix/transport':
+        specifier: workspace:*
+        version: link:../../packages/transport
+
+  examples/ping-bot:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@shardix/http':
+        specifier: workspace:*
+        version: link:../../packages/http
+      '@shardix/transport':
+        specifier: workspace:*
+        version: link:../../packages/transport
+
   packages/cache:
     dependencies:
       '@shardix/common':

@@ -1,0 +1,15 @@
+{
+  "name": "@shardix/example-ping-bot",
+  "private": true,
+  "version": "0.2.5",
+  "description": "Shardix Dogfooding App 1 — Ping Bot with HTTP Runtime (Slash, Button, Modal, Autocomplete)",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/http": "workspace:*",
+    "@shardix/transport": "workspace:*"
+  }
+}

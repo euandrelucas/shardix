@@ -1,0 +1,13 @@
+{
+  "name": "@shardix/example-large-bot-simulation",
+  "private": true,
+  "version": "0.2.5",
+  "description": "Shardix Dogfooding App 4 — Large Bot Scale Simulation (50 Controllers, 250 Commands, 100 Providers)",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*"
+  }
+}

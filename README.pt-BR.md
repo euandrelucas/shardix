@@ -15,10 +15,10 @@
 </p>
 
 <p align="center">
-  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.2.0-8b5cf6?style=for-the-badge&logo=typescript">
+  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.2.5-8b5cf6?style=for-the-badge&logo=typescript">
   <img alt="Zero Vendor Lock-in" src="https://img.shields.io/badge/Vendor--Lock--in-ZERO-22c55e?style=for-the-badge">
+  <img alt="Auditoria" src="https://img.shields.io/badge/Auditoria-APROVADO-22c55e?style=for-the-badge">
   <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Gateway%20%7C%20HTTP%20%7C%20H%C3%ADbrido-orange?style=for-the-badge">
-  <img alt="Transport" src="https://img.shields.io/badge/HTTP%20Interactions-Nativo-blue?style=for-the-badge">
   <img alt="Licença" src="https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=for-the-badge">
 </p>
 

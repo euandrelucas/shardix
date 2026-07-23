@@ -1,0 +1,15 @@
+{
+  "name": "@shardix/example-moderation-bot",
+  "private": true,
+  "version": "0.2.5",
+  "description": "Shardix Dogfooding App 2 — Moderation Bot with Gateway Runtime (Ban, Kick, Timeout, Purge, Slowmode, Lock)",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/discordjs": "workspace:*",
+    "@shardix/transport": "workspace:*"
+  }
+}
