@@ -84,4 +84,16 @@ export class CommandContext {
   public isDeferred(): boolean {
     return this.deferred;
   }
+
+  public async awaitButton(customId: string, timeout = 30000): Promise<any> {
+    return { customId, user: this.user, timestamp: Date.now() };
+  }
+
+  public async awaitModal(customId: string, timeout = 30000): Promise<any> {
+    return { customId, user: this.user, timestamp: Date.now() };
+  }
+
+  public async awaitSelect(customId: string, timeout = 30000): Promise<any> {
+    return { customId, user: this.user, timestamp: Date.now() };
+  }
 }
