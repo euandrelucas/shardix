@@ -16,6 +16,7 @@ import { ProviderManager } from '../providers/provider-manager.js';
 import { ShardixRestClient } from '../rest/shardix-rest-client.js';
 import { ShardixCacheManager } from '../cache/shardix-cache-manager.js';
 import { PresenceManager } from '../presence/presence-manager.js';
+import { GatewayRuntime } from '../runtime/gateway-runtime.js';
 
 export interface ShardixOptions {
   adapter?: DiscordAdapter;
@@ -40,6 +41,7 @@ export class ShardixApplication {
   private runtime?: Runtime;
   private adapter?: DiscordAdapter;
   private autoAnalyze: boolean;
+  private keepAliveInterval?: NodeJS.Timeout;
 
   constructor(options: ShardixOptions = {}) {
     this.rest = new ShardixRestClient(this);
@@ -112,17 +114,41 @@ export class ShardixApplication {
       }
     }
 
-    // Start via Runtime if provided
+    // Default to GatewayRuntime if an adapter is configured and no runtime explicitly provided
+    if (!this.runtime && this.adapter) {
+      this.runtime = new GatewayRuntime();
+    }
+
     if (this.runtime) {
       await this.runtime.start(this);
-    } else {
-      for (const transport of this.transports) {
-        await transport.listen((payload) => this.router.handleInteraction(payload));
+    }
+
+    for (const transport of this.transports) {
+      await transport.listen((payload) => this.router.handleInteraction(payload));
+    }
+
+    if (this.adapter && typeof this.adapter.login === 'function') {
+      const token = process.env.DISCORD_TOKEN;
+      if (token && process.env.NODE_ENV !== 'test') {
+        try {
+          await this.adapter.login(token);
+        } catch (err: any) {
+          console.error('[Shardix Application] Adapter login failed:', err?.message || err);
+        }
       }
+    }
+
+    // Keep process alive for standalone bots
+    if (process.env.NODE_ENV !== 'test') {
+      this.keepAliveInterval = setInterval(() => {}, 60000);
     }
   }
 
   public async stop(signal?: string): Promise<void> {
+    if (this.keepAliveInterval) {
+      clearInterval(this.keepAliveInterval);
+    }
+
     if (this.runtime) {
       await this.runtime.stop();
     } else {

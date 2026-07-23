@@ -3,25 +3,32 @@ import { GatewayTransport } from '@shardix/transport';
 import { DiscordAdapter } from '@shardix/common';
 
 export interface GatewayRuntimeOptions {
-  adapter: DiscordAdapter;
+  adapter?: DiscordAdapter;
   token?: string;
 }
 
 export class GatewayRuntime extends BaseRuntime {
   public readonly name = 'GatewayRuntime';
-  private transport: GatewayTransport;
+  private transport?: GatewayTransport;
+  private options?: GatewayRuntimeOptions;
 
-  constructor(options: GatewayRuntimeOptions) {
+  constructor(options?: GatewayRuntimeOptions) {
     super();
-    this.transport = new GatewayTransport(options);
+    this.options = options;
   }
 
   protected async onStart(): Promise<void> {
     if (!this.app) return;
-    await this.transport.listen((payload: any) => this.app!.getRouter().handleInteraction(payload));
+    const adapter = this.options?.adapter || this.app.getAdapter();
+    if (adapter) {
+      this.transport = new GatewayTransport({ adapter, token: this.options?.token });
+      await this.transport.listen((payload: any) => this.app!.getRouter().handleInteraction(payload));
+    }
   }
 
   protected async onStop(): Promise<void> {
-    await this.transport.close();
+    if (this.transport) {
+      await this.transport.close();
+    }
   }
 }

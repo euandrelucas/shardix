@@ -44,18 +44,18 @@ export function createProjectFiles(options: InitProjectOptions): string {
     scripts: {
       build: 'tsup',
       start: 'node dist/main.js',
-      dev: 'ts-node src/main.ts',
+      dev: 'tsx watch src/main.ts',
     },
     dependencies: {
-      '@shardix/core': '^0.2.0',
-      '@shardix/common': '^0.2.0',
-      [selectedAdapter.pkg]: '^0.2.0',
+      '@shardix/core': '^0.8.0',
+      '@shardix/common': '^0.8.0',
+      [selectedAdapter.pkg]: '^0.8.0',
       [selectedAdapter.client]: selectedAdapter.clientVer,
       dotenv: '^16.4.7',
     },
     devDependencies: {
       '@types/node': '^22.10.1',
-      'ts-node': '^10.9.2',
+      tsx: '^4.19.2',
       tsup: '^8.3.5',
       typescript: '^5.7.2',
     },

@@ -115,8 +115,13 @@ export function Event(eventName: string): MethodDecorator {
   };
 }
 
-export const On = Event;
-export const Once = Event;
+export function On(eventName: string): MethodDecorator {
+  return Event(eventName);
+}
+
+export function Once(eventName: string): MethodDecorator {
+  return Event(eventName);
+}
 
 export function Cron(expression: string): MethodDecorator {
   return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
