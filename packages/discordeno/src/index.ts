@@ -8,7 +8,7 @@ export interface DiscordenoClientOptions {
 
 export class DiscordenoAdapter implements DiscordAdapter<any> {
   public readonly name = 'DiscordenoAdapter';
-  public readonly version = '0.5.0';
+  public readonly version = '0.8.0';
   private bot: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
@@ -17,9 +17,10 @@ export class DiscordenoAdapter implements DiscordAdapter<any> {
     try {
       const { createBot } = require('@discordeno/bot');
       const token = options.token || process.env.DISCORD_TOKEN || 'mock_token';
+      const defaultIntents = options.intents || (1 | 512 | 32768 | 2 | 128); // Guilds, GuildMessages, MessageContent, GuildMembers, GuildVoiceStates
       this.bot = createBot({
         token,
-        intents: options.intents || 0,
+        intents: defaultIntents,
         events: {},
       });
     } catch {
@@ -84,14 +85,21 @@ export class DiscordenoAdapter implements DiscordAdapter<any> {
               id: interaction.id,
               type: interaction.type,
               token: interaction.token,
-              data: interaction.data,
+              data: {
+                name: interaction.data?.name,
+                custom_id: interaction.data?.customId || interaction.data?.custom_id,
+                options: interaction.data?.options || [],
+              },
               guild_id: interaction.guildId,
               channel_id: interaction.channelId,
               user: interaction.user,
               member: interaction.member,
             },
           };
-          await this.rawHandler(rawPayload);
+          const result: any = await this.rawHandler(rawPayload);
+          if (result && typeof result === 'object' && 'data' in result && typeof interaction.respond === 'function') {
+            await interaction.respond(result.data.content || result.data);
+          }
         }
       };
     }

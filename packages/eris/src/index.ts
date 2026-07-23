@@ -8,7 +8,7 @@ export interface ErisClientOptions {
 
 export class ErisAdapter implements DiscordAdapter<any> {
   public readonly name = 'ErisAdapter';
-  public readonly version = '0.5.0';
+  public readonly version = '0.8.0';
   private client: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
@@ -17,7 +17,11 @@ export class ErisAdapter implements DiscordAdapter<any> {
     try {
       const Eris = require('eris');
       const token = options.token || process.env.DISCORD_TOKEN || 'mock_token';
-      this.client = new Eris(token, options.options || {});
+      const erisOptions = options.options || {};
+      if (!erisOptions.intents) {
+        erisOptions.intents = ['guilds', 'guildMessages', 'guildMembers', 'guildVoiceStates', 'messageContent'];
+      }
+      this.client = new Eris(token, erisOptions);
     } catch {
       this.client = null;
     }
@@ -79,14 +83,23 @@ export class ErisAdapter implements DiscordAdapter<any> {
               id: interaction.id,
               type: interaction.type,
               token: interaction.token,
-              data: interaction.data,
+              data: {
+                name: interaction.data?.name,
+                custom_id: interaction.data?.custom_id,
+                options: interaction.data?.options || [],
+              },
               guild_id: interaction.guildID,
               channel_id: interaction.channelID,
               member: interaction.member,
               user: interaction.user,
             },
           };
-          await this.rawHandler(rawPayload);
+          const result: any = await this.rawHandler(rawPayload);
+          if (result && typeof result === 'object' && 'data' in result && typeof interaction.createMessage === 'function') {
+            if (!interaction.acknowledged) {
+              await interaction.createMessage(result.data.content || result.data);
+            }
+          }
         }
       });
     }

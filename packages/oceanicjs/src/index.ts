@@ -8,7 +8,7 @@ export interface OceanicClientOptions {
 
 export class OceanicAdapter implements DiscordAdapter<any> {
   public readonly name = 'OceanicAdapter';
-  public readonly version = '0.5.0';
+  public readonly version = '0.8.0';
   private client: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
@@ -17,9 +17,13 @@ export class OceanicAdapter implements DiscordAdapter<any> {
     try {
       const { Client } = require('oceanic.js');
       const auth = options.auth || (process.env.DISCORD_TOKEN ? `Bot ${process.env.DISCORD_TOKEN}` : undefined);
+      const gatewayOptions = options.gateway || {};
+      if (!gatewayOptions.intents) {
+        gatewayOptions.intents = ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MEMBERS', 'GUILD_VOICE_STATES', 'MESSAGE_CONTENT'];
+      }
       this.client = new Client({
         auth,
-        gateway: options.gateway || {},
+        gateway: gatewayOptions,
       });
     } catch {
       this.client = null;
@@ -82,14 +86,23 @@ export class OceanicAdapter implements DiscordAdapter<any> {
               id: interaction.id,
               type: interaction.type,
               token: interaction.token,
-              data: interaction.data,
+              data: {
+                name: interaction.data?.name,
+                custom_id: interaction.data?.customID || interaction.data?.custom_id,
+                options: interaction.data?.options || [],
+              },
               guild_id: interaction.guildID,
               channel_id: interaction.channelID,
               user: interaction.user,
               member: interaction.member,
             },
           };
-          await this.rawHandler(rawPayload);
+          const result: any = await this.rawHandler(rawPayload);
+          if (result && typeof result === 'object' && 'data' in result && typeof interaction.createMessage === 'function') {
+            if (!interaction.acknowledged) {
+              await interaction.createMessage(result.data.content || result.data);
+            }
+          }
         }
       });
     }
