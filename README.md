@@ -1,140 +1,78 @@
-<h1 align="center">⚡ Shardix</h1>
+# Shardix Framework
 
 <p align="center">
-  <b>The Enterprise-Grade Architectural Framework for Discord Applications & Bots</b>
+  <img src="https://img.shields.io/badge/Shardix-Architecture%20Framework-8b5cf6?style=for-the-badge&logo=discord" alt="Shardix Banner" />
 </p>
 
 <p align="center">
-  <a href="README.pt-BR.md">Português (Brasil)</a> •
-  <a href="#-key-features">Key Features</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-monorepo-packages">Packages</a> •
-  <a href="#-license">License</a>
+  <b>Enterprise Architecture & Productivity Framework for Discord Applications & Bots</b><br>
+  Inspired by NestJS architectural principles for Node.js & TypeScript.
 </p>
 
 <p align="center">
   <img alt="Shardix Version" src="https://img.shields.io/badge/version-0.4.0-8b5cf6?style=for-the-badge&logo=typescript">
   <img alt="Zero Vendor Lock-in" src="https://img.shields.io/badge/Vendor--Lock--in-ZERO-22c55e?style=for-the-badge">
-  <img alt="Distributed Architecture" src="https://img.shields.io/badge/Architecture-Distributed%20Workers-blue?style=for-the-badge">
-  <img alt="Official Providers" src="https://img.shields.io/badge/Official%20Providers-7%20Packages-purple?style=for-the-badge">
-  <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Distributed%20%7C%20Gateway%20%7C%20HTTP-orange?style=for-the-badge">
+  <img alt="Multi Lib Support" src="https://img.shields.io/badge/Adapters-Discord.js%20%7C%20Eris%20%7C%20Oceanic.js%20%7C%20Discordeno-blue?style=for-the-badge">
+  <img alt="Distributed Architecture" src="https://img.shields.io/badge/Architecture-Distributed%20Workers-purple?style=for-the-badge">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge">
 </p>
 
 ---
 
-## 🎯 What is Shardix?
+## 💡 What is Shardix?
 
-**Shardix is NOT a Discord API wrapper library** (and does not aim to replace `discord.js`, `Eris`, or `Discordeno`).
+**Shardix is NOT a Discord API wrapper library.** It does not aim to replace `discord.js`, `Eris`, `Oceanic.js`, or `Discordeno`.
 
-Instead, **Shardix is for Discord bots what [NestJS](https://nestjs.com/) is for Express/Fastify**:
-
-> An enterprise architectural framework focused on productivity, maintainability, modularity, and high-performance scalability.
-
-While Discord API libraries remain responsible for low-level socket or REST protocol interactions, **Shardix handles**:
-* 🏛️ **Clean Architecture & SOLID**
-* ⚡ **Abstract Transport Layer** (First-class HTTP Interactions & Gateway)
-* 🔌 **Zero Vendor Lock-in** (Interchangeable Library Adapters)
-* 📦 **Dependency Injection (IoC Container)** (Singleton, Scoped & Transient)
-* 🎨 **Declarative Decorators** (`@Controller()`, `@SlashCommand()`, `@Button()`, `@Event()`, etc.)
-* 🚀 **Infrastructure & Observability Ready** (Docker, Kubernetes, Redis, Pino Logger, Prometheus)
+Instead, Shardix is to Discord bots what **NestJS** is to Express/Fastify:
+> An enterprise-grade framework for software architecture, dependency injection, scalability, observability, and developer experience.
 
 ---
 
-## ✨ Key Features
+## 🔌 Zero Vendor Lock-in (Multi-Library Adapters)
 
-| Feature | Description | Benefit |
-|---------|-------------|---------|
-| **Zero Vendor Lock-in** | Decoupled Core communicating strictly through `DiscordAdapter` interfaces | Swap `discord.js` for `Eris` or `Discordeno` without changing business code |
-| **HTTP Interactions 1st Class** | Full ed25519 signature-validated Fastify HTTP server built-in | 0 WebSocket connections, serverless compatibility, 90%+ RAM reduction |
-| **Native IoC Container** | Complete Dependency Injection engine with Metadata Reflection | Easy mocking, testing, and clean service separation |
-| **Universal Routing** | Same handler code works transparently on Gateway or HTTP | Write once, run everywhere |
-| **Distributed EventBus** | Native event bus with Redis Pub/Sub integration | Seamless horizontal scaling across multiple pods |
-| **Interactive CLI** | `create-shardix` scaffolding wizard | Spin up production-ready projects in seconds |
+With Shardix, your business logic (Controllers, Services, Guards, Interceptors) is **100% decoupled** from any Discord library. You can swap your Discord library at any time by changing a single line of code!
+
+Official Adapters:
+* `@shardix/discordjs`: Official adapter for Discord.js
+* `@shardix/eris`: Official adapter for Eris
+* `@shardix/oceanicjs`: Official adapter for Oceanic.js
+* `@shardix/discordeno`: Official adapter for Discordeno
 
 ---
 
-## 🚀 Quick Start
-
-### 1. Scaffold a Project with `create-shardix`
-
-```bash
-npx create-shardix
-```
-
-Follow the interactive wizard to select your preferred library adapter, transport mode, ORM, Redis, and deployment manifests.
-
-### 2. Declarative Code Example
+## ⚡ Code Example (Swapping Adapters)
 
 ```typescript
-import { Controller, SlashCommand, Button, Injectable, Module } from '@shardix/common';
-import { ShardixFactory } from '@shardix/core';
-import { HttpInteractionsTransport } from '@shardix/transport';
+import { Controller, SlashCommand, UseGuards } from '@shardix/common';
+import { ShardixFactory, AutoScanner } from '@shardix/core';
 
-@Injectable()
-export class PingService {
-  getPongMessage() {
-    return 'Pong! Powered by Shardix HTTP Interactions 🚀';
-  }
-}
+// 1. Choose ANY Discord Library Adapter
+import { DiscordJSAdapter } from '@shardix/discordjs';
+// import { ErisAdapter } from '@shardix/eris';
+// import { OceanicAdapter } from '@shardix/oceanicjs';
+// import { DiscordenoAdapter } from '@shardix/discordeno';
 
 @Controller()
-export class AppController {
-  constructor(private pingService: PingService) {}
-
-  @SlashCommand({
-    name: 'ping',
-    description: 'Replies with pong',
-  })
+export class PingController {
+  @SlashCommand({ name: 'ping', description: 'Check bot responsiveness' })
   async ping() {
     return {
       type: 4,
       data: {
-        content: this.pingService.getPongMessage(),
-        components: [
-          {
-            type: 1,
-            components: [
-              {
-                type: 2,
-                label: 'Click Me!',
-                style: 1,
-                custom_id: 'btn_ping',
-              },
-            ],
-          },
-        ],
+        content: '🏓 Pong! Shardix is running cleanly across any Discord library!',
       },
-    };
-  }
-
-  @Button('btn_ping')
-  async onButtonClick() {
-    return {
-      type: 4,
-      data: { content: 'Button clicked! 🎉' },
     };
   }
 }
 
-@Module({
-  controllers: [AppController],
-  providers: [PingService],
-})
-export class AppModule {}
-
 async function bootstrap() {
   const app = await ShardixFactory.create({
-    transport: new HttpInteractionsTransport({
-      port: 3000,
-      publicKey: process.env.DISCORD_PUBLIC_KEY,
-    }),
+    adapter: new DiscordJSAdapter(), // Swap with ErisAdapter, OceanicAdapter, or DiscordenoAdapter anytime!
   });
 
-  app.register(AppModule);
+  AutoScanner.scanAndRegister(app, [PingController]);
+
   await app.start();
-  console.log('Shardix Application running on port 3000');
 }
 
 bootstrap();
@@ -142,67 +80,45 @@ bootstrap();
 
 ---
 
-## 🏗️ Architecture & Transports
+## 🏢 Enterprise Layered Architecture
 
-Shardix abstracts the underlying channel used to receive events and interactions.
-
-```
-       +---------------------------------------------+
-       |             Shardix Application             |
-       +---------------------------------------------+
-                              |
-                   +---------------------+
-                   |   Transport Layer   |
-                   +---------------------+
-                              |
-       +----------------------+----------------------+
-       |                                             |
-+--------------+                             +---------------+
-| Gateway WS   |                             | HTTP POST     |
-| Transport    |                             | Interactions  |
-+--------------+                             +---------------+
-       |                                             |
-+--------------+                             +---------------+
-| Discord      |                             | Fastify HTTP  |
-| Adapter      |                             | Server        |
-+--------------+                             +---------------+
+```text
+                 Application
+                     │
+             Distributed Runtime
+        ┌────────────┼────────────┐
+     Worker       Worker       Worker
+        │            │            │
+    Transport    Transport    Transport
+        │            │            │
+     Adapter      Adapter      Adapter
+        │            │            │
+    Providers    Providers    Providers
 ```
 
 ---
 
-## 📦 Monorepo Packages
+## 🛠️ Official Ecosystem Packages
 
-```
-packages/
-├── @shardix/common       # Interfaces, decorators, lifecycle hooks & constants
-├── @shardix/core         # IoC Container, Router & ShardixFactory
-├── @shardix/transport    # Gateway & HTTP Interactions transports
-├── @shardix/http         # Fastify HTTP engine & ed25519 signature verification
-├── @shardix/discordjs    # Official discord.js v14+ adapter
-├── @shardix/logger       # Pino-inspired structured logger
-├── @shardix/cache        # Memory & Redis cache engine
-├── @shardix/events       # Local & Distributed EventBus (Redis Pub/Sub)
-└── create-shardix        # Interactive CLI scaffolding tool
-```
-
----
-
-## 🧪 Testing
-
-Shardix is built with testability as a core requirement. Unit test services and controllers easily with Vitest:
-
-```bash
-pnpm test
-```
+| Package | Description |
+|---|---|
+| `@shardix/common` | Interfaces, contracts, decorators (`@Controller`, `@SlashCommand`, `@Injectable`) |
+| `@shardix/core` | IoC Container, Dependency Injection, Router, Reflection Engine |
+| `@shardix/cluster` | Cluster Manager & Worker Node abstractions |
+| `@shardix/ipc` | Inter-process & distributed message communication layer |
+| `@shardix/runtime-distributed` | Distributed Runtime orchestrating worker nodes |
+| `@shardix/provider-config` | Config API loading `shardix.config.ts` and `.env` |
+| `@shardix/provider-logger` | High-performance structured logger (JSON & Pretty) |
+| `@shardix/provider-cache` | Unified Memory & Redis Cache Provider |
+| `@shardix/provider-eventbus` | Local & Distributed Pub/Sub Event Bus Provider |
+| `@shardix/provider-health` | Liveness, Readiness, and Health probe Provider |
+| `@shardix/provider-queue` | Background job queue provider (Retries & Delayed Jobs) |
+| `@shardix/provider-observability` | OpenTelemetry & Prometheus observability provider |
+| `@shardix/dashboard-api` | REST API for monitoring workers, health, logs & metrics |
+| `@shardix/cli` | Interactive CLI code generator & production diagnostic doctor |
 
 ---
 
 ## 📄 License
 
-Shardix is open-source software licensed under the [MIT License](LICENSE).
-
----
-
-<p align="center">
-  Made with 💜 for the Discord Developer Community
-</p>
+MIT © [Shardix Team](LICENSE)

@@ -1,0 +1,17 @@
+{
+  "name": "@shardix/example-multi-adapter-bot",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Shardix Multi-Adapter Example — Swapping between Discord.js, Eris, Oceanic.js, and Discordeno adapters with zero business logic changes",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/discordeno": "workspace:*",
+    "@shardix/discordjs": "workspace:*",
+    "@shardix/eris": "workspace:*",
+    "@shardix/oceanicjs": "workspace:*"
+  }
+}

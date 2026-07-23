@@ -31,6 +31,10 @@ export default defineConfig({
       '@shardix/provider-queue': path.resolve(__dirname, '../../packages/provider-queue/src/index.ts'),
       '@shardix/provider-observability': path.resolve(__dirname, '../../packages/provider-observability/src/index.ts'),
       '@shardix/dashboard-api': path.resolve(__dirname, '../../packages/dashboard-api/src/index.ts'),
+      '@shardix/discordjs': path.resolve(__dirname, '../../packages/discordjs/src/index.ts'),
+      '@shardix/eris': path.resolve(__dirname, '../../packages/eris/src/index.ts'),
+      '@shardix/oceanicjs': path.resolve(__dirname, '../../packages/oceanicjs/src/index.ts'),
+      '@shardix/discordeno': path.resolve(__dirname, '../../packages/discordeno/src/index.ts'),
     },
   },
   test: {
