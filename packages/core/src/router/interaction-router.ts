@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import {
+  CommandContext,
   ExecutionContext,
   Guard,
   InteractionPayload,
@@ -176,8 +177,20 @@ export class InteractionRouter {
       }
     }
 
-    // Execute Handler with Interceptors pipeline
-    const handler = () => match!.controllerInstance[match!.methodName](payload);
+    // Check Permission Decorator Metadata
+    const isGuildOnly = Reflect.getMetadata('shardix:guild_only', match.controllerInstance, match.methodName);
+    if (isGuildOnly && !payload.guild_id) {
+      return { type: 4, data: { content: 'This command can only be used in a server (Guild).' } };
+    }
+
+    const isDmOnly = Reflect.getMetadata('shardix:dm_only', match.controllerInstance, match.methodName);
+    if (isDmOnly && payload.guild_id) {
+      return { type: 4, data: { content: 'This command can only be used in Direct Messages (DMs).' } };
+    }
+
+    // Execute Handler with Interceptors pipeline (passes CommandContext as 1st arg, payload as 2nd)
+    const ctx = new CommandContext(payload);
+    const handler = () => match!.controllerInstance[match!.methodName](ctx, payload);
     
     let pipeline = handler;
     for (const InterceptorClass of match.interceptors.reverse()) {

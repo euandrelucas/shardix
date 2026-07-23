@@ -1,6 +1,6 @@
 {
   "name": "@shardix/oceanicjs",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Official Oceanic.js Adapter for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-config",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Official Config Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

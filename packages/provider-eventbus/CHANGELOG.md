@@ -1,5 +1,13 @@
 # @shardix/provider-eventbus
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.5.0
+  - @shardix/events@0.1.4
+
 ## 0.3.3
 
 ### Patch Changes

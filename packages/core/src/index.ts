@@ -13,3 +13,9 @@ export * from './reflection/reflection-container.js';
 export * from './discovery/auto-scanner.js';
 export * from './analyzer/project-analyzer.js';
 export * from './providers/provider-manager.js';
+
+// v0.7 Platform Exports
+export * from './rest/shardix-rest-client.js';
+export * from './cache/shardix-cache-manager.js';
+export * from './collectors/collector-manager.js';
+export * from './voice/voice-foundation.js';

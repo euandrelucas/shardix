@@ -13,6 +13,8 @@ import { Container } from '../di/container.js';
 import { InteractionRouter } from '../router/interaction-router.js';
 import { ProjectAnalyzer } from '../analyzer/project-analyzer.js';
 import { ProviderManager } from '../providers/provider-manager.js';
+import { ShardixRestClient } from '../rest/shardix-rest-client.js';
+import { ShardixCacheManager } from '../cache/shardix-cache-manager.js';
 
 export interface ShardixOptions {
   adapter?: DiscordAdapter;
@@ -24,6 +26,8 @@ export interface ShardixOptions {
 }
 
 export class ShardixApplication {
+  public readonly rest: ShardixRestClient;
+  public readonly cache = new ShardixCacheManager();
   private container = new Container();
   private router = new InteractionRouter(this.container);
   private providerManager = new ProviderManager(this);
@@ -36,6 +40,7 @@ export class ShardixApplication {
   private autoAnalyze: boolean;
 
   constructor(options: ShardixOptions = {}) {
+    this.rest = new ShardixRestClient(this);
     this.adapter = options.adapter;
     this.autoAnalyze = options.autoAnalyze !== false;
 

@@ -1,6 +1,6 @@
 {
   "name": "@shardix/core",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Core architecture, IoC container and application factory for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

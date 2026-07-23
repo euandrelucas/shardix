@@ -115,7 +115,7 @@ export function mockInteraction(options: {
       name: options.command,
       custom_id: options.customId,
     },
-    guild_id: options.guildId || 'mock_guild_123',
+    guild_id: 'guildId' in options ? (options.guildId as string) : 'mock_guild_123',
     user: { id: options.userId || 'mock_user_456', username: 'TestUser' },
     member: { user: { id: options.userId || 'mock_user_456', username: 'TestUser' }, roles: [] },
   };

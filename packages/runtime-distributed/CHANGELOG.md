@@ -1,5 +1,15 @@
 # @shardix/runtime-distributed
 
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.5.0
+  - @shardix/core@0.5.0
+  - @shardix/cluster@0.5.3
+  - @shardix/ipc@0.4.4
+
 ## 0.4.3
 
 ### Patch Changes

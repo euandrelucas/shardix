@@ -1,6 +1,6 @@
 {
   "name": "@shardix/cluster",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Cluster Manager and Worker Node abstractions for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
