@@ -1,11 +1,14 @@
 {
-  "name": "create-shardix",
-  "version": "0.1.0",
-  "description": "Interactive CLI Wizard to create Shardix applications",
+  "name": "@shardix/cli",
+  "version": "0.5.1",
+  "description": "Official CLI and project generator for Shardix Framework",
   "main": "./dist/index.js",
   "bin": {
-    "create-shardix": "./bin/create-shardix.js",
-    "shardix": "./bin/create-shardix.js"
+    "shardix": "./bin/create-shardix.js",
+    "create-shardix": "./bin/create-shardix.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup",

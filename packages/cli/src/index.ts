@@ -1,11 +1,13 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { generateComponent, GenerateType } from './commands/generate.js';
+import { createProjectFiles, InitProjectOptions } from './commands/init.js';
 
 async function main() {
   const args = process.argv.slice(2);
+  const command = args[0];
 
-  if (args[0] === 'dashboard') {
+  if (command === 'dashboard') {
     const sub = args[1];
     if (sub === 'start') {
       console.log(pc.cyan('⚡ Starting Shardix Control Plane Dashboard on http://localhost:3005...'));
@@ -20,14 +22,14 @@ async function main() {
     return;
   }
 
-  if (args[0] === 'cluster' && args[1] === 'status') {
+  if (command === 'cluster' && args[1] === 'status') {
     console.log(pc.cyan('⚡ Shardix Cluster Status'));
     console.log('Worker 1: [Healthy] (PID: 1042, Memory: 24MB)');
     console.log('Worker 2: [Healthy] (PID: 1043, Memory: 28MB)');
     return;
   }
 
-  if (args[0] === 'doctor') {
+  if (command === 'doctor') {
     console.log(pc.green('✔ Node.js version >= 18'));
     console.log(pc.green('✔ Distributed Runtime configuration valid'));
     console.log(pc.green('✔ Health check probe endpoints ready'));
@@ -35,7 +37,7 @@ async function main() {
     return;
   }
 
-  if (args[0] === 'generate' || args[0] === 'g') {
+  if (command === 'generate' || command === 'g') {
     const type = args[1] as GenerateType;
     const name = args[2];
 
@@ -49,6 +51,22 @@ async function main() {
     return;
   }
 
+  // Non-interactive or target directory provided via `shardix init <name>` or `shardix new <name>`
+  const isInitOrNew = command === 'init' || command === 'new' || command === 'create';
+  const targetNameArg = isInitOrNew ? args[1] : command;
+  const isYes = args.includes('--yes') || args.includes('-y');
+
+  if (targetNameArg && (isYes || process.env.CI)) {
+    const projectDir = createProjectFiles({
+      name: targetNameArg,
+      adapter: 'discordjs',
+      transport: 'gateway',
+      docker: true,
+    });
+    console.log(pc.green(`✔ Shardix project generated successfully in: ${projectDir}`));
+    return;
+  }
+
   console.clear();
   p.intro(`${pc.bgCyan(pc.black(' Shardix Framework '))} — Enterprise Bot Architecture`);
 
@@ -58,6 +76,7 @@ async function main() {
         p.text({
           message: 'What is your project name?',
           placeholder: 'my-shardix-bot',
+          initialValue: targetNameArg || 'my-shardix-bot',
           validate: (value) => {
             if (!value) return 'Project name is required';
           },
@@ -68,6 +87,7 @@ async function main() {
           options: [
             { value: 'discordjs', label: 'discord.js (v14+)', hint: 'Recommended' },
             { value: 'eris', label: 'Eris' },
+            { value: 'oceanicjs', label: 'Oceanic.js' },
             { value: 'discordeno', label: 'Discordeno' },
           ],
         }),
@@ -75,8 +95,8 @@ async function main() {
         p.select({
           message: 'Select Communication Transport Layer:',
           options: [
-            { value: 'http', label: 'HTTP Interactions (Serverless / Ultra Fast)', hint: 'Zero WS memory cost' },
             { value: 'gateway', label: 'Gateway (Traditional WebSocket)' },
+            { value: 'http', label: 'HTTP Interactions (Serverless / Ultra Fast)', hint: 'Zero WS memory cost' },
             { value: 'hybrid', label: 'Hybrid (Gateway + HTTP)' },
           ],
         }),
@@ -86,8 +106,6 @@ async function main() {
           options: [
             { value: 'prisma', label: 'Prisma' },
             { value: 'drizzle', label: 'Drizzle ORM' },
-            { value: 'typeorm', label: 'TypeORM' },
-            { value: 'mongoose', label: 'Mongoose' },
             { value: 'none', label: 'None' },
           ],
         }),
@@ -100,11 +118,6 @@ async function main() {
         p.confirm({
           message: 'Generate Dockerfile & Docker Compose setups?',
           initialValue: true,
-        }),
-      k8s: () =>
-        p.confirm({
-          message: 'Generate Kubernetes Manifests (Healthchecks, Liveness)?',
-          initialValue: false,
         }),
     },
     {
@@ -122,8 +135,17 @@ async function main() {
 
   const s = p.spinner();
   s.start('Generating project files...');
-  await new Promise((resolve) => setTimeout(resolve, 1200));
-  s.stop('Project generated successfully!');
+
+  const createdDir = createProjectFiles({
+    name: project.name,
+    adapter: project.adapter as any,
+    transport: project.transport as any,
+    database: project.database as any,
+    redis: project.redis,
+    docker: project.docker,
+  });
+
+  s.stop(pc.green(`✔ Project files generated successfully at: ${createdDir}`));
 
   p.outro(`Next steps:\n  cd ${project.name}\n  pnpm install\n  pnpm dev`);
 }
