@@ -1,6 +1,6 @@
 {
   "name": "@shardix/ipc",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Internal Communication Layer (IPC, Broadcast, Redis PubSub) for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

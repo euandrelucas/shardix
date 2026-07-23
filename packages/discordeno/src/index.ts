@@ -97,6 +97,14 @@ export class DiscordenoAdapter implements DiscordAdapter<any> {
     }
   }
 
+  public onEvent(eventName: string, handler: (...args: any[]) => void | Promise<void>): void {
+    if (this.bot?.events) {
+      this.bot.events[eventName] = async (...args: any[]) => {
+        await handler(...args);
+      };
+    }
+  }
+
   public async emitInteractionResponse(interactionId: string, token: string, body: any): Promise<void> {
     if (this.bot?.rest) {
       await this.bot.rest.sendInteractionResponse(interactionId, token, body);

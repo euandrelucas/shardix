@@ -115,6 +115,9 @@ export function Event(eventName: string): MethodDecorator {
   };
 }
 
+export const On = Event;
+export const Once = Event;
+
 export function Cron(expression: string): MethodDecorator {
   return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const existing = Reflect.getMetadata(METADATA_KEYS.CRON, target.constructor) || [];

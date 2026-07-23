@@ -90,6 +90,7 @@ export interface DiscordAdapter<TClient = any> {
   destroy(): Promise<void>;
   registerRawHandler(handler: (event: RawDiscordEvent) => void | Promise<void>): void;
   emitInteractionResponse(interactionId: string, token: string, body: any): Promise<void>;
+  onEvent?(eventName: string, handler: (...args: any[]) => void | Promise<void>): void;
 }
 
 export interface InteractionPayload {

@@ -160,4 +160,15 @@ export class InteractionRouter {
 
     return await pipeline();
   }
+
+  public async handleEvent(eventName: string, ...args: any[]): Promise<void> {
+    const matches = this.eventHandlers.get(eventName) || [];
+    for (const match of matches) {
+      try {
+        await match.controllerInstance[match.methodName](...args);
+      } catch (err: any) {
+        console.error(`[Shardix] Error executing event handler for '${eventName}':`, err?.message || err);
+      }
+    }
+  }
 }

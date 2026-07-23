@@ -92,6 +92,14 @@ export class ErisAdapter implements DiscordAdapter<any> {
     }
   }
 
+  public onEvent(eventName: string, handler: (...args: any[]) => void | Promise<void>): void {
+    if (this.client?.on) {
+      this.client.on(eventName, async (...args: any[]) => {
+        await handler(...args);
+      });
+    }
+  }
+
   public async emitInteractionResponse(interactionId: string, token: string, body: any): Promise<void> {
     if (this.client?.requestHandler) {
       await this.client.requestHandler.request(

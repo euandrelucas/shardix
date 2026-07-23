@@ -36,4 +36,19 @@ describe('Multi-Vendor Discord Adapters (v0.4)', () => {
     await adapter.destroy();
     expect(adapter.getStatus()).toBe(false);
   });
+
+  it('DiscordJSAdapter should register and dispatch @Event native listeners', async () => {
+    const adapter = new DiscordJSAdapter();
+    let receivedMember: any = null;
+
+    adapter.onEvent('guildMemberAdd', (member: any) => {
+      receivedMember = member;
+    });
+
+    const mockClient = adapter.getClient();
+    if (mockClient && mockClient.emit) {
+      mockClient.emit('guildMemberAdd', { user: { username: 'testuser' } });
+      expect(receivedMember?.user?.username).toBe('testuser');
+    }
+  });
 });

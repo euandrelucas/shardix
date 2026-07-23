@@ -80,6 +80,14 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
     }
   }
 
+  public onEvent(eventName: string, handler: (...args: any[]) => void | Promise<void>): void {
+    if (this.client?.on) {
+      this.client.on(eventName, async (...args: any[]) => {
+        await handler(...args);
+      });
+    }
+  }
+
   public async emitInteractionResponse(interactionId: string, token: string, body: any): Promise<void> {
     if (this.client?.rest) {
       await this.client.rest.post(`/interactions/${interactionId}/${token}/callback` as any, {

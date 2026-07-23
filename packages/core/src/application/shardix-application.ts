@@ -177,11 +177,24 @@ export class ShardixApplication {
         this.container.register(controller);
         this.router.registerController(controller);
         this.registeredControllers.push(controller);
+
+        if (this.adapter && typeof this.adapter.onEvent === 'function') {
+          const events: any[] = Reflect.getMetadata(METADATA_KEYS.EVENT, controller) || [];
+          for (const item of events) {
+            this.adapter.onEvent(item.eventName, (...args: any[]) =>
+              this.router.handleEvent(item.eventName, ...args)
+            );
+          }
+        }
       }
     }
 
     // Instantiate Module
     const moduleInstance = this.container.get(moduleClass);
     this.moduleInstances.push(moduleInstance);
+  }
+
+  public getAdapter(): DiscordAdapter | undefined {
+    return this.adapter;
   }
 }

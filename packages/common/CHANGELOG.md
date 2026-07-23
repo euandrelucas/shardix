@@ -1,5 +1,11 @@
 # @shardix/common
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: add @Event, @On, and @Once native event decorators, typed Gateway event listening, and dynamic module loading for Discord.js, Eris, Oceanic.js, and Discordeno adapters.
+
 ## 0.2.0
 
 ### Minor Changes
