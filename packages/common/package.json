@@ -1,6 +1,6 @@
 {
   "name": "@shardix/common",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Common interfaces, decorators, types and constants for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

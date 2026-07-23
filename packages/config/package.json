@@ -1,6 +1,6 @@
 {
   "name": "@shardix/config",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Configuration API (shardix.config.ts) for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

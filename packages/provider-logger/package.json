@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-logger",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Official Structured Logger Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

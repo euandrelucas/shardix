@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-queue",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Official Queue Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

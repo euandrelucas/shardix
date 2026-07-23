@@ -1,5 +1,18 @@
 # @shardix/core
 
+## 0.6.1
+
+### Patch Changes
+
+- # Fixes for On/Once exports, GatewayRuntime auto-default, and CLI dev template
+  - **@shardix/common**: Export `On` and `Once` as explicit functions for typescript `.d.ts` declaration generation.
+  - **@shardix/core**: Automatically default `this.runtime` to `GatewayRuntime` when adapter is present, call `adapter.login(token)`, and keep Node.js process event loop active.
+  - **@shardix/cli**: Update generator template dev script to `"tsx watch src/main.ts"` and include `"tsx": "^4.19.2"` in `devDependencies`.
+
+- Updated dependencies
+  - @shardix/common@0.6.1
+  - @shardix/transport@0.1.6
+
 ## 0.6.0
 
 ### Minor Changes

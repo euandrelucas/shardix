@@ -1,6 +1,6 @@
 {
   "name": "@shardix/dashboard-api",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "REST API Endpoints (/applications, /workers, /health, /metrics, /events, /logs) for Shardix Dashboard",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

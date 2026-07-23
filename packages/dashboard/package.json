@@ -1,6 +1,6 @@
 {
   "name": "@shardix/dashboard",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Official Web Dashboard Control Plane Interface for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
