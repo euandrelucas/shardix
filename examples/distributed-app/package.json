@@ -1,0 +1,18 @@
+{
+  "name": "@shardix/example-distributed-app",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Shardix v0.4 Distributed App — Running across multiple workers with IPC, Queues, and Observability",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/cluster": "workspace:*",
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/ipc": "workspace:*",
+    "@shardix/provider-observability": "workspace:*",
+    "@shardix/provider-queue": "workspace:*",
+    "@shardix/runtime-distributed": "workspace:*"
+  }
+}

@@ -14,10 +14,11 @@
 </p>
 
 <p align="center">
-  <img alt="Shardix Version" src="https://img.shields.io/badge/version-0.3.0-8b5cf6?style=for-the-badge&logo=typescript">
+  <img alt="Shardix Version" src="https://img.shields.io/badge/version-0.4.0-8b5cf6?style=for-the-badge&logo=typescript">
   <img alt="Zero Vendor Lock-in" src="https://img.shields.io/badge/Vendor--Lock--in-ZERO-22c55e?style=for-the-badge">
-  <img alt="Ecosystem" src="https://img.shields.io/badge/Official%20Providers-5%20Packages-purple?style=for-the-badge">
-  <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Gateway%20%7C%20HTTP%20%7C%20Hybrid-orange?style=for-the-badge">
+  <img alt="Distributed Architecture" src="https://img.shields.io/badge/Architecture-Distributed%20Workers-blue?style=for-the-badge">
+  <img alt="Official Providers" src="https://img.shields.io/badge/Official%20Providers-7%20Packages-purple?style=for-the-badge">
+  <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Distributed%20%7C%20Gateway%20%7C%20HTTP-orange?style=for-the-badge">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge">
 </p>
 

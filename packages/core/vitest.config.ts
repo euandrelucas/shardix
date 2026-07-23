@@ -25,6 +25,12 @@ export default defineConfig({
       '@shardix/transport': path.resolve(__dirname, '../../packages/transport/src/index.ts'),
       '@shardix/http': path.resolve(__dirname, '../../packages/http/src/index.ts'),
       '@shardix/config': path.resolve(__dirname, '../../packages/config/src/index.ts'),
+      '@shardix/cluster': path.resolve(__dirname, '../../packages/cluster/src/index.ts'),
+      '@shardix/ipc': path.resolve(__dirname, '../../packages/ipc/src/index.ts'),
+      '@shardix/runtime-distributed': path.resolve(__dirname, '../../packages/runtime-distributed/src/index.ts'),
+      '@shardix/provider-queue': path.resolve(__dirname, '../../packages/provider-queue/src/index.ts'),
+      '@shardix/provider-observability': path.resolve(__dirname, '../../packages/provider-observability/src/index.ts'),
+      '@shardix/dashboard-api': path.resolve(__dirname, '../../packages/dashboard-api/src/index.ts'),
     },
   },
   test: {

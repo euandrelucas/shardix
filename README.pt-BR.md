@@ -15,10 +15,11 @@
 </p>
 
 <p align="center">
-  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.3.0-8b5cf6?style=for-the-badge&logo=typescript">
+  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.4.0-8b5cf6?style=for-the-badge&logo=typescript">
   <img alt="Zero Vendor Lock-in" src="https://img.shields.io/badge/Vendor--Lock--in-ZERO-22c55e?style=for-the-badge">
-  <img alt="Ecossistema" src="https://img.shields.io/badge/Provedores%20Oficiais-5%20Pacotes-purple?style=for-the-badge">
-  <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Gateway%20%7C%20HTTP%20%7C%20H%C3%ADbrido-orange?style=for-the-badge">
+  <img alt="Arquitetura Distribuída" src="https://img.shields.io/badge/Arquitetura-Workers%20Distribu%C3%ADdos-blue?style=for-the-badge">
+  <img alt="Ecossistema" src="https://img.shields.io/badge/Provedores%20Oficiais-7%20Pacotes-purple?style=for-the-badge">
+  <img alt="Runtime System" src="https://img.shields.io/badge/Runtime-Distribu%C3%ADdo%20%7C%20Gateway%20%7C%20HTTP-orange?style=for-the-badge">
   <img alt="Licença" src="https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=for-the-badge">
 </p>
 
