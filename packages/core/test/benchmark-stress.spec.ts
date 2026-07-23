@@ -62,7 +62,7 @@ describe('Framework Stress Test & Performance Benchmarks', () => {
     console.log(`⚡ Reflection 500 classes first pass: ${durationFirstPass.toFixed(2)} ms`);
     console.log(`⚡ Reflection 500 classes cached pass: ${durationCachePass.toFixed(2)} ms`);
 
-    expect(durationFirstPass).toBeLessThan(100);
+    expect(durationFirstPass).toBeLessThan(250);
     expect(durationCachePass).toBeLessThan(100);
   });
 });

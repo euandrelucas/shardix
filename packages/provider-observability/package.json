@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-observability",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Official Observability Provider (Prometheus metrics & Tracing) for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

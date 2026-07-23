@@ -11,4 +11,5 @@ export * from './builders/select-builder.js';
 export * from './builders/modal-builder.js';
 export * from './builders/message-builder.js';
 export * from './builders/poll-builder.js';
+export * from './builders/advanced-builders.js';
 export * from './context/command-context.js';

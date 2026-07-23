@@ -1,31 +1,34 @@
-import { Module } from '@shardix/common';
-import { GatewayRuntime, ShardixFactory } from '@shardix/core';
+import { ShardixFactory, AutoScanner } from '@shardix/core';
 import { DiscordJSAdapter } from '@shardix/discordjs';
-import { ModerationController } from './moderation.controller.js';
-import { AuditLoggerService, ModerationService } from './moderation.service.js';
-import { AdminGuard } from './moderation.guard.js';
+import { Controller, SlashCommand, CommandContext, GuildOnly, Permissions } from '@shardix/common';
 
-@Module({
-  controllers: [ModerationController],
-  providers: [ModerationService, AuditLoggerService, AdminGuard],
-})
-export class ModerationModule {}
+@Controller()
+export class ModerationController {
+  @SlashCommand({ name: 'ban', description: 'Ban a member from the guild' })
+  @GuildOnly()
+  @Permissions('BanMembers')
+  async ban(ctx: CommandContext) {
+    const userId = ctx.getOption<string>('user');
+    const reason = ctx.getOption<string>('reason') || 'Violation of server rules';
+    return ctx.reply(`🔨 Banned member ${userId} for reason: ${reason}`);
+  }
 
-async function bootstrap() {
-  const adapter = new DiscordJSAdapter();
-
-  const app = await ShardixFactory.create({
-    adapter,
-    runtime: new GatewayRuntime({
-      adapter,
-      token: process.env.DISCORD_TOKEN,
-    }),
-  });
-
-  app.register(ModerationModule);
-
-  await app.start();
-  console.log('🛡️ Shardix Moderation Bot running on GatewayRuntime');
+  @SlashCommand({ name: 'kick', description: 'Kick a member from the guild' })
+  @GuildOnly()
+  @Permissions('KickMembers')
+  async kick(ctx: CommandContext) {
+    const userId = ctx.getOption<string>('user');
+    return ctx.reply(`👢 Kicked member ${userId}`);
+  }
 }
 
-bootstrap().catch(console.error);
+async function bootstrap() {
+  const app = await ShardixFactory.create({
+    adapter: new DiscordJSAdapter(),
+  });
+
+  AutoScanner.scanAndRegister(app, [ModerationController]);
+  await app.start();
+}
+
+bootstrap();

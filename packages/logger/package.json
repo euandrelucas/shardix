@@ -1,6 +1,6 @@
 {
   "name": "@shardix/logger",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Structured logging system with context and trace IDs for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

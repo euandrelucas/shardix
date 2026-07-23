@@ -1,5 +1,21 @@
 # @shardix/discordjs
 
+## 0.4.0
+
+### Minor Changes
+
+- # Shardix v0.8 — Complete Discord Platform & Production Engine
+  - **Presence System (`PresenceManager`)**: `app.presence.set({ status: 'online', activities: [...] })` decoupled from adapter libraries.
+  - **Advanced Builders (`@shardix/common`)**: Added `ActionRowBuilder`, `AttachmentBuilder`, `SlashCommandBuilder`, `ContextMenuBuilder`, `ThreadBuilder`, `RoleBuilder`, `EmojiBuilder`, `StickerBuilder`, `ActivityBuilder`, `WebhookBuilder`, `PermissionBuilder`.
+  - **Middleware Pipeline (`MiddlewarePipeline`)**: Request -> Middlewares -> Guards -> Pipes -> Interceptors -> Controller -> Exception Filters -> Response.
+  - **Rate Limit Manager (`RateLimitManager`)**: Bucket management & exponential backoff for REST and Gateway.
+  - **Official ADRs (0037 to 0045)** & **10 Production Bot Examples**.
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.6.0
+
 ## 0.3.0
 
 ### Minor Changes

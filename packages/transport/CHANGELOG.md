@@ -1,5 +1,12 @@
 # @shardix/transport
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.6.0
+
 ## 0.1.4
 
 ### Patch Changes

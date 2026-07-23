@@ -1,5 +1,13 @@
 # @shardix/provider-dashboard
 
+## 0.6.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.6.0
+  - @shardix/dashboard-api@0.5.4
+
 ## 0.6.3
 
 ### Patch Changes

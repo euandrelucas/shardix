@@ -15,6 +15,7 @@ import { ProjectAnalyzer } from '../analyzer/project-analyzer.js';
 import { ProviderManager } from '../providers/provider-manager.js';
 import { ShardixRestClient } from '../rest/shardix-rest-client.js';
 import { ShardixCacheManager } from '../cache/shardix-cache-manager.js';
+import { PresenceManager } from '../presence/presence-manager.js';
 
 export interface ShardixOptions {
   adapter?: DiscordAdapter;
@@ -28,6 +29,7 @@ export interface ShardixOptions {
 export class ShardixApplication {
   public readonly rest: ShardixRestClient;
   public readonly cache = new ShardixCacheManager();
+  public readonly presence = new PresenceManager();
   private container = new Container();
   private router = new InteractionRouter(this.container);
   private providerManager = new ProviderManager(this);

@@ -1,5 +1,12 @@
 # @shardix/plugin
 
+## 0.7.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.6.0
+
 ## 0.7.1
 
 ### Patch Changes

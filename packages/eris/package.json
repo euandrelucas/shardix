@@ -1,6 +1,6 @@
 {
   "name": "@shardix/eris",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Official Eris Adapter for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

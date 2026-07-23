@@ -1,6 +1,6 @@
 {
   "name": "@shardix/events",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Internal and distributed Event Bus (Redis Pub/Sub) for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

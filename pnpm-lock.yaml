@@ -198,9 +198,16 @@ importers:
       '@shardix/discordjs':
         specifier: workspace:*
         version: link:../../packages/discordjs
-      '@shardix/transport':
-        specifier: workspace:*
-        version: link:../../packages/transport
+    devDependencies:
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.15.46)(@types/node@22.20.1)(typescript@5.9.3)
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   examples/multi-adapter-bot:
     dependencies:
@@ -222,6 +229,28 @@ importers:
       '@shardix/oceanicjs':
         specifier: workspace:*
         version: link:../../packages/oceanicjs
+
+  examples/music-bot:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@shardix/discordjs':
+        specifier: workspace:*
+        version: link:../../packages/discordjs
+    devDependencies:
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.15.46)(@types/node@22.20.1)(typescript@5.9.3)
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   examples/ping-bot:
     dependencies:
