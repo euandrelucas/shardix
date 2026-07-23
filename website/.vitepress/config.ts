@@ -20,17 +20,28 @@ export default defineConfig({
         sidebar: {
           '/guide/': [
             {
-              text: 'Developer Guide',
+              text: 'Fundamentals',
               items: [
                 { text: 'Introduction', link: '/guide/introduction' },
                 { text: 'Getting Started', link: '/guide/getting-started' },
                 { text: 'Architecture & DI', link: '/guide/architecture' },
-                { text: 'Runtimes', link: '/guide/runtimes' },
+                { text: 'Events & Interactions', link: '/guide/events' },
+              ],
+            },
+            {
+              text: 'Adapters & Runtimes',
+              items: [
                 { text: 'Multi-Library Adapters', link: '/guide/adapters' },
+                { text: 'Runtimes (Gateway, HTTP, Hybrid)', link: '/guide/runtimes' },
+              ],
+            },
+            {
+              text: 'Ecosystem & Scaling',
+              items: [
                 { text: 'Official Providers', link: '/guide/providers' },
                 { text: 'Workers & Clusters', link: '/guide/clusters' },
                 { text: 'Control Plane Dashboard', link: '/guide/dashboard' },
-                { text: 'Production Deploy (Docker/K8s)', link: '/guide/deployment' },
+                { text: 'Production Deployment', link: '/guide/deployment' },
               ],
             },
           ],
@@ -43,6 +54,7 @@ export default defineConfig({
                 { text: '@shardix/common', link: '/api/common' },
                 { text: 'Adapters API', link: '/api/adapters' },
                 { text: 'Providers API', link: '/api/providers' },
+                { text: 'Cluster & IPC API', link: '/api/cluster' },
               ],
             },
           ],
@@ -63,17 +75,28 @@ export default defineConfig({
         sidebar: {
           '/pt/guide/': [
             {
-              text: 'Guia do Desenvolvedor',
+              text: 'Fundamentos',
               items: [
                 { text: 'Introdução', link: '/pt/guide/introduction' },
                 { text: 'Primeiros Passos', link: '/pt/guide/getting-started' },
                 { text: 'Arquitetura e DI', link: '/pt/guide/architecture' },
-                { text: 'Runtimes', link: '/pt/guide/runtimes' },
+                { text: 'Eventos e Interações', link: '/pt/guide/events' },
+              ],
+            },
+            {
+              text: 'Adapters e Runtimes',
+              items: [
                 { text: 'Adapters Multi-Biblioteca', link: '/pt/guide/adapters' },
+                { text: 'Runtimes (Gateway, HTTP, Híbrido)', link: '/pt/guide/runtimes' },
+              ],
+            },
+            {
+              text: 'Ecossistema e Escala',
+              items: [
                 { text: 'Provedores Oficiais', link: '/pt/guide/providers' },
                 { text: 'Workers & Clusters', link: '/pt/guide/clusters' },
                 { text: 'Dashboard Control Plane', link: '/pt/guide/dashboard' },
-                { text: 'Deploy em Produção (Docker/K8s)', link: '/pt/guide/deployment' },
+                { text: 'Deploy em Produção', link: '/pt/guide/deployment' },
               ],
             },
           ],
@@ -86,6 +109,7 @@ export default defineConfig({
                 { text: '@shardix/common', link: '/pt/api/common' },
                 { text: 'API de Adapters', link: '/pt/api/adapters' },
                 { text: 'API de Provedores', link: '/pt/api/providers' },
+                { text: 'API de Cluster & IPC', link: '/pt/api/cluster' },
               ],
             },
           ],
