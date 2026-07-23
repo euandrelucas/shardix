@@ -99,11 +99,33 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/config:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../common
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/core:
     dependencies:
       '@shardix/common':
         specifier: workspace:*
         version: link:../common
+      '@shardix/http':
+        specifier: workspace:*
+        version: link:../http
+      '@shardix/transport':
+        specifier: workspace:*
+        version: link:../transport
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2

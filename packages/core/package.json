@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@shardix/common": "workspace:*",
+    "@shardix/http": "workspace:*",
+    "@shardix/transport": "workspace:*",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {

@@ -1,7 +1,24 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
+import { generateComponent, GenerateType } from './commands/generate.js';
 
 async function main() {
+  const args = process.argv.slice(2);
+
+  if (args[0] === 'generate' || args[0] === 'g') {
+    const type = args[1] as GenerateType;
+    const name = args[2];
+
+    if (!type || !name) {
+      console.log(pc.red('Usage: shardix generate <type> <name>'));
+      console.log('Available types: module, controller, command, event, guard, interceptor, provider, service');
+      process.exit(1);
+    }
+
+    generateComponent(type, name);
+    return;
+  }
+
   console.clear();
   p.intro(`${pc.bgCyan(pc.black(' Shardix Framework '))} — Enterprise Bot Architecture`);
 

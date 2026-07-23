@@ -3,19 +3,21 @@ import {
   DiscordAdapter,
   METADATA_KEYS,
   ModuleMetadata,
-  OnApplicationBootstrap,
-  OnModuleDestroy,
-  OnModuleInit,
+  OnApplicationShutdown,
+  Runtime,
   Transport,
   Type,
 } from '@shardix/common';
 import { Container } from '../di/container.js';
 import { InteractionRouter } from '../router/interaction-router.js';
+import { ProjectAnalyzer } from '../analyzer/project-analyzer.js';
 
 export interface ShardixOptions {
   adapter?: DiscordAdapter;
+  runtime?: Runtime | Type<Runtime>;
   transport?: Transport | Type<Transport>;
   transports?: (Transport | Type<Transport>)[];
+  autoAnalyze?: boolean;
 }
 
 export class ShardixApplication {
@@ -23,11 +25,23 @@ export class ShardixApplication {
   private router = new InteractionRouter(this.container);
   private initializedModules = new Set<Type<any>>();
   private moduleInstances: any[] = [];
+  private registeredControllers: Type<any>[] = [];
   private transports: Transport[] = [];
+  private runtime?: Runtime;
   private adapter?: DiscordAdapter;
+  private autoAnalyze: boolean;
 
   constructor(options: ShardixOptions = {}) {
     this.adapter = options.adapter;
+    this.autoAnalyze = options.autoAnalyze !== false;
+
+    if (options.runtime) {
+      if (typeof options.runtime === 'function') {
+        this.runtime = new (options.runtime as Type<Runtime>)();
+      } else {
+        this.runtime = options.runtime;
+      }
+    }
 
     const rawTransports = options.transports || (options.transport ? [options.transport] : []);
     for (const t of rawTransports) {
@@ -44,6 +58,13 @@ export class ShardixApplication {
   }
 
   public async start(): Promise<void> {
+    if (this.autoAnalyze) {
+      const analysis = ProjectAnalyzer.analyze(this.registeredControllers);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(analysis.suggestionMessage);
+      }
+    }
+
     // Lifecycle: OnModuleInit
     for (const instance of this.moduleInstances) {
       if (typeof instance.onModuleInit === 'function') {
@@ -58,20 +79,31 @@ export class ShardixApplication {
       }
     }
 
-    // Start Transports
-    for (const transport of this.transports) {
-      await transport.listen((payload) => this.router.handleInteraction(payload));
+    // Start via Runtime if provided
+    if (this.runtime) {
+      await this.runtime.start(this);
+    } else {
+      for (const transport of this.transports) {
+        await transport.listen((payload) => this.router.handleInteraction(payload));
+      }
     }
   }
 
-  public async stop(): Promise<void> {
-    for (const transport of this.transports) {
-      await transport.close();
+  public async stop(signal?: string): Promise<void> {
+    if (this.runtime) {
+      await this.runtime.stop();
+    } else {
+      for (const transport of this.transports) {
+        await transport.close();
+      }
     }
 
     for (const instance of this.moduleInstances) {
       if (typeof instance.onModuleDestroy === 'function') {
         await instance.onModuleDestroy();
+      }
+      if (typeof instance.onApplicationShutdown === 'function') {
+        await (instance as OnApplicationShutdown).onApplicationShutdown(signal);
       }
     }
 
@@ -122,6 +154,7 @@ export class ShardixApplication {
       for (const controller of metadata.controllers) {
         this.container.register(controller);
         this.router.registerController(controller);
+        this.registeredControllers.push(controller);
       }
     }
 

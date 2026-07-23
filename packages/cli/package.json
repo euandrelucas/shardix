@@ -4,7 +4,8 @@
   "description": "Interactive CLI Wizard to create Shardix applications",
   "main": "./dist/index.js",
   "bin": {
-    "create-shardix": "./bin/create-shardix.js"
+    "create-shardix": "./bin/create-shardix.js",
+    "shardix": "./bin/create-shardix.js"
   },
   "scripts": {
     "build": "tsup",

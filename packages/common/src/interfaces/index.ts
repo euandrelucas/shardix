@@ -58,6 +58,16 @@ export interface OnModuleDestroy {
   onModuleDestroy(): void | Promise<void>;
 }
 
+export interface OnApplicationShutdown {
+  onApplicationShutdown(signal?: string): void | Promise<void>;
+}
+
+export interface Runtime {
+  readonly name: string;
+  start(app: any): Promise<void>;
+  stop(): Promise<void>;
+}
+
 export interface RawDiscordEvent {
   t: string;
   d: any;
