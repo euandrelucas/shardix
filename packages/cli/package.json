@@ -1,0 +1,22 @@
+{
+  "name": "create-shardix",
+  "version": "0.1.0",
+  "description": "Interactive CLI Wizard to create Shardix applications",
+  "main": "./dist/index.js",
+  "bin": {
+    "create-shardix": "./bin/create-shardix.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}

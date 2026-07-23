@@ -1,0 +1,12 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+  - "examples/*"
+
+onlyBuiltDependencies:
+  - esbuild
+  - pino-pretty
+
+allowBuilds:
+  '@swc/core': true
+  esbuild: true

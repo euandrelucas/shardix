@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shardix/common": ["./packages/common/src/index.ts"],
+      "@shardix/core": ["./packages/core/src/index.ts"],
+      "@shardix/transport": ["./packages/transport/src/index.ts"],
+      "@shardix/discordjs": ["./packages/discordjs/src/index.ts"],
+      "@shardix/logger": ["./packages/logger/src/index.ts"],
+      "@shardix/cache": ["./packages/cache/src/index.ts"],
+      "@shardix/events": ["./packages/events/src/index.ts"],
+      "@shardix/http": ["./packages/http/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".turbo"]
+}

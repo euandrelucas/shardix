@@ -1,0 +1,14 @@
+{
+  "name": "@shardix/example-http-interactions",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/http": "workspace:*",
+    "@shardix/transport": "workspace:*"
+  }
+}

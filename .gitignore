@@ -1,0 +1,8 @@
+node_modules
+dist
+.turbo
+*.log
+coverage
+.ds_store
+.env
+.env.local
