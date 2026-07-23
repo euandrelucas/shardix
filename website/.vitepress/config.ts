@@ -13,6 +13,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Guide', link: '/guide/getting-started' },
+          { text: 'Class Index', link: '/api/classes' },
           { text: 'API Reference', link: '/api/overview' },
           { text: 'Ecosystem', link: '/guide/providers' },
           { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
@@ -34,6 +35,7 @@ export default defineConfig({
               items: [
                 { text: 'Universal Builders', link: '/guide/builders' },
                 { text: 'Collectors & Iterators', link: '/guide/collectors' },
+                { text: 'Cache Layer & Providers', link: '/guide/cache' },
                 { text: 'Plugin Ecosystem', link: '/guide/plugins' },
                 { text: 'Testing & Mock Layer', link: '/guide/testing' },
                 { text: 'Voice Foundation', link: '/guide/voice' },
@@ -61,6 +63,7 @@ export default defineConfig({
               text: 'API Reference',
               items: [
                 { text: 'Overview', link: '/api/overview' },
+                { text: 'Complete Class Index', link: '/api/classes' },
                 { text: '@shardix/core', link: '/api/core' },
                 { text: '@shardix/common', link: '/api/common' },
                 { text: '@shardix/plugin', link: '/api/plugin' },
@@ -81,6 +84,7 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Guia', link: '/pt/guide/getting-started' },
+          { text: 'Índice de Classes', link: '/pt/api/classes' },
           { text: 'Referência da API', link: '/pt/api/overview' },
           { text: 'Ecossistema', link: '/pt/guide/providers' },
           { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
@@ -102,6 +106,7 @@ export default defineConfig({
               items: [
                 { text: 'Builders Universais', link: '/pt/guide/builders' },
                 { text: 'Collectors & Iteradores', link: '/pt/guide/collectors' },
+                { text: 'Camada de Cache & Provedores', link: '/pt/guide/cache' },
                 { text: 'Ecossistema de Plugins', link: '/pt/guide/plugins' },
                 { text: 'Testes & Camada Mock', link: '/pt/guide/testing' },
                 { text: 'Fundação de Voz', link: '/pt/guide/voice' },
@@ -129,6 +134,7 @@ export default defineConfig({
               text: 'Referência da API',
               items: [
                 { text: 'Visão Geral', link: '/pt/api/overview' },
+                { text: 'Índice Completo de Classes', link: '/pt/api/classes' },
                 { text: '@shardix/core', link: '/pt/api/core' },
                 { text: '@shardix/common', link: '/pt/api/common' },
                 { text: '@shardix/plugin', link: '/pt/api/plugin' },
