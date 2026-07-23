@@ -19,6 +19,14 @@
   "dependencies": {
     "@shardix/common": "workspace:*"
   },
+  "peerDependencies": {
+    "oceanic.js": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oceanic.js": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "rimraf": "^6.0.1",
     "tsup": "^8.3.5",

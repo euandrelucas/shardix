@@ -19,6 +19,14 @@
   "dependencies": {
     "@shardix/common": "workspace:*"
   },
+  "peerDependencies": {
+    "@discordeno/bot": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@discordeno/bot": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "rimraf": "^6.0.1",
     "tsup": "^8.3.5",

@@ -2,21 +2,29 @@ import { DiscordAdapter, RawDiscordEvent } from '@shardix/common';
 
 export interface ErisClientOptions {
   token?: string;
+  options?: any;
   [key: string]: any;
 }
 
-export class ErisAdapter implements DiscordAdapter {
+export class ErisAdapter implements DiscordAdapter<any> {
   public readonly name = 'ErisAdapter';
-  public readonly version = '0.4.0';
-  private handler?: (interaction: any) => void | Promise<void>;
+  public readonly version = '0.5.0';
+  private client: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
-  private clientMock = { id: 'eris_client' };
 
-  constructor(private options: ErisClientOptions = {}) {}
+  constructor(private options: ErisClientOptions = {}) {
+    try {
+      const Eris = require('eris');
+      const token = options.token || process.env.DISCORD_TOKEN || 'mock_token';
+      this.client = new Eris(token, options.options || {});
+    } catch {
+      this.client = null;
+    }
+  }
 
   public getClient(): any {
-    return this.clientMock;
+    return this.client;
   }
 
   public async login(token?: string): Promise<void> {
@@ -27,28 +35,71 @@ export class ErisAdapter implements DiscordAdapter {
       }
       return;
     }
-    this.isConnected = true;
+
+    if (!this.client) {
+      if (process.env.NODE_ENV !== 'test') {
+        throw new Error(
+          "[Shardix] Error: 'eris' package is not installed. Please install it using 'pnpm add eris' or 'npm install eris'."
+        );
+      }
+      this.isConnected = true;
+      return;
+    }
+
+    try {
+      this.isConnected = true;
+      await this.client.connect();
+    } catch (err: any) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.error('[ErisAdapter] Gateway connection failed:', err?.message || err);
+      }
+    }
   }
 
   public async destroy(): Promise<void> {
     this.isConnected = false;
+    if (this.client?.disconnect) {
+      this.client.disconnect({ reconnect: false });
+    }
   }
 
   public registerRawHandler(handler: (event: RawDiscordEvent) => void | Promise<void>): void {
     this.rawHandler = handler;
+    if (this.client) {
+      this.client.on('rawWS', async (packet: any) => {
+        if (packet && packet.t) {
+          await handler(packet as RawDiscordEvent);
+        }
+      });
+      this.client.on('interactionCreate', async (interaction: any) => {
+        if (this.rawHandler) {
+          const rawPayload: RawDiscordEvent = {
+            t: 'INTERACTION_CREATE',
+            d: {
+              id: interaction.id,
+              type: interaction.type,
+              token: interaction.token,
+              data: interaction.data,
+              guild_id: interaction.guildID,
+              channel_id: interaction.channelID,
+              member: interaction.member,
+              user: interaction.user,
+            },
+          };
+          await this.rawHandler(rawPayload);
+        }
+      });
+    }
   }
 
   public async emitInteractionResponse(interactionId: string, token: string, body: any): Promise<void> {
-    // Response handler for Eris
-  }
-
-  public onInteractionCreate(handler: (interaction: any) => void | Promise<void>): void {
-    this.handler = handler;
-  }
-
-  public emitInteraction(interaction: any): void {
-    if (this.handler) {
-      this.handler(interaction);
+    if (this.client?.requestHandler) {
+      await this.client.requestHandler.request(
+        'POST',
+        `/interactions/${interactionId}/${token}/callback`,
+        true,
+        body
+      );
     }
   }
 
