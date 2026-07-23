@@ -1,0 +1,20 @@
+{
+  "name": "@shardix/example-ecosystem-app",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Shardix v0.3 Ecosystem App — Demonstrating all official providers (Config, Logger, Cache, EventBus, Health)",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/http": "workspace:*",
+    "@shardix/provider-cache": "workspace:*",
+    "@shardix/provider-config": "workspace:*",
+    "@shardix/provider-eventbus": "workspace:*",
+    "@shardix/provider-health": "workspace:*",
+    "@shardix/provider-logger": "workspace:*",
+    "@shardix/transport": "workspace:*"
+  }
+}

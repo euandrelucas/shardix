@@ -166,3 +166,9 @@ export function UseInterceptors(...interceptors: Type<Interceptor>[]): MethodDec
     }
   };
 }
+
+export function DependsOn(...dependencies: Type<any>[]): ClassDecorator {
+  return (target: object) => {
+    Reflect.defineMetadata(METADATA_KEYS.DEPENDS_ON, dependencies, target);
+  };
+}

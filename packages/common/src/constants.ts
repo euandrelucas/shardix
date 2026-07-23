@@ -17,4 +17,5 @@ export const METADATA_KEYS = {
   INTERCEPTORS: 'shardix:interceptors',
   MIDDLEWARE: 'shardix:middleware',
   PARAM_INJECT: 'shardix:param_inject',
+  DEPENDS_ON: 'shardix:depends_on',
 } as const;

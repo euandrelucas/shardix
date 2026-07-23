@@ -62,6 +62,14 @@ export interface OnApplicationShutdown {
   onApplicationShutdown(signal?: string): void | Promise<void>;
 }
 
+export interface ProviderContract {
+  readonly name: string;
+  readonly version: string;
+  register(app: any): Promise<void> | void;
+  boot?(): Promise<void> | void;
+  shutdown?(): Promise<void> | void;
+}
+
 export interface Runtime {
   readonly name: string;
   start(app: any): Promise<void>;

@@ -4,6 +4,7 @@ import {
   METADATA_KEYS,
   ModuleMetadata,
   OnApplicationShutdown,
+  ProviderContract,
   Runtime,
   Transport,
   Type,
@@ -11,18 +12,21 @@ import {
 import { Container } from '../di/container.js';
 import { InteractionRouter } from '../router/interaction-router.js';
 import { ProjectAnalyzer } from '../analyzer/project-analyzer.js';
+import { ProviderManager } from '../providers/provider-manager.js';
 
 export interface ShardixOptions {
   adapter?: DiscordAdapter;
   runtime?: Runtime | Type<Runtime>;
   transport?: Transport | Type<Transport>;
   transports?: (Transport | Type<Transport>)[];
+  providers?: (ProviderContract | Type<ProviderContract>)[];
   autoAnalyze?: boolean;
 }
 
 export class ShardixApplication {
   private container = new Container();
   private router = new InteractionRouter(this.container);
+  private providerManager = new ProviderManager(this);
   private initializedModules = new Set<Type<any>>();
   private moduleInstances: any[] = [];
   private registeredControllers: Type<any>[] = [];
@@ -34,6 +38,12 @@ export class ShardixApplication {
   constructor(options: ShardixOptions = {}) {
     this.adapter = options.adapter;
     this.autoAnalyze = options.autoAnalyze !== false;
+
+    if (options.providers) {
+      for (const p of options.providers) {
+        this.providerManager.use(p);
+      }
+    }
 
     if (options.runtime) {
       if (typeof options.runtime === 'function') {
@@ -53,6 +63,11 @@ export class ShardixApplication {
     }
   }
 
+  public use(provider: ProviderContract | Type<ProviderContract>): this {
+    this.providerManager.use(provider);
+    return this;
+  }
+
   public register(rootModule: Type<any>): void {
     this.loadModule(rootModule);
   }
@@ -64,6 +79,10 @@ export class ShardixApplication {
         console.log(analysis.suggestionMessage);
       }
     }
+
+    // Providers: Register & Boot
+    await this.providerManager.registerAll();
+    await this.providerManager.bootAll();
 
     // Lifecycle: OnModuleInit
     for (const instance of this.moduleInstances) {
@@ -97,6 +116,9 @@ export class ShardixApplication {
         await transport.close();
       }
     }
+
+    // Providers Shutdown
+    await this.providerManager.shutdownAll();
 
     for (const instance of this.moduleInstances) {
       if (typeof instance.onModuleDestroy === 'function') {
