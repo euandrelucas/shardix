@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-dashboard",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Official Dashboard Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

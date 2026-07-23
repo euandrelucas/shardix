@@ -25,6 +25,7 @@ export class InteractionRouter {
   private autocompletes = new Map<string, RouteMatch>(); // commandName:optionName
   private selectMenus = new Map<string | RegExp, RouteMatch>();
   private eventHandlers = new Map<string, RouteMatch[]>();
+  private rateLimits = new Map<string, { count: number; expiresAt: number }>();
 
   constructor(private container: Container) {}
 
@@ -148,14 +149,43 @@ export class InteractionRouter {
       }
     }
 
+    // RateLimit Evaluation
+    const rateLimitMeta: any = match.interceptors.find((i: any) => i && typeof i === 'object' && 'isRateLimit' in i);
+    if (rateLimitMeta) {
+      const userId = payload.user?.id || payload.member?.user?.id || 'global';
+      const key = `${userId}:${match.methodName}`;
+      const now = Date.now();
+      const windowMs =
+        typeof rateLimitMeta.options.window === 'number'
+          ? rateLimitMeta.options.window
+          : String(rateLimitMeta.options.window).endsWith('s')
+            ? parseInt(String(rateLimitMeta.options.window)) * 1000
+            : parseInt(String(rateLimitMeta.options.window)) * 60000;
+
+      const record = this.rateLimits.get(key);
+      if (record && record.expiresAt > now) {
+        if (record.count >= rateLimitMeta.options.limit) {
+          return {
+            type: 4,
+            data: { content: rateLimitMeta.options.message || 'Rate limit exceeded. Please wait before trying again.' },
+          };
+        }
+        record.count++;
+      } else {
+        this.rateLimits.set(key, { count: 1, expiresAt: now + windowMs });
+      }
+    }
+
     // Execute Handler with Interceptors pipeline
     const handler = () => match!.controllerInstance[match!.methodName](payload);
     
     let pipeline = handler;
     for (const InterceptorClass of match.interceptors.reverse()) {
-      const interceptorInstance: Interceptor = this.container.get(InterceptorClass, scopeContext);
-      const nextFn = pipeline;
-      pipeline = () => interceptorInstance.intercept(context, nextFn);
+      if (typeof InterceptorClass === 'function') {
+        const interceptorInstance: Interceptor = this.container.get(InterceptorClass, scopeContext);
+        const nextFn = pipeline;
+        pipeline = () => interceptorInstance.intercept(context, nextFn);
+      }
     }
 
     return await pipeline();

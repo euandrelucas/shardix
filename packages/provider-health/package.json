@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-health",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Official Health Probe Provider (/health, /ready, /live) for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

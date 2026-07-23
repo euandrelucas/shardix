@@ -1,5 +1,13 @@
 # @shardix/provider-config
 
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.4.0
+  - @shardix/config@0.2.3
+
 ## 0.3.2
 
 ### Patch Changes

@@ -37,6 +37,8 @@ export default defineConfig({
       '@shardix/discordeno': path.resolve(__dirname, '../../packages/discordeno/src/index.ts'),
       '@shardix/provider-dashboard': path.resolve(__dirname, '../../packages/provider-dashboard/src/index.ts'),
       '@shardix/dashboard': path.resolve(__dirname, '../../packages/dashboard/src/index.ts'),
+      '@shardix/plugin': path.resolve(__dirname, '../../packages/plugin/src/index.ts'),
+      '@shardix/testing': path.resolve(__dirname, '../../packages/testing/src/index.ts'),
     },
   },
   test: {

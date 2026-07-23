@@ -1,5 +1,12 @@
 # @shardix/dashboard-api
 
+## 0.5.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.4.0
+
 ## 0.5.1
 
 ### Patch Changes

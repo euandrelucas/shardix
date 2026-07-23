@@ -68,6 +68,13 @@ export class ShardixApplication {
     return this;
   }
 
+  public usePlugin(plugin: any): this {
+    if (typeof plugin.register === 'function') {
+      plugin.register(this);
+    }
+    return this;
+  }
+
   public register(rootModule: Type<any>): void {
     this.loadModule(rootModule);
   }

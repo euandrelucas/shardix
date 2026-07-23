@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-eventbus",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Official EventBus Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

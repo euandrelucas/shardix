@@ -1,0 +1,24 @@
+{
+  "name": "@shardix/example-large-bot",
+  "private": true,
+  "version": "0.6.0",
+  "scripts": {
+    "build": "tsup src/main.ts",
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/discordjs": "workspace:*",
+    "@shardix/plugin": "workspace:*",
+    "@shardix/provider-config": "workspace:*",
+    "@shardix/provider-logger": "workspace:*",
+    "@shardix/provider-dashboard": "workspace:*",
+    "discord.js": "^14.17.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
