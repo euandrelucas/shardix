@@ -15,7 +15,7 @@ export default defineConfig({
           { text: 'Guide', link: '/guide/getting-started' },
           { text: 'API Reference', link: '/api/overview' },
           { text: 'Ecosystem', link: '/guide/providers' },
-          { text: 'GitHub', link: 'https://github.com/shardix/shardix' },
+          { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
         ],
         sidebar: {
           '/guide/': [
@@ -83,7 +83,7 @@ export default defineConfig({
           { text: 'Guia', link: '/pt/guide/getting-started' },
           { text: 'Referência da API', link: '/pt/api/overview' },
           { text: 'Ecossistema', link: '/pt/guide/providers' },
-          { text: 'GitHub', link: 'https://github.com/shardix/shardix' },
+          { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
         ],
         sidebar: {
           '/pt/guide/': [
@@ -149,7 +149,7 @@ export default defineConfig({
       provider: 'local',
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/shardix/shardix' },
+      { icon: 'github', link: 'https://github.com/euandrelucas/shardix' },
     ],
     footer: {
       message: 'Released under the MIT License.',

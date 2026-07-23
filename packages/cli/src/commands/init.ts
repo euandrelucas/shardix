@@ -47,9 +47,9 @@ export function createProjectFiles(options: InitProjectOptions): string {
       dev: 'tsx watch src/main.ts',
     },
     dependencies: {
-      '@shardix/core': '^0.8.0',
-      '@shardix/common': '^0.8.0',
-      [selectedAdapter.pkg]: '^0.8.0',
+      '@shardix/core': '^0.6.1',
+      '@shardix/common': '^0.6.1',
+      [selectedAdapter.pkg]: '^0.6.1',
       [selectedAdapter.client]: selectedAdapter.clientVer,
       dotenv: '^16.4.7',
     },

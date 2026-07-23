@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/cli/changelog", { "repo": "shardix/shardix" }],
+  "changelog": ["@changesets/cli/changelog", { "repo": "euandrelucas/shardix" }],
   "commit": false,
   "fixed": [],
   "linked": [],

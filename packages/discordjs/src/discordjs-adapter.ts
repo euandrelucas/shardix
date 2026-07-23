@@ -5,13 +5,21 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
   private client: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
 
-  constructor(options: any = { intents: [] }) {
+  constructor(options: any = {}) {
     try {
-      // Dynamic require/import to prevent hard crash if discord.js is not present
-      const { Client } = require('discord.js');
-      this.client = new Client(options);
+      const { Client, GatewayIntentBits } = require('discord.js');
+      const defaultIntents = options.intents || [
+        GatewayIntentBits?.Guilds ?? 1,
+        GatewayIntentBits?.GuildMessages ?? 512,
+        GatewayIntentBits?.MessageContent ?? 32768,
+        GatewayIntentBits?.GuildMembers ?? 2,
+        GatewayIntentBits?.GuildVoiceStates ?? 128,
+      ];
+      this.client = new Client({
+        intents: defaultIntents,
+        ...options,
+      });
     } catch {
-      // Fallback mock for testing or when discord.js is externalized
       this.client = null;
     }
   }
@@ -57,8 +65,11 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
     this.rawHandler = handler;
     if (this.client) {
       this.client.on('raw', async (data: any) => {
-        await handler(data as RawDiscordEvent);
+        if (data && data.t) {
+          await handler(data as RawDiscordEvent);
+        }
       });
+
       this.client.on('interactionCreate', async (interaction: any) => {
         if (this.rawHandler) {
           const rawPayload: RawDiscordEvent = {
@@ -67,14 +78,24 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
               id: interaction.id,
               type: interaction.type,
               token: interaction.token,
-              data: interaction.data,
+              data: {
+                name: interaction.commandName,
+                custom_id: interaction.customId,
+                options: interaction.options?.data || [],
+              },
               guild_id: interaction.guildId,
               channel_id: interaction.channelId,
               user: interaction.user ? { id: interaction.user.id, username: interaction.user.username } : undefined,
               member: interaction.member,
             },
           };
-          await this.rawHandler(rawPayload);
+
+          const result: any = await this.rawHandler(rawPayload);
+          if (result && typeof result === 'object' && 'data' in result && typeof interaction.reply === 'function') {
+            if (!interaction.replied && !interaction.deferred) {
+              await interaction.reply(result.data.content || result.data);
+            }
+          }
         }
       });
     }

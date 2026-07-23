@@ -8,7 +8,7 @@ export class ShardixError extends Error {
     this.name = 'ShardixError';
     this.code = options.code;
     this.solution = options.solution;
-    this.docsUrl = options.docsUrl || `https://github.com/shardix/shardix/tree/main/docs`;
+    this.docsUrl = options.docsUrl || `https://github.com/euandrelucas/shardix/tree/main/docs`;
   }
 }
 

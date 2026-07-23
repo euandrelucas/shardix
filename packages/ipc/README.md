@@ -20,4 +20,4 @@ await ipc.broadcast('user:levelup', { userId: '123' });
 
 ## License
 
-MIT © [Shardix Team](https://github.com/shardix/shardix)
+MIT © [Shardix Team](https://github.com/euandrelucas/shardix)

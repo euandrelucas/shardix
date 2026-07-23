@@ -41,4 +41,4 @@ export class PingController {
 
 ## License
 
-MIT © [Shardix Team](https://github.com/shardix/shardix)
+MIT © [Shardix Team](https://github.com/euandrelucas/shardix)
