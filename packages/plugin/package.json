@@ -1,6 +1,6 @@
 {
   "name": "@shardix/plugin",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "Official Plugin System & Extension Architecture for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

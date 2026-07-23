@@ -1,5 +1,18 @@
 # @shardix/cluster
 
+## 0.6.0
+
+### Minor Changes
+
+- # Shardix v0.8.0 — Standardized Monorepo Release
+
+  Standardize all 28 framework packages to version **v0.8.0**.
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.7.0
+
 ## 0.5.5
 
 ### Patch Changes

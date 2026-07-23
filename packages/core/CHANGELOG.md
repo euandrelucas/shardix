@@ -1,5 +1,20 @@
 # @shardix/core
 
+## 0.7.0
+
+### Minor Changes
+
+- # Shardix v0.8.0 — Standardized Monorepo Release
+
+  Standardize all 28 framework packages to version **v0.8.0**.
+
+### Patch Changes
+
+- Updated dependencies
+  - @shardix/common@0.7.0
+  - @shardix/http@0.2.0
+  - @shardix/transport@0.2.0
+
 ## 0.6.1
 
 ### Patch Changes
