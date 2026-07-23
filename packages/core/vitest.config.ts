@@ -35,6 +35,8 @@ export default defineConfig({
       '@shardix/eris': path.resolve(__dirname, '../../packages/eris/src/index.ts'),
       '@shardix/oceanicjs': path.resolve(__dirname, '../../packages/oceanicjs/src/index.ts'),
       '@shardix/discordeno': path.resolve(__dirname, '../../packages/discordeno/src/index.ts'),
+      '@shardix/provider-dashboard': path.resolve(__dirname, '../../packages/provider-dashboard/src/index.ts'),
+      '@shardix/dashboard': path.resolve(__dirname, '../../packages/dashboard/src/index.ts'),
     },
   },
   test: {

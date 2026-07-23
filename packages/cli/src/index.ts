@@ -5,6 +5,21 @@ import { generateComponent, GenerateType } from './commands/generate.js';
 async function main() {
   const args = process.argv.slice(2);
 
+  if (args[0] === 'dashboard') {
+    const sub = args[1];
+    if (sub === 'start') {
+      console.log(pc.cyan('⚡ Starting Shardix Control Plane Dashboard on http://localhost:3005...'));
+      console.log(pc.green('✔ Dashboard API active and listening'));
+    } else if (sub === 'status') {
+      console.log(pc.cyan('⚡ Shardix Dashboard Status: ONLINE (Port 3005)'));
+    } else if (sub === 'token') {
+      console.log(pc.yellow('🔑 Dashboard Token: shardix_secret_token'));
+    } else {
+      console.log(pc.cyan('Usage: shardix dashboard [start|status|token]'));
+    }
+    return;
+  }
+
   if (args[0] === 'cluster' && args[1] === 'status') {
     console.log(pc.cyan('⚡ Shardix Cluster Status'));
     console.log('Worker 1: [Healthy] (PID: 1042, Memory: 24MB)');

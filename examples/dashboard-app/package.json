@@ -1,0 +1,17 @@
+{
+  "name": "@shardix/example-dashboard-app",
+  "private": true,
+  "version": "0.5.0",
+  "description": "Shardix v0.5 Dashboard App — Control Plane Operations, Sharding Analytics & Monitoring",
+  "scripts": {
+    "dev": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@shardix/common": "workspace:*",
+    "@shardix/core": "workspace:*",
+    "@shardix/dashboard": "workspace:*",
+    "@shardix/provider-dashboard": "workspace:*",
+    "@shardix/provider-health": "workspace:*",
+    "@shardix/provider-logger": "workspace:*"
+  }
+}

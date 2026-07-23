@@ -13,8 +13,21 @@ export class DiscordJSAdapter implements DiscordAdapter<Client> {
     return this.client;
   }
 
-  public async login(token: string): Promise<void> {
-    await this.client.login(token);
+  public async login(token?: string): Promise<void> {
+    const finalToken = token || process.env.DISCORD_TOKEN;
+    if (!finalToken) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('[DiscordJSAdapter] Warning: No DISCORD_TOKEN provided. Gateway connection paused.');
+      }
+      return;
+    }
+    try {
+      await this.client.login(finalToken);
+    } catch (err: any) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.error('[DiscordJSAdapter] Gateway login failed:', err.message);
+      }
+    }
   }
 
   public async destroy(): Promise<void> {

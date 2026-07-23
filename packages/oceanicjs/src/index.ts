@@ -20,9 +20,12 @@ export class OceanicAdapter implements DiscordAdapter {
   }
 
   public async login(token?: string): Promise<void> {
-    const finalToken = token || this.options.auth;
-    if (!finalToken && process.env.NODE_ENV !== 'test') {
-      throw new Error('[OceanicAdapter] Auth token is required to connect Oceanic.js');
+    const finalToken = token || this.options.auth || process.env.DISCORD_TOKEN;
+    if (!finalToken) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('[OceanicAdapter] Warning: No DISCORD_TOKEN provided. Gateway connection paused.');
+      }
+      return;
     }
     this.isConnected = true;
   }

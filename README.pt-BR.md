@@ -10,8 +10,9 @@
 </p>
 
 <p align="center">
-  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.4.0-8b5cf6?style=for-the-badge&logo=typescript">
+  <img alt="Shardix Version" src="https://img.shields.io/badge/Vers%C3%A3o-0.5.0-8b5cf6?style=for-the-badge&logo=typescript">
   <img alt="Zero Vendor Lock-in" src="https://img.shields.io/badge/Vendor--Lock--in-ZERO-22c55e?style=for-the-badge">
+  <img alt="Control Plane" src="https://img.shields.io/badge/Control%20Plane-Dashboard%20UI-cyan?style=for-the-badge">
   <img alt="Suporte Multilib" src="https://img.shields.io/badge/Adapters-Discord.js%20%7C%20Eris%20%7C%20Oceanic.js%20%7C%20Discordeno-blue?style=for-the-badge">
   <img alt="Arquitetura Distribuída" src="https://img.shields.io/badge/Arquitetura-Workers%20Distribu%C3%ADdos-purple?style=for-the-badge">
   <img alt="Licença" src="https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=for-the-badge">

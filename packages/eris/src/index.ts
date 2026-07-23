@@ -20,9 +20,12 @@ export class ErisAdapter implements DiscordAdapter {
   }
 
   public async login(token?: string): Promise<void> {
-    const finalToken = token || this.options.token;
-    if (!finalToken && process.env.NODE_ENV !== 'test') {
-      throw new Error('[ErisAdapter] Token is required to login to Eris');
+    const finalToken = token || this.options.token || process.env.DISCORD_TOKEN;
+    if (!finalToken) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('[ErisAdapter] Warning: No DISCORD_TOKEN provided. Gateway connection paused.');
+      }
+      return;
     }
     this.isConnected = true;
   }

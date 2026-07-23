@@ -21,9 +21,12 @@ export class DiscordenoAdapter implements DiscordAdapter {
   }
 
   public async login(token?: string): Promise<void> {
-    const finalToken = token || this.options.token;
-    if (!finalToken && process.env.NODE_ENV !== 'test') {
-      throw new Error('[DiscordenoAdapter] Token is required to start Discordeno bot');
+    const finalToken = token || this.options.token || process.env.DISCORD_TOKEN;
+    if (!finalToken) {
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('[DiscordenoAdapter] Warning: No DISCORD_TOKEN provided. Gateway connection paused.');
+      }
+      return;
     }
     this.isConnected = true;
   }

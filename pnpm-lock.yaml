@@ -30,6 +30,27 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.1)
 
+  examples/dashboard-app:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@shardix/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@shardix/dashboard':
+        specifier: workspace:*
+        version: link:../../packages/dashboard
+      '@shardix/provider-dashboard':
+        specifier: workspace:*
+        version: link:../../packages/provider-dashboard
+      '@shardix/provider-health':
+        specifier: workspace:*
+        version: link:../../packages/provider-health
+      '@shardix/provider-logger':
+        specifier: workspace:*
+        version: link:../../packages/provider-logger
+
   examples/distributed-app:
     dependencies:
       '@shardix/cluster':
@@ -297,6 +318,25 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.1)
 
+  packages/dashboard:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../common
+      '@shardix/dashboard-api':
+        specifier: workspace:*
+        version: link:../dashboard-api
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/dashboard-api:
     dependencies:
       '@shardix/common':
@@ -498,6 +538,25 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/provider-dashboard:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../common
+      '@shardix/dashboard-api':
+        specifier: workspace:*
+        version: link:../dashboard-api
     devDependencies:
       rimraf:
         specifier: ^6.0.1
