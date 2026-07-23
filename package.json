@@ -13,7 +13,7 @@
     "clean": "turbo run clean && rimraf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo build && changeset publish"
+    "release": "pnpm build && changeset publish --access public"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.10",

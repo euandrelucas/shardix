@@ -54,3 +54,19 @@ If your GitHub Organization restricts the default `GITHUB_TOKEN`:
 2. Add it as a secret named `PAT_TOKEN` under repository `Settings -> Secrets and variables -> Actions`.
 3. The workflow will automatically use `PAT_TOKEN` as a fallback.
 
+---
+
+## ⚠️ Troubleshooting: npm 404 Not Found on Publish
+
+If you encounter the error:
+`404 Not Found - PUT https://registry.npmjs.org/@shardix%2fcore - Not found`
+
+This occurs because scoped packages (`@shardix/*`) require the Organization Scope to exist on npm:
+
+1. Log in to [npmjs.com](https://www.npmjs.com/).
+2. Click on your profile picture -> **Add Organization**.
+3. Create the organization named **`shardix`** (Public/Free).
+4. Create an **Automation Token** or **Granular Access Token** with read/write access to `@shardix/*`.
+5. Save the token as `NPM_TOKEN` under GitHub Repository `Settings -> Secrets and variables -> Actions`.
+
+
