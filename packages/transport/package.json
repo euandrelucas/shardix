@@ -1,6 +1,6 @@
 {
   "name": "@shardix/transport",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Gateway and HTTP Interactions transports for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
