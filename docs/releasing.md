@@ -34,14 +34,23 @@ When a PR containing changesets is merged into the `main` branch:
 
 ---
 
-## 🏷️ Pre-releases (Alpha/Beta/RC)
+## ⚠️ Troubleshooting: GitHub Actions PR Permissions
 
-To enter pre-release mode for upcoming versions:
+If you encounter the error:
+`Error: GitHub Actions is not permitted to create or approve pull requests`
 
-```bash
-# Enter beta mode
-pnpm changeset pre enter beta
+### Option 1: Enable Permission in Repository Settings (Recommended)
 
-# Exit pre-release mode
-pnpm changeset pre exit
-```
+1. Go to your GitHub repository: `Settings -> Actions -> General`.
+2. Scroll down to **Workflow permissions**.
+3. Select **Read and write permissions**.
+4. Check the checkbox: **"Allow GitHub Actions to create and approve pull requests"**.
+5. Click **Save**.
+
+### Option 2: Use a Personal Access Token (PAT)
+
+If your GitHub Organization restricts the default `GITHUB_TOKEN`:
+1. Create a Personal Access Token (PAT) with `repo` scope under GitHub `Developer Settings`.
+2. Add it as a secret named `PAT_TOKEN` under repository `Settings -> Secrets and variables -> Actions`.
+3. The workflow will automatically use `PAT_TOKEN` as a fallback.
+
