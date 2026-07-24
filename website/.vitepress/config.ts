@@ -5,7 +5,7 @@ export default defineConfig({
   description: 'Enterprise Architecture Framework for Discord Applications & Bots',
   cleanUrls: true,
   ignoreDeadLinks: true,
-  base: '/shardix/',
+  base: '/',
   locales: {
     root: {
       label: 'English',
