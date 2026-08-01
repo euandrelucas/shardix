@@ -9,6 +9,7 @@ export class GatewayTransport implements Transport {
   public readonly name = 'GatewayTransport';
   private adapter: DiscordAdapter;
   private token?: string;
+  private loggedIn = false;
 
   constructor(options: GatewayTransportOptions) {
     this.adapter = options.adapter;
@@ -16,18 +17,21 @@ export class GatewayTransport implements Transport {
   }
 
   public async listen(handler: InteractionHandler): Promise<void> {
+    // Register the interaction handler via raw event forwarding
     this.adapter.registerRawHandler(async (event) => {
-      // Opcode 0 = Dispatch
       if (event.t === 'INTERACTION_CREATE') {
-        const response = await handler(event.d);
-        if (response) {
-          await this.adapter.emitInteractionResponse(event.d.id, event.d.token, response);
-        }
+        // The handler (router) processes the interaction; adapter handles the reply natively
+        await handler(event.d);
       }
     });
 
-    if (this.token) {
-      await this.adapter.login(this.token);
+    // Login using the token if provided, or rely on DISCORD_TOKEN env var
+    if (!this.loggedIn) {
+      this.loggedIn = true;
+      const token = this.token || process.env.DISCORD_TOKEN;
+      if (token && process.env.NODE_ENV !== 'test') {
+        await this.adapter.login(token);
+      }
     }
   }
 

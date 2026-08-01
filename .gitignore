@@ -6,3 +6,4 @@ coverage
 .ds_store
 .env
 .env.local
+scratch/

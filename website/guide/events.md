@@ -1,134 +1,172 @@
-# Events & Component Interactions
+# Events & Unified Context
 
-Shardix provides a unified, declarative decorator system for handling native Discord Gateway events, Slash Commands, Buttons, Modals, Select Menus, Autocomplete, Context Menus, and Message Commands.
+Shardix provides a unified way to handle Discord events using decorators, completely abstracting the underlying library.
 
----
+## Event Decorators
 
-## 🎧 Native Gateway Events (`@Event`, `@On`, `@Once`)
-
-You can listen to any native Discord event emitted by Discord.js, Eris, Oceanic.js, or Discordeno using `@Event()`, `@On()`, or `@Once()`. Native event objects are passed directly into your handler methods.
+### `@On(eventName)` — Persistent listener
 
 ```typescript
-import { Controller, Event, On, Once } from '@shardix/common';
-import { GuildMember, Message, Guild } from 'discord.js';
+import { Controller, On } from '@shardix/common';
 
 @Controller()
-export class GuildEventsController {
-  // Listen to new members joining
-  @Event('guildMemberAdd')
-  onMemberJoin(member: GuildMember) {
-    console.log(`[EVENT] Member joined: ${member.user.username}`);
-  }
-
-  // Alias @On for message creation
+export class EventsController {
   @On('messageCreate')
-  onMessage(message: Message) {
-    if (message.author.bot) return;
-    console.log(`[EVENT] Message: ${message.content}`);
+  async onMessage(message: any) {
+    if (message.content === 'hello') {
+      await message.reply('Hello! 👋');
+    }
   }
 
-  // Alias @Once for bot startup
-  @Once('ready')
-  onReady() {
-    console.log('⚡ Shardix Gateway Connection Ready!');
+  @On('guildMemberAdd')
+  async onMemberJoin(member: any) {
+    console.log(`${member.user.username} joined the server!`);
+  }
+
+  @On('guildMemberRemove')
+  async onMemberLeave(member: any) {
+    console.log(`${member.user.username} left the server.`);
+  }
+
+  @On('ready')
+  async onReady(client: any) {
+    console.log(`✅ Logged in as ${client.user.tag}`);
+    // Set bot status
+    client.user.setPresence({
+      activities: [{ name: 'with Shardix', type: 0 }],
+      status: 'online',
+    });
   }
 }
 ```
 
----
-
-## ⚔️ Slash Commands (`@SlashCommand`)
-
-Register Discord application slash commands with full metadata options:
+### `@Once(eventName)` — One-time listener
 
 ```typescript
-import { Controller, SlashCommand } from '@shardix/common';
-
-@Controller()
-export class UserCommandsController {
-  @SlashCommand({
-    name: 'avatar',
-    description: 'Get a user avatar',
-  })
-  async getAvatar(interaction: any) {
-    return {
-      type: 4,
-      data: {
-        content: `Avatar URL: ${interaction.user?.avatar}`,
-      },
-    };
-  }
+@Once('ready')
+async onFirstReady(client: any) {
+  // Only fires ONCE when the bot first connects
+  console.log('Bot is ready for the first time!');
+  await this.registerSlashCommands();
 }
 ```
 
----
+## CommandContext
 
-## 🔘 Message Components (`@Button`, `@SelectMenu`, `@Modal`)
-
-Handle interactive buttons, select dropdown menus, and modal form submissions with string IDs or Regular Expressions:
+Every slash command, button, modal, and select menu handler receives a `CommandContext` as its first argument:
 
 ```typescript
-import { Controller, Button, SelectMenu, Modal } from '@shardix/common';
+@SlashCommand({ name: 'example', description: 'Example command' })
+async example(ctx: CommandContext) {
+  // User information
+  console.log(ctx.user.id);
+  console.log(ctx.user.username);
 
-@Controller()
-export class UIComponentsController {
-  // Handle button clicks with exact ID match
-  @Button('confirm_action')
-  async onConfirm(payload: any) {
-    return {
-      type: 4,
-      data: { content: 'Action confirmed!' },
-    };
-  }
+  // Guild information
+  console.log(ctx.guildId);   // undefined in DMs
+  console.log(ctx.channelId);
 
-  // Handle buttons matching dynamic regex pattern
-  @Button(/^role_toggle_(\d+)$/)
-  async onRoleToggle(payload: any) {
-    return {
-      type: 4,
-      data: { content: 'Role toggled successfully.' },
-    };
-  }
+  // Member information (guild only)
+  console.log(ctx.member?.roles);
+  console.log(ctx.member?.permissions);
 
-  // Handle Modal Form Submission
-  @Modal('feedback_modal')
-  async onFeedbackSubmit(payload: any) {
-    return {
-      type: 4,
-      data: { content: 'Thank you for your feedback!' },
-    };
-  }
+  // The raw interaction payload
+  console.log(ctx.raw);
+
+  // Get command options
+  const name = ctx.getOption<string>('name');
+  const count = ctx.getOption<number>('count');
+
+  // Get all options as a map
+  const { name, count } = ctx.getOptions();
+
+  // Reply to the interaction
+  return ctx.reply('Hello World!');
 }
 ```
 
----
-
-## 🔍 Autocomplete & Context Menus
+### Replying to Interactions
 
 ```typescript
-import { Controller, Autocomplete, ContextMenu } from '@shardix/common';
+// Simple text reply
+return ctx.reply('Hello!');
 
-@Controller()
-export class AdvancedInteractionsController {
-  @Autocomplete('search', 'query')
-  async onSearchQuery(payload: any) {
-    return {
-      type: 8,
-      data: {
-        choices: [
-          { name: 'Option 1', value: '1' },
-          { name: 'Option 2', value: '2' },
-        ],
-      },
-    };
+// Rich reply with embeds
+return ctx.reply({
+  content: 'Check this out!',
+  embeds: [embed.toJSON()],
+  components: [row.toJSON()],
+});
+
+// Ephemeral reply (only visible to the command user)
+return ctx.reply({
+  content: 'This is only visible to you!',
+  ephemeral: true,
+});
+
+// Defer response (shows loading indicator)
+await ctx.defer();
+// ... do long operation ...
+return ctx.editReply('Finished!');
+
+// Deferred ephemeral
+await ctx.defer(true); // true = ephemeral
+await doLongOperation();
+return ctx.editReply('Done!');
+
+// Follow-up messages
+await ctx.reply('Processing...');
+await ctx.followUp('Step 1 done!');
+await ctx.followUp('Step 2 done!');
+```
+
+### Awaiting Components
+
+Wait for a button click, modal, or select menu after sending a message:
+
+```typescript
+@SlashCommand({ name: 'confirm', description: 'Confirm something' })
+async confirm(ctx: CommandContext) {
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId('yes').setLabel('Yes').setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId('no').setLabel('No').setStyle(ButtonStyle.Danger),
+  );
+
+  await ctx.reply({
+    content: 'Are you sure?',
+    components: [row.toJSON()],
+  });
+
+  // Wait for a button click (30 second timeout)
+  const buttonCtx = await ctx.awaitButton('yes', 30000);
+  if (!buttonCtx) {
+    return ctx.editReply({ content: 'Timed out.', components: [] });
   }
 
-  @ContextMenu({ name: 'User Profile', type: 'USER' })
-  async onUserContextMenu(payload: any) {
-    return {
-      type: 4,
-      data: { content: 'User Profile selected.' },
-    };
-  }
+  return buttonCtx.reply({ content: '✅ Confirmed!', ephemeral: true });
 }
 ```
+
+## Available Discord Events
+
+All standard Discord events are supported:
+
+| Event | Description |
+|-------|-------------|
+| `ready` | Bot is connected and ready |
+| `messageCreate` | Message sent in a channel |
+| `messageUpdate` | Message edited |
+| `messageDelete` | Message deleted |
+| `guildMemberAdd` | User joined a server |
+| `guildMemberRemove` | User left a server |
+| `guildMemberUpdate` | Server member updated |
+| `guildCreate` | Bot added to a server |
+| `guildDelete` | Bot removed from a server |
+| `channelCreate` | Channel created |
+| `channelDelete` | Channel deleted |
+| `roleCreate` | Role created |
+| `roleDelete` | Role deleted |
+| `voiceStateUpdate` | User joined/left voice channel |
+| `presenceUpdate` | User's presence changed |
+| `typingStart` | User started typing |
+| `interactionCreate` | Any interaction (handled automatically by Shardix) |

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5865f2"/>
+      <stop offset="60%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <!-- Hexagon shard background -->
+  <polygon points="24,4 40,13.6 40,34.4 24,44 8,34.4 8,13.6" fill="url(#g1)" opacity="0.15"/>
+  <polygon points="24,4 40,13.6 40,34.4 24,44 8,34.4 8,13.6" fill="none" stroke="url(#g1)" stroke-width="1.5" opacity="0.6"/>
+  <!-- Lightning bolt -->
+  <path d="M27 8L15 26h10l-4 14L37 22H27L31 8z" fill="url(#g1)" filter="url(#glow)"/>
+</svg>

@@ -6,6 +6,32 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
   base: '/',
+
+  // Force dark mode as default — our theme is designed dark-first
+  appearance: 'dark',
+
+  head: [
+    // Favicon
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+
+    // Open Graph / Social
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'Shardix Framework' }],
+    ['meta', { property: 'og:description', content: 'Enterprise Architecture Framework for Discord Bots. NestJS-inspired, zero vendor lock-in.' }],
+    ['meta', { property: 'og:image', content: 'https://shardix.dev/og-image.png' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: 'Shardix Framework' }],
+    ['meta', { name: 'twitter:description', content: 'Enterprise Architecture Framework for Discord Bots.' }],
+
+    // Theme color (Discord blurple)
+    ['meta', { name: 'theme-color', content: '#5865f2' }],
+
+    // Fonts preconnect for perf
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+  ],
+
   locales: {
     root: {
       label: 'English',
@@ -16,12 +42,19 @@ export default defineConfig({
           { text: 'Class Index', link: '/api/classes' },
           { text: 'API Reference', link: '/api/overview' },
           { text: 'Ecosystem', link: '/guide/providers' },
-          { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
+          {
+            text: 'v0.8.0',
+            items: [
+              { text: 'Changelog', link: 'https://github.com/euandrelucas/shardix/releases' },
+              { text: 'npm', link: 'https://www.npmjs.com/org/shardix' },
+            ],
+          },
         ],
         sidebar: {
           '/guide/': [
             {
               text: 'Fundamentals',
+              collapsed: false,
               items: [
                 { text: 'Introduction', link: '/guide/introduction' },
                 { text: 'Getting Started', link: '/guide/getting-started' },
@@ -31,7 +64,8 @@ export default defineConfig({
               ],
             },
             {
-              text: 'Platform & Building Blocks',
+              text: 'Building Blocks',
+              collapsed: false,
               items: [
                 { text: 'Universal Builders', link: '/guide/builders' },
                 { text: 'Collectors & Iterators', link: '/guide/collectors' },
@@ -43,6 +77,7 @@ export default defineConfig({
             },
             {
               text: 'Adapters & Runtimes',
+              collapsed: false,
               items: [
                 { text: 'Multi-Library Adapters', link: '/guide/adapters' },
                 { text: 'Runtimes (Gateway, HTTP, Hybrid)', link: '/guide/runtimes' },
@@ -50,6 +85,7 @@ export default defineConfig({
             },
             {
               text: 'Ecosystem & Scaling',
+              collapsed: false,
               items: [
                 { text: 'Official Providers', link: '/guide/providers' },
                 { text: 'Workers & Clusters', link: '/guide/clusters' },
@@ -87,12 +123,19 @@ export default defineConfig({
           { text: 'Índice de Classes', link: '/pt/api/classes' },
           { text: 'Referência da API', link: '/pt/api/overview' },
           { text: 'Ecossistema', link: '/pt/guide/providers' },
-          { text: 'GitHub', link: 'https://github.com/euandrelucas/shardix' },
+          {
+            text: 'v0.8.0',
+            items: [
+              { text: 'Changelog', link: 'https://github.com/euandrelucas/shardix/releases' },
+              { text: 'npm', link: 'https://www.npmjs.com/org/shardix' },
+            ],
+          },
         ],
         sidebar: {
           '/pt/guide/': [
             {
               text: 'Fundamentos',
+              collapsed: false,
               items: [
                 { text: 'Introdução', link: '/pt/guide/introduction' },
                 { text: 'Primeiros Passos', link: '/pt/guide/getting-started' },
@@ -102,7 +145,8 @@ export default defineConfig({
               ],
             },
             {
-              text: 'Plataforma e Blocos',
+              text: 'Blocos de Construção',
+              collapsed: false,
               items: [
                 { text: 'Builders Universais', link: '/pt/guide/builders' },
                 { text: 'Collectors & Iteradores', link: '/pt/guide/collectors' },
@@ -114,6 +158,7 @@ export default defineConfig({
             },
             {
               text: 'Adapters e Runtimes',
+              collapsed: false,
               items: [
                 { text: 'Adapters Multi-Biblioteca', link: '/pt/guide/adapters' },
                 { text: 'Runtimes (Gateway, HTTP, Híbrido)', link: '/pt/guide/runtimes' },
@@ -121,6 +166,7 @@ export default defineConfig({
             },
             {
               text: 'Ecossistema e Escala',
+              collapsed: false,
               items: [
                 { text: 'Provedores Oficiais', link: '/pt/guide/providers' },
                 { text: 'Workers & Clusters', link: '/pt/guide/clusters' },
@@ -149,17 +195,59 @@ export default defineConfig({
       },
     },
   },
+
   themeConfig: {
-    logo: '⚡',
+    logo: {
+      light: '/logo-light.svg',
+      dark: '/logo-dark.svg',
+      alt: 'Shardix',
+    },
+
     search: {
       provider: 'local',
+      options: {
+        translations: {
+          button: {
+            buttonText: 'Search docs...',
+            buttonAriaLabel: 'Search documentation',
+          },
+        },
+      },
     },
+
     socialLinks: [
       { icon: 'github', link: 'https://github.com/euandrelucas/shardix' },
+      { icon: 'discord', link: 'https://discord.gg/shardix' },
+      { icon: 'npm', link: 'https://www.npmjs.com/org/shardix' },
     ],
+
+    editLink: {
+      pattern: 'https://github.com/euandrelucas/shardix/edit/main/website/:path',
+      text: 'Edit this page on GitHub',
+    },
+
+    lastUpdated: {
+      text: 'Last updated',
+      formatOptions: {
+        dateStyle: 'medium',
+      },
+    },
+
     footer: {
-      message: 'Released under the MIT License.',
+      message: 'Released under the <a href="https://github.com/euandrelucas/shardix/blob/main/LICENSE">MIT License</a>. Join our <a href="https://discord.gg/shardix">Discord</a>!',
       copyright: 'Copyright © 2026 Shardix Core Team',
     },
+
+    docFooter: {
+      prev: 'Previous page',
+      next: 'Next page',
+    },
+
+    outline: {
+      level: [2, 3],
+      label: 'On this page',
+    },
+
+    externalLinkIcon: true,
   },
 });

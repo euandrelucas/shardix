@@ -1,7 +1,7 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { generateComponent, GenerateType } from './commands/generate.js';
-import { createProjectFiles, InitProjectOptions } from './commands/init.js';
+import { createProjectFiles, installDependencies, InitProjectOptions } from './commands/init.js';
 
 async function main() {
   const args = process.argv.slice(2);
@@ -176,9 +176,44 @@ async function main() {
     docker: project.docker,
   });
 
-  s.stop(pc.green(`✔ Project files generated successfully at: ${createdDir}`));
+  s.stop(pc.green(`✔ Project generated successfully at: ${createdDir}`));
 
-  p.outro(`Next steps:\n  cd ${project.name}\n  pnpm install\n  pnpm dev`);
+  // Ask if user wants to install dependencies
+  const shouldInstall = await p.confirm({
+    message: `Install dependencies now?`,
+    initialValue: true,
+  });
+
+  if (p.isCancel(shouldInstall)) {
+    p.cancel('Skipped dependency installation.');
+  } else if (shouldInstall) {
+    const pm = await p.select({
+      message: 'Select package manager:',
+      options: [
+        { value: 'npm', label: 'npm', hint: 'Default' },
+        { value: 'pnpm', label: 'pnpm', hint: 'Recommended' },
+        { value: 'yarn', label: 'yarn' },
+        { value: 'bun', label: 'bun', hint: 'Fastest' },
+      ],
+    }) as string;
+
+    if (!p.isCancel(pm)) {
+      installDependencies(createdDir, pm);
+    }
+  }
+
+  p.outro(
+    [
+      pc.bold(`\n🚀 Next steps:`),
+      `  ${pc.cyan('cd')} ${project.name}`,
+      !shouldInstall || p.isCancel(shouldInstall) ? `  ${pc.cyan('pnpm install')}` : '',
+      `  ${pc.cyan('# Edit .env with your DISCORD_TOKEN and CLIENT_ID')}`,
+      `  ${pc.cyan('pnpm run register-commands')}  ${pc.gray('# Register slash commands with Discord')}`,
+      `  ${pc.cyan('pnpm run dev')}               ${pc.gray('# Start the bot in development mode')}`,
+      `\n📚 Docs: ${pc.underline('https://shardix.dev')}`,
+      `💬 Discord: ${pc.underline('https://discord.gg/shardix')}`,
+    ].filter(Boolean).join('\n')
+  );
 }
 
 main().catch(console.error);

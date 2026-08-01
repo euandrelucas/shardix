@@ -46,6 +46,9 @@ export class ShardixApplication {
   constructor(options: ShardixOptions = {}) {
     this.rest = new ShardixRestClient(this);
     this.adapter = options.adapter;
+    if (this.adapter) {
+      this.router.setAdapter(this.adapter);
+    }
     this.autoAnalyze = options.autoAnalyze !== false;
 
     if (options.providers) {
@@ -120,20 +123,23 @@ export class ShardixApplication {
     }
 
     if (this.runtime) {
+      // GatewayRuntime handles adapter registration AND login internally
       await this.runtime.start(this);
-    }
+    } else {
+      // For transport-only setups (HTTP, etc.), listen on transports
+      for (const transport of this.transports) {
+        await transport.listen((payload) => this.router.handleInteraction(payload));
+      }
 
-    for (const transport of this.transports) {
-      await transport.listen((payload) => this.router.handleInteraction(payload));
-    }
-
-    if (this.adapter && typeof this.adapter.login === 'function') {
-      const token = process.env.DISCORD_TOKEN;
-      if (token && process.env.NODE_ENV !== 'test') {
-        try {
-          await this.adapter.login(token);
-        } catch (err: any) {
-          console.error('[Shardix Application] Adapter login failed:', err?.message || err);
+      // Only login directly if no runtime is managing the adapter
+      if (this.adapter && typeof this.adapter.login === 'function') {
+        const token = process.env.DISCORD_TOKEN;
+        if (token && process.env.NODE_ENV !== 'test') {
+          try {
+            await this.adapter.login(token);
+          } catch (err: any) {
+            console.error('[Shardix Application] Adapter login failed:', err?.message || err);
+          }
         }
       }
     }
@@ -141,6 +147,9 @@ export class ShardixApplication {
     // Keep process alive for standalone bots
     if (process.env.NODE_ENV !== 'test') {
       this.keepAliveInterval = setInterval(() => {}, 60000);
+      // Handle graceful shutdown
+      process.once('SIGINT', () => this.stop('SIGINT').then(() => process.exit(0)));
+      process.once('SIGTERM', () => this.stop('SIGTERM').then(() => process.exit(0)));
     }
   }
 
@@ -236,5 +245,9 @@ export class ShardixApplication {
 
   public getAdapter(): DiscordAdapter | undefined {
     return this.adapter;
+  }
+
+  public getCommandData(): any[] {
+    return this.router.getSlashCommandData();
   }
 }

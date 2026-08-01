@@ -1,0 +1,757 @@
+/* ============================================================
+   SHARDIX — Custom VitePress Theme
+   Premium design: Dark navy base, blurple + purple gradients
+   ============================================================ */
+
+/* ─── Google Fonts ─── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ─── CSS Custom Properties ─── */
+:root {
+  /* Brand colors */
+  --shardix-blurple: #5865f2;
+  --shardix-purple: #a855f7;
+  --shardix-cyan: #06b6d4;
+  --shardix-green: #22c55e;
+  --shardix-red: #ef4444;
+
+  /* Background palette */
+  --shardix-bg-0: #050810;
+  --shardix-bg-1: #0a0e1a;
+  --shardix-bg-2: #0f1628;
+  --shardix-bg-3: #131d35;
+  --shardix-bg-card: rgba(15, 22, 40, 0.7);
+
+  /* Text */
+  --shardix-text-1: #e8eaf0;
+  --shardix-text-2: #9ba3c0;
+  --shardix-text-3: #5e6891;
+
+  /* Gradients */
+  --shardix-gradient-brand: linear-gradient(135deg, var(--shardix-blurple) 0%, var(--shardix-purple) 100%);
+  --shardix-gradient-glow: linear-gradient(135deg, rgba(88,101,242,0.15) 0%, rgba(168,85,247,0.15) 100%);
+  --shardix-gradient-text: linear-gradient(90deg, var(--shardix-blurple) 0%, var(--shardix-purple) 60%, var(--shardix-cyan) 100%);
+
+  /* Borders */
+  --shardix-border: rgba(88, 101, 242, 0.2);
+  --shardix-border-hover: rgba(88, 101, 242, 0.5);
+
+  /* Shadows */
+  --shardix-glow-sm: 0 0 20px rgba(88,101,242,0.15);
+  --shardix-glow-md: 0 0 40px rgba(88,101,242,0.2);
+  --shardix-glow-lg: 0 0 80px rgba(88,101,242,0.3);
+}
+
+/* ─── VitePress Color Overrides ─── */
+.dark {
+  --vp-c-bg: var(--shardix-bg-1);
+  --vp-c-bg-soft: var(--shardix-bg-2);
+  --vp-c-bg-mute: var(--shardix-bg-3);
+  --vp-c-bg-alt: var(--shardix-bg-0);
+
+  --vp-c-brand-1: var(--shardix-blurple);
+  --vp-c-brand-2: #7983f5;
+  --vp-c-brand-3: #a0a8f8;
+  --vp-c-brand-soft: rgba(88, 101, 242, 0.12);
+
+  --vp-c-text-1: var(--shardix-text-1);
+  --vp-c-text-2: var(--shardix-text-2);
+  --vp-c-text-3: var(--shardix-text-3);
+
+  --vp-c-divider: var(--shardix-border);
+  --vp-c-divider-light: rgba(88,101,242,0.1);
+
+  --vp-c-border: var(--shardix-border);
+  --vp-c-border-hover: var(--shardix-border-hover);
+
+  --vp-c-tip-1: var(--shardix-cyan);
+  --vp-c-tip-soft: rgba(6,182,212,0.1);
+
+  --vp-c-warning-1: #f59e0b;
+  --vp-c-warning-soft: rgba(245,158,11,0.1);
+
+  --vp-c-danger-1: var(--shardix-red);
+  --vp-c-danger-soft: rgba(239,68,68,0.1);
+}
+
+/* Default to dark theme even without .dark class for SSR */
+:root {
+  --vp-c-bg: var(--shardix-bg-1);
+  --vp-c-bg-soft: var(--shardix-bg-2);
+  --vp-c-bg-mute: var(--shardix-bg-3);
+  --vp-c-bg-alt: var(--shardix-bg-0);
+
+  --vp-c-brand-1: var(--shardix-blurple);
+  --vp-c-brand-2: #7983f5;
+  --vp-c-brand-3: #a0a8f8;
+  --vp-c-brand-soft: rgba(88, 101, 242, 0.12);
+
+  --vp-c-text-1: var(--shardix-text-1);
+  --vp-c-text-2: var(--shardix-text-2);
+  --vp-c-text-3: var(--shardix-text-3);
+
+  --vp-c-divider: var(--shardix-border);
+  --vp-c-border: var(--shardix-border);
+}
+
+/* ─── Base Typography ─── */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  background-color: var(--shardix-bg-1) !important;
+  color: var(--shardix-text-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Navbar ─── */
+.VPNav {
+  background: rgba(10, 14, 26, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid var(--shardix-border) !important;
+  box-shadow: 0 1px 0 var(--shardix-border), var(--shardix-glow-sm);
+}
+
+.VPNavBarTitle .title {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  background: var(--shardix-gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.VPNavBarMenuLink {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: var(--shardix-text-2) !important;
+  transition: color 0.2s ease !important;
+}
+
+.VPNavBarMenuLink:hover,
+.VPNavBarMenuLink.active {
+  color: var(--shardix-text-1) !important;
+}
+
+/* ─── Hero Section ─── */
+.VPHome {
+  background: var(--shardix-bg-1) !important;
+}
+
+/* Background grid/mesh effect */
+.VPHomeHero {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 24px 120px !important;
+}
+
+.VPHomeHero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(88,101,242,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 60%, rgba(168,85,247,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(6,182,212,0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Grid overlay */
+.VPHomeHero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(88,101,242,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,101,242,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.VPHomeHero .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero name (big gradient text) */
+.VPHero .name {
+  font-size: clamp(2.5rem, 6vw, 5rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.05 !important;
+  background: var(--shardix-gradient-text) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  filter: drop-shadow(0 0 30px rgba(88,101,242,0.4));
+}
+
+/* Hero text (subtitle line) */
+.VPHero .text {
+  font-size: clamp(1.4rem, 3vw, 2.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--shardix-text-1) !important;
+  line-height: 1.2 !important;
+  margin-top: 8px !important;
+}
+
+/* Hero tagline */
+.VPHero .tagline {
+  font-size: 1.05rem !important;
+  font-weight: 400 !important;
+  color: var(--shardix-text-2) !important;
+  line-height: 1.7 !important;
+  max-width: 560px !important;
+  margin-top: 20px !important;
+}
+
+/* Hero image */
+.VPHero .image-container {
+  filter: drop-shadow(0 0 60px rgba(88,101,242,0.35)) drop-shadow(0 0 120px rgba(168,85,247,0.2));
+}
+
+/* ─── Hero Buttons ─── */
+.VPButton.medium {
+  height: 44px !important;
+  padding: 0 24px !important;
+  border-radius: 10px !important;
+  font-size: 0.925rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.VPButton.brand {
+  background: var(--shardix-gradient-brand) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(88,101,242,0.4) !important;
+}
+
+.VPButton.brand:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(88,101,242,0.5) !important;
+  filter: brightness(1.1) !important;
+}
+
+.VPButton.alt {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: var(--shardix-border) !important;
+  color: var(--shardix-text-1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.VPButton.alt:hover {
+  background: rgba(88,101,242,0.1) !important;
+  border-color: var(--shardix-border-hover) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ─── Feature Cards ─── */
+.VPFeatures {
+  background: var(--shardix-bg-1) !important;
+  padding: 0 24px 80px !important;
+}
+
+.VPFeature {
+  background: var(--shardix-bg-card) !important;
+  border: 1px solid var(--shardix-border) !important;
+  border-radius: 16px !important;
+  padding: 28px !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.VPFeature::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--shardix-gradient-glow);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.VPFeature:hover {
+  border-color: var(--shardix-border-hover) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shardix-glow-md) !important;
+}
+
+.VPFeature:hover::before {
+  opacity: 1;
+}
+
+.VPFeature .icon {
+  font-size: 2rem !important;
+  margin-bottom: 12px !important;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(88,101,242,0.5));
+}
+
+.VPFeature .title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--shardix-text-1) !important;
+  margin-bottom: 8px !important;
+  letter-spacing: -0.01em;
+}
+
+.VPFeature .details {
+  font-size: 0.875rem !important;
+  color: var(--shardix-text-2) !important;
+  line-height: 1.65 !important;
+}
+
+.VPFeature .link-text {
+  color: var(--shardix-blurple) !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+}
+
+/* ─── Sidebar ─── */
+.VPSidebar {
+  background: var(--shardix-bg-0) !important;
+  border-right: 1px solid var(--shardix-border) !important;
+}
+
+.VPSidebarItem.level-0 > .item > .text {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--shardix-text-3) !important;
+  padding: 16px 0 6px !important;
+}
+
+.VPSidebarItem.level-1 > .item > .link {
+  font-size: 0.875rem !important;
+  color: var(--shardix-text-2) !important;
+  border-radius: 8px !important;
+  transition: all 0.15s ease !important;
+  padding: 6px 12px !important;
+  margin: 1px 0 !important;
+}
+
+.VPSidebarItem.level-1 > .item > .link:hover {
+  color: var(--shardix-text-1) !important;
+  background: rgba(88,101,242,0.08) !important;
+}
+
+.VPSidebarItem.level-1 > .item > .link.active {
+  color: var(--shardix-blurple) !important;
+  background: rgba(88,101,242,0.12) !important;
+  font-weight: 600 !important;
+}
+
+/* ─── Content Area ─── */
+.VPContent {
+  background: var(--shardix-bg-1) !important;
+}
+
+.VPDoc {
+  background: var(--shardix-bg-1) !important;
+}
+
+/* Content max width */
+.vp-doc {
+  max-width: 780px !important;
+}
+
+/* Headings */
+.vp-doc h1 {
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--shardix-text-1) !important;
+  line-height: 1.2 !important;
+  margin-bottom: 16px !important;
+}
+
+.vp-doc h2 {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--shardix-text-1) !important;
+  border-top: 1px solid var(--shardix-border) !important;
+  padding-top: 28px !important;
+  margin-top: 40px !important;
+}
+
+.vp-doc h3 {
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--shardix-text-1) !important;
+}
+
+.vp-doc p {
+  color: var(--shardix-text-2) !important;
+  line-height: 1.75 !important;
+}
+
+.vp-doc a {
+  color: var(--shardix-blurple) !important;
+  text-decoration: none !important;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.vp-doc a:hover {
+  color: #7983f5 !important;
+  text-decoration: underline !important;
+}
+
+/* ─── Code Blocks ─── */
+.vp-doc div[class*='language-'] {
+  background: var(--shardix-bg-0) !important;
+  border: 1px solid var(--shardix-border) !important;
+  border-radius: 12px !important;
+  margin: 20px 0 !important;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3) !important;
+}
+
+.vp-doc div[class*='language-'] pre {
+  background: transparent !important;
+  padding: 20px 24px !important;
+}
+
+.vp-doc div[class*='language-'] code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.7 !important;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+/* Language tag */
+.vp-doc div[class*='language-'] .lang {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  color: var(--shardix-text-3) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Inline code */
+.vp-doc :not(pre) > code {
+  background: rgba(88,101,242,0.12) !important;
+  color: #a0a8f8 !important;
+  border: 1px solid rgba(88,101,242,0.2) !important;
+  border-radius: 5px !important;
+  padding: 2px 7px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.82em !important;
+}
+
+/* ─── Tables ─── */
+.vp-doc table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 20px 0 !important;
+  background: var(--shardix-bg-0) !important;
+  border: 1px solid var(--shardix-border) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.vp-doc thead {
+  background: rgba(88,101,242,0.08) !important;
+}
+
+.vp-doc th {
+  color: var(--shardix-text-1) !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid var(--shardix-border) !important;
+}
+
+.vp-doc td {
+  padding: 12px 16px !important;
+  color: var(--shardix-text-2) !important;
+  border-bottom: 1px solid var(--shardix-border) !important;
+  font-size: 0.875rem !important;
+}
+
+.vp-doc tr:last-child td {
+  border-bottom: none !important;
+}
+
+.vp-doc tr:hover td {
+  background: rgba(88,101,242,0.04) !important;
+}
+
+/* ─── Custom Containers (tip, warning, etc.) ─── */
+.custom-block {
+  border-radius: 10px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  padding: 16px 20px !important;
+  margin: 20px 0 !important;
+}
+
+.custom-block.tip {
+  background: rgba(6,182,212,0.06) !important;
+  border-color: rgba(6,182,212,0.3) !important;
+}
+
+.custom-block.tip .custom-block-title {
+  color: var(--shardix-cyan) !important;
+}
+
+.custom-block.warning {
+  background: rgba(245,158,11,0.06) !important;
+  border-color: rgba(245,158,11,0.3) !important;
+}
+
+.custom-block.warning .custom-block-title {
+  color: #f59e0b !important;
+}
+
+.custom-block.danger {
+  background: rgba(239,68,68,0.06) !important;
+  border-color: rgba(239,68,68,0.3) !important;
+}
+
+.custom-block.danger .custom-block-title {
+  color: var(--shardix-red) !important;
+}
+
+.custom-block.info {
+  background: rgba(88,101,242,0.06) !important;
+  border-color: rgba(88,101,242,0.3) !important;
+}
+
+.custom-block.info .custom-block-title {
+  color: var(--shardix-blurple) !important;
+}
+
+.custom-block-title {
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 6px !important;
+}
+
+/* ─── Search ─── */
+.VPLocalSearchBox {
+  background: var(--shardix-bg-0) !important;
+  border: 1px solid var(--shardix-border-hover) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shardix-glow-lg) !important;
+}
+
+.VPLocalSearchBox .search-input {
+  background: transparent !important;
+  color: var(--shardix-text-1) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* ─── Footer ─── */
+.VPFooter {
+  background: var(--shardix-bg-0) !important;
+  border-top: 1px solid var(--shardix-border) !important;
+  padding: 24px !important;
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  color: var(--shardix-text-3) !important;
+  font-size: 0.8rem !important;
+}
+
+.VPFooter .message a {
+  color: var(--shardix-blurple) !important;
+}
+
+/* ─── Doc Aside (ToC) ─── */
+.VPDocAside {
+  background: transparent !important;
+}
+
+.VPDocAsideOutline .root {
+  font-size: 0.8rem !important;
+}
+
+.outline-link {
+  color: var(--shardix-text-3) !important;
+  transition: color 0.15s ease !important;
+}
+
+.outline-link:hover,
+.outline-link.active {
+  color: var(--shardix-blurple) !important;
+}
+
+/* ─── Badge ─── */
+.VPBadge {
+  border-radius: 6px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  padding: 2px 8px !important;
+}
+
+.VPBadge.tip {
+  background: rgba(6,182,212,0.15) !important;
+  color: var(--shardix-cyan) !important;
+  border: 1px solid rgba(6,182,212,0.3) !important;
+}
+
+.VPBadge.info {
+  background: rgba(88,101,242,0.15) !important;
+  color: var(--shardix-blurple) !important;
+  border: 1px solid rgba(88,101,242,0.3) !important;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--shardix-bg-0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(88,101,242,0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(88,101,242,0.5);
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(88,101,242,0.3);
+  color: #fff;
+}
+
+/* ─── Home page code example section ─── */
+.vp-doc .why-shardix-code {
+  position: relative;
+}
+
+/* Community links section */
+.community-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.community-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--shardix-text-2) !important;
+  padding: 8px 16px;
+  border: 1px solid var(--shardix-border);
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: var(--shardix-bg-card);
+  backdrop-filter: blur(10px);
+}
+
+.community-links a:hover {
+  color: var(--shardix-text-1) !important;
+  border-color: var(--shardix-border-hover);
+  background: rgba(88,101,242,0.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shardix-glow-sm);
+  text-decoration: none !important;
+}
+
+/* ─── Language Switcher ─── */
+.VPNavBarTranslations {
+  font-size: 0.875rem !important;
+}
+
+/* ─── Mobile Nav ─── */
+@media (max-width: 768px) {
+  .VPHero {
+    padding: 48px 24px 60px !important;
+  }
+
+  .VPHero .name {
+    font-size: 2.2rem !important;
+  }
+
+  .VPHero .text {
+    font-size: 1.4rem !important;
+  }
+
+  .community-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ─── Smooth transitions everywhere ─── */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Animated gradient border on nav ─── */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ─── Doc page prev/next ─── */
+.VPDocFooter .pager-link {
+  background: var(--shardix-bg-2) !important;
+  border: 1px solid var(--shardix-border) !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--shardix-border-hover) !important;
+  background: rgba(88,101,242,0.06) !important;
+  transform: translateY(-2px) !important;
+}
+
+.VPDocFooter .pager-link .title {
+  color: var(--shardix-text-1) !important;
+  font-weight: 600 !important;
+}
+
+/* ─── Carbon Ads (if any) ─── */
+#carbonads {
+  display: none;
+}
+
+/* ─── Copy button on code blocks ─── */
+.vp-code-group .tabs {
+  background: rgba(88,101,242,0.06) !important;
+  border-bottom: 1px solid var(--shardix-border) !important;
+}
+
+.vp-code-group .tabs button {
+  color: var(--shardix-text-3) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.8rem !important;
+}
+
+.vp-code-group .tabs button.active {
+  color: var(--shardix-blurple) !important;
+  border-bottom-color: var(--shardix-blurple) !important;
+}
