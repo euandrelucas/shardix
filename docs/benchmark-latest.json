@@ -1,11 +1,17 @@
 {
+<<<<<<< HEAD
   "timestamp": "2026-08-02T20:34:56.485Z",
   "platform": "win32",
+=======
+  "timestamp": "2026-08-02T20:31:25.303Z",
+  "platform": "linux",
+>>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
   "arch": "x64",
-  "nodeVersion": "v22.22.0",
+  "nodeVersion": "v22.23.1",
   "results": [
     {
       "name": "Shardix Core (Mock Adapter)",
+<<<<<<< HEAD
       "bootstrapMs": 1.84,
       "memoryHeapMB": 0,
       "memoryRssMB": 146.2,
@@ -35,10 +41,42 @@
       "memoryRssMB": 242.5,
       "opsPerSec": 1001014,
       "avgLatencyUs": 1
+=======
+      "bootstrapMs": 1.73,
+      "memoryHeapMB": 4.72,
+      "memoryRssMB": 113.43,
+      "opsPerSec": 287372,
+      "avgLatencyUs": 3.48
+    },
+    {
+      "name": "Raw Discord.js (Baseline)",
+      "bootstrapMs": 0.05,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 113.43,
+      "opsPerSec": 3148361,
+      "avgLatencyUs": 0.32
+    },
+    {
+      "name": "Shardix + DiscordJSAdapter",
+      "bootstrapMs": 0.39,
+      "memoryHeapMB": 10.07,
+      "memoryRssMB": 145.55,
+      "opsPerSec": 303251,
+      "avgLatencyUs": 3.3
+    },
+    {
+      "name": "Raw Eris (Baseline)",
+      "bootstrapMs": 0.06,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 145.8,
+      "opsPerSec": 4540394,
+      "avgLatencyUs": 0.22
+>>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
     },
     {
       "name": "Shardix + ErisAdapter",
       "bootstrapMs": 0.41,
+<<<<<<< HEAD
       "memoryHeapMB": 0,
       "memoryRssMB": 243.64,
       "opsPerSec": 246701,
@@ -67,14 +105,50 @@
       "memoryRssMB": 282.1,
       "opsPerSec": 7078493,
       "avgLatencyUs": 0.14
+=======
+      "memoryHeapMB": 8.15,
+      "memoryRssMB": 147.55,
+      "opsPerSec": 307622,
+      "avgLatencyUs": 3.25
+    },
+    {
+      "name": "Raw Oceanic.js (Baseline)",
+      "bootstrapMs": 0.03,
+      "memoryHeapMB": 0.59,
+      "memoryRssMB": 147.67,
+      "opsPerSec": 4633405,
+      "avgLatencyUs": 0.22
+    },
+    {
+      "name": "Shardix + OceanicAdapter",
+      "bootstrapMs": 1.12,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 156.91,
+      "opsPerSec": 303925,
+      "avgLatencyUs": 3.29
+    },
+    {
+      "name": "Raw Discordeno (Baseline)",
+      "bootstrapMs": 0.05,
+      "memoryHeapMB": 7.01,
+      "memoryRssMB": 156.91,
+      "opsPerSec": 4304819,
+      "avgLatencyUs": 0.23
+>>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
     },
     {
       "name": "Shardix + DiscordenoAdapter",
-      "bootstrapMs": 0.36,
+      "bootstrapMs": 0.35,
       "memoryHeapMB": 0,
+<<<<<<< HEAD
       "memoryRssMB": 282.23,
       "opsPerSec": 250020,
       "avgLatencyUs": 4
+=======
+      "memoryRssMB": 165.01,
+      "opsPerSec": 307519,
+      "avgLatencyUs": 3.25
+>>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
     }
   ]
 }
