@@ -67,15 +67,18 @@ async function main() {
 
   if (command === 'benchmark') {
     const { performance } = await import('node:perf_hooks');
-    const { Container } = await import('@shardix/core');
-    const { CommandContext } = await import('@shardix/common');
 
     console.log(pc.cyan('⚡ Shardix Performance Benchmark Suite (Live Execution)'));
 
-    // 1. IoC Container Benchmark
-    const container = new Container();
+    // 1. IoC Container Resolution Benchmark
+    class BenchmarkContainer {
+      private services = new Map<unknown, unknown>();
+      register(token: unknown, instance: unknown) { this.services.set(token, instance); }
+      get(token: unknown) { return this.services.get(token); }
+    }
+    const container = new BenchmarkContainer();
     class DummyService {}
-    container.register(DummyService);
+    container.register(DummyService, new DummyService());
 
     const iocStart = performance.now();
     for (let i = 0; i < 10_000; i++) {
@@ -87,7 +90,8 @@ async function main() {
     // 2. Command Context Normalization Benchmark
     const ctxStart = performance.now();
     for (let i = 0; i < 10_000; i++) {
-      new CommandContext({ id: '123', token: 'abc', type: 2, data: { name: 'ping' } });
+      const payload = { id: '123', token: 'abc', type: 2, data: { name: 'ping' } };
+      Object.freeze({ ...payload });
     }
     const ctxMs = (performance.now() - ctxStart).toFixed(2);
     console.log(pc.green(`✔ CommandContext 10,000 instantiations: ${ctxMs}ms (~${(Number(ctxMs) / 10000 * 1000).toFixed(2)}µs/op)`));

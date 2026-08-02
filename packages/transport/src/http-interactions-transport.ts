@@ -10,7 +10,7 @@ export class HttpInteractionsTransport implements Transport {
   }
 
   public async listen(handler: InteractionHandler): Promise<void> {
-    this.server.registerInteractionEndpoint(handler);
+    this.server.registerInteractionEndpoint((payload) => handler(payload as any));
     await this.server.start();
   }
 
