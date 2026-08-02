@@ -103,29 +103,48 @@ async function benchmarkRawDiscordJs(): Promise<MetricResult> {
   const startMem = process.memoryUsage();
   const startBoot = performance.now();
 
-  // Raw handler simulation (no IoC, no reflection, no decorators)
-  const handlers = new Map<string, (interaction: any) => any>();
-  const service = new BenchmarkService();
+  // Simulated idiomatic Discord.js bot written from scratch
+  class RawDiscordJsBot {
+    private service = new BenchmarkService();
+    private commands = new Map<string, (interaction: any) => Promise<any>>();
 
-  handlers.set('ping', (interaction: any) => {
-    const res = service.compute(10);
-    return { type: 4, data: { content: `Pong! Result: ${res}` } };
-  });
+    constructor() {
+      this.commands.set('ping', async (interaction: any) => {
+        const value = interaction.options.getInteger('val') || 10;
+        const res = this.service.compute(value);
+        return await interaction.reply({ content: `Pong! Result: ${res}` });
+      });
+    }
 
+    public async handleInteraction(interaction: any) {
+      if (!interaction.isChatInputCommand()) return;
+      const cmd = this.commands.get(interaction.commandName);
+      if (cmd) return await cmd(interaction);
+    }
+  }
+
+  const bot = new RawDiscordJsBot();
   const bootTime = performance.now() - startBoot;
 
+  const mockDjsInteraction = {
+    type: 2,
+    commandName: 'ping',
+    isChatInputCommand: () => true,
+    options: {
+      getInteger: (_name: string) => 10,
+    },
+    reply: async (data: any) => ({ type: 4, data }),
+  };
+
   // Warmup
-  const payload = mockInteraction({ command: 'ping' });
   for (let i = 0; i < 1000; i++) {
-    const fn = handlers.get(payload.data?.name || '');
-    if (fn) fn(payload);
+    await bot.handleInteraction(mockDjsInteraction);
   }
 
   const ITERATIONS = 100_000;
   const startDispatch = performance.now();
   for (let i = 0; i < ITERATIONS; i++) {
-    const fn = handlers.get(payload.data?.name || '');
-    if (fn) fn(payload);
+    await bot.handleInteraction(mockDjsInteraction);
   }
   const totalDispatchTimeMs = performance.now() - startDispatch;
 
@@ -150,24 +169,38 @@ async function benchmarkRawEris(): Promise<MetricResult> {
   const startMem = process.memoryUsage();
   const startBoot = performance.now();
 
-  const service = new BenchmarkService();
-  const listeners: Array<(interaction: any) => any> = [];
-  listeners.push((interaction: any) => {
-    const res = service.compute(10);
-    return { content: `Pong! Result: ${res}` };
-  });
+  // Simulated idiomatic Eris bot written from scratch
+  class RawErisBot {
+    private service = new BenchmarkService();
 
+    public async handleInteraction(interaction: any) {
+      if (interaction.type !== 2) return;
+      if (interaction.data?.name === 'ping') {
+        const val = interaction.data.options?.find((o: any) => o.name === 'val')?.value || 10;
+        const res = this.service.compute(val);
+        return await interaction.createMessage({ content: `Pong! Result: ${res}` });
+      }
+    }
+  }
+
+  const bot = new RawErisBot();
   const bootTime = performance.now() - startBoot;
-  const payload = mockInteraction({ command: 'ping' });
 
+  const mockErisInteraction = {
+    type: 2,
+    data: { name: 'ping', options: [{ name: 'val', value: 10 }] },
+    createMessage: async (data: any) => ({ type: 4, data }),
+  };
+
+  // Warmup
   for (let i = 0; i < 1000; i++) {
-    for (const fn of listeners) fn(payload);
+    await bot.handleInteraction(mockErisInteraction);
   }
 
   const ITERATIONS = 100_000;
   const startDispatch = performance.now();
   for (let i = 0; i < ITERATIONS; i++) {
-    for (const fn of listeners) fn(payload);
+    await bot.handleInteraction(mockErisInteraction);
   }
   const totalDispatchTimeMs = performance.now() - startDispatch;
 
@@ -192,24 +225,41 @@ async function benchmarkRawOceanic(): Promise<MetricResult> {
   const startMem = process.memoryUsage();
   const startBoot = performance.now();
 
-  const service = new BenchmarkService();
-  const listeners: Array<(interaction: any) => any> = [];
-  listeners.push((interaction: any) => {
-    const res = service.compute(10);
-    return { content: `Pong! Result: ${res}` };
-  });
+  // Simulated idiomatic Oceanic.js bot written from scratch
+  class RawOceanicBot {
+    private service = new BenchmarkService();
 
+    public async handleInteraction(interaction: any) {
+      if (interaction.type !== 2) return;
+      if (interaction.data?.name === 'ping') {
+        const val = interaction.data.options?.getInteger('val') || 10;
+        const res = this.service.compute(val);
+        return await interaction.createMessage({ content: `Pong! Result: ${res}` });
+      }
+    }
+  }
+
+  const bot = new RawOceanicBot();
   const bootTime = performance.now() - startBoot;
-  const payload = mockInteraction({ command: 'ping' });
 
+  const mockOceanicInteraction = {
+    type: 2,
+    data: {
+      name: 'ping',
+      options: { getInteger: (_name: string) => 10 },
+    },
+    createMessage: async (data: any) => ({ type: 4, data }),
+  };
+
+  // Warmup
   for (let i = 0; i < 1000; i++) {
-    for (const fn of listeners) fn(payload);
+    await bot.handleInteraction(mockOceanicInteraction);
   }
 
   const ITERATIONS = 100_000;
   const startDispatch = performance.now();
   for (let i = 0; i < ITERATIONS; i++) {
-    for (const fn of listeners) fn(payload);
+    await bot.handleInteraction(mockOceanicInteraction);
   }
   const totalDispatchTimeMs = performance.now() - startDispatch;
 
@@ -234,25 +284,45 @@ async function benchmarkRawDiscordeno(): Promise<MetricResult> {
   const startMem = process.memoryUsage();
   const startBoot = performance.now();
 
-  const service = new BenchmarkService();
-  const events = {
-    interactionCreate: (interaction: any) => {
-      const res = service.compute(10);
-      return { content: `Pong! Result: ${res}` };
-    },
+  // Simulated idiomatic Discordeno bot written from scratch
+  class RawDiscordenoBot {
+    private service = new BenchmarkService();
+    public helpers = {
+      sendInteractionResponse: async (_id: string, _token: string, body: any) => body,
+    };
+
+    public async handleInteraction(interaction: any) {
+      if (interaction.type !== 2) return;
+      if (interaction.data?.name === 'ping') {
+        const val = interaction.data.options?.find((o: any) => o.name === 'val')?.value || 10;
+        const res = this.service.compute(val);
+        return await this.helpers.sendInteractionResponse(interaction.id, interaction.token, {
+          type: 4,
+          data: { content: `Pong! Result: ${res}` },
+        });
+      }
+    }
+  }
+
+  const bot = new RawDiscordenoBot();
+  const bootTime = performance.now() - startBoot;
+
+  const mockDiscordenoInteraction = {
+    id: '123',
+    token: 'abc',
+    type: 2,
+    data: { name: 'ping', options: [{ name: 'val', value: 10 }] },
   };
 
-  const bootTime = performance.now() - startBoot;
-  const payload = mockInteraction({ command: 'ping' });
-
+  // Warmup
   for (let i = 0; i < 1000; i++) {
-    events.interactionCreate(payload);
+    await bot.handleInteraction(mockDiscordenoInteraction);
   }
 
   const ITERATIONS = 100_000;
   const startDispatch = performance.now();
   for (let i = 0; i < ITERATIONS; i++) {
-    events.interactionCreate(payload);
+    await bot.handleInteraction(mockDiscordenoInteraction);
   }
   const totalDispatchTimeMs = performance.now() - startDispatch;
 

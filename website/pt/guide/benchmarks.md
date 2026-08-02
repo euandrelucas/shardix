@@ -10,15 +10,15 @@ Abaixo estão as métricas empíricas medidas no Node.js v22 através de 100.000
 
 | Engine / Configuração de Adapter | Cold Start (ms) | Heap (MB) | Throughput (Ops / sec) | Latência (µs) | Overhead vs Puro |
 |----------------------------------|-----------------|-----------|------------------------|---------------|------------------|
-| **Shardix Core (Mock Adapter)** | 1.88 ms | 3.36 MB | 238.071 ops/sec | 4.20 µs | — |
-| **Raw Discord.js (Baseline)** | 0.00 ms | 2.58 MB | 18.665.074 ops/sec | 0.05 µs | Baseline |
-| **Shardix + DiscordJSAdapter** | 0.33 ms | 9.68 MB | **239.446 ops/sec** | **4.18 µs** | **+4.13 µs** |
-| **Raw Eris (Baseline)** | 0.00 ms | 0.00 MB | 22.654.162 ops/sec | 0.04 µs | Baseline |
-| **Shardix + ErisAdapter** | 0.54 ms | 0.00 MB | **215.169 ops/sec** | **4.65 µs** | **+4.61 µs** |
-| **Raw Oceanic.js (Baseline)** | 0.00 ms | 8.04 MB | 11.698.096 ops/sec | 0.09 µs | Baseline |
-| **Shardix + OceanicAdapter** | 1.18 ms | 0.00 MB | **161.729 ops/sec** | **6.18 µs** | **+6.09 µs** |
-| **Raw Discordeno (Baseline)** | 0.04 ms | 6.50 MB | 32.059.502 ops/sec | 0.03 µs | Baseline |
-| **Shardix + DiscordenoAdapter** | 0.37 ms | 0.00 MB | **152.402 ops/sec** | **6.56 µs** | **+6.53 µs** |
+| **Shardix Core (Mock Adapter)** | 2.14 ms | 3.02 MB | 248.847 ops/sec | 4.02 µs | — |
+| **Raw Discord.js (Baseline)** | 0.05 ms | 3.34 MB | 2.193.391 ops/sec | 0.46 µs | Baseline |
+| **Shardix + DiscordJSAdapter** | 0.45 ms | 9.91 MB | **259.703 ops/sec** | **3.85 µs** | **+3.39 µs** |
+| **Raw Eris (Baseline)** | 0.03 ms | 0.00 MB | 4.383.216 ops/sec | 0.23 µs | Baseline |
+| **Shardix + ErisAdapter** | 0.57 ms | 8.14 MB | **245.881 ops/sec** | **4.07 µs** | **+3.84 µs** |
+| **Raw Oceanic.js (Baseline)** | 0.05 ms | 0.00 MB | 5.260.306 ops/sec | 0.19 µs | Baseline |
+| **Shardix + OceanicAdapter** | 0.31 ms | 0.00 MB | **264.750 ops/sec** | **3.78 µs** | **+3.59 µs** |
+| **Raw Discordeno (Baseline)** | 0.05 ms | 5.56 MB | 4.311.999 ops/sec | 0.23 µs | Baseline |
+| **Shardix + DiscordenoAdapter** | 0.36 ms | 0.00 MB | **223.671 ops/sec** | **4.47 µs** | **+4.24 µs** |
 
 ---
 
