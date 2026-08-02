@@ -115,11 +115,19 @@ export class Container {
       const paramInjects: Map<number, InjectionToken> =
         Reflect.getOwnMetadata(METADATA_KEYS.PARAM_INJECT, target, '') || new Map();
 
-      const args = paramTypes.map((paramType, index) => {
-        const customToken = paramInjects.get(index);
-        const depToken = customToken || paramType;
-        return this.get(depToken, context);
-      });
+      const maxParamIndex = Math.max(
+        paramTypes.length,
+        paramInjects.size > 0 ? Math.max(...Array.from(paramInjects.keys())) + 1 : 0
+      );
+
+      const args: any[] = [];
+      for (let i = 0; i < maxParamIndex; i++) {
+        const customToken = paramInjects.get(i);
+        const depToken = customToken || paramTypes[i];
+        if (depToken) {
+          args.push(this.get(depToken, context));
+        }
+      }
 
       const instance = new target(...args);
 

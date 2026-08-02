@@ -162,6 +162,7 @@ export default defineConfig({
               items: [
                 { text: 'Adapters Multi-Biblioteca', link: '/pt/guide/adapters' },
                 { text: 'Runtimes (Gateway, HTTP, Híbrido)', link: '/pt/guide/runtimes' },
+                { text: 'Benchmarks de Performance', link: '/pt/guide/benchmarks' },
               ],
             },
             {
