@@ -8,17 +8,17 @@ O Shardix foi projetado para **altíssimo throughput e latência quase nula**. A
 
 Abaixo estão as métricas empíricas medidas no Node.js v22 através de 100.000 disparos de interação por adapter usando a suíte oficial de benchmarks do Shardix.
 
-| Engine / Configuração de Adapter | Cold Start (ms) | Heap (MB) | Throughput (Ops / sec) | Latência (µs) | Overhead vs Puro |
+| Engine / Configuração de Adapter | Cold Start (ms) | Heap (MB) | Throughput (Ops / sec) | Latência (µs) | Overhead vs Raw |
 |----------------------------------|-----------------|-----------|------------------------|---------------|------------------|
-| **Shardix Core (Mock Adapter)** | 2.14 ms | 3.02 MB | 248.847 ops/sec | 4.02 µs | — |
-| **Raw Discord.js (Baseline)** | 0.05 ms | 3.34 MB | 2.193.391 ops/sec | 0.46 µs | Baseline |
-| **Shardix + DiscordJSAdapter** | 0.45 ms | 9.91 MB | **259.703 ops/sec** | **3.85 µs** | **+3.39 µs** |
-| **Raw Eris (Baseline)** | 0.03 ms | 0.00 MB | 4.383.216 ops/sec | 0.23 µs | Baseline |
-| **Shardix + ErisAdapter** | 0.57 ms | 8.14 MB | **245.881 ops/sec** | **4.07 µs** | **+3.84 µs** |
-| **Raw Oceanic.js (Baseline)** | 0.05 ms | 0.00 MB | 5.260.306 ops/sec | 0.19 µs | Baseline |
-| **Shardix + OceanicAdapter** | 0.31 ms | 0.00 MB | **264.750 ops/sec** | **3.78 µs** | **+3.59 µs** |
-| **Raw Discordeno (Baseline)** | 0.05 ms | 5.56 MB | 4.311.999 ops/sec | 0.23 µs | Baseline |
-| **Shardix + DiscordenoAdapter** | 0.36 ms | 0.00 MB | **223.671 ops/sec** | **4.47 µs** | **+4.24 µs** |
+| **Shardix Core (Mock Adapter)** | 1.84 ms | 0.00 MB | 250.080 ops/sec | 4.00 µs | — |
+| **Raw Discord.js (Cliente v14 Real)** | 74.71 ms | 65.01 MB | 685.668 ops/sec | 1.46 µs | Baseline |
+| **Shardix + DiscordJSAdapter** | 3.76 ms | 0.00 MB | **248.453 ops/sec** | **4.02 µs** | **+2.56 µs** |
+| **Raw Eris (Cliente v0.18 Real)** | 1.40 ms | 41.07 MB | 1.001.014 ops/sec | 1.00 µs | Baseline |
+| **Shardix + ErisAdapter** | 0.41 ms | 0.00 MB | **246.701 ops/sec** | **4.05 µs** | **+3.05 µs** |
+| **Raw Oceanic.js (Cliente v1.14 Real)** | 1.39 ms | 45.01 MB | 973.395 ops/sec | 1.03 µs | Baseline |
+| **Shardix + OceanicAdapter** | 0.38 ms | 0.00 MB | **238.811 ops/sec** | **4.19 µs** | **+3.16 µs** |
+| **Raw Discordeno (Bot v21 Real)** | 5.56 ms | 9.98 MB | 7.078.493 ops/sec | 0.14 µs | Baseline |
+| **Shardix + DiscordenoAdapter** | 0.36 ms | 0.00 MB | **250.020 ops/sec** | **4.00 µs** | **+3.86 µs** |
 
 ---
 
