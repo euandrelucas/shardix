@@ -145,6 +145,133 @@ async function benchmarkRawDiscordJs(): Promise<MetricResult> {
   };
 }
 
+async function benchmarkRawEris(): Promise<MetricResult> {
+  if (global.gc) global.gc();
+  const startMem = process.memoryUsage();
+  const startBoot = performance.now();
+
+  const service = new BenchmarkService();
+  const listeners: Array<(interaction: any) => any> = [];
+  listeners.push((interaction: any) => {
+    const res = service.compute(10);
+    return { content: `Pong! Result: ${res}` };
+  });
+
+  const bootTime = performance.now() - startBoot;
+  const payload = mockInteraction({ command: 'ping' });
+
+  for (let i = 0; i < 1000; i++) {
+    for (const fn of listeners) fn(payload);
+  }
+
+  const ITERATIONS = 100_000;
+  const startDispatch = performance.now();
+  for (let i = 0; i < ITERATIONS; i++) {
+    for (const fn of listeners) fn(payload);
+  }
+  const totalDispatchTimeMs = performance.now() - startDispatch;
+
+  const endMem = process.memoryUsage();
+  const opsPerSec = Math.round((ITERATIONS / totalDispatchTimeMs) * 1000);
+  const avgLatencyUs = Number(((totalDispatchTimeMs / ITERATIONS) * 1000).toFixed(2));
+  const memoryHeapMB = Number(((endMem.heapUsed - startMem.heapUsed) / 1024 / 1024).toFixed(2));
+  const memoryRssMB = Number((endMem.rss / 1024 / 1024).toFixed(2));
+
+  return {
+    name: 'Raw Eris (Baseline)',
+    bootstrapMs: Number(bootTime.toFixed(2)),
+    memoryHeapMB: Math.max(0, memoryHeapMB),
+    memoryRssMB,
+    opsPerSec,
+    avgLatencyUs,
+  };
+}
+
+async function benchmarkRawOceanic(): Promise<MetricResult> {
+  if (global.gc) global.gc();
+  const startMem = process.memoryUsage();
+  const startBoot = performance.now();
+
+  const service = new BenchmarkService();
+  const listeners: Array<(interaction: any) => any> = [];
+  listeners.push((interaction: any) => {
+    const res = service.compute(10);
+    return { content: `Pong! Result: ${res}` };
+  });
+
+  const bootTime = performance.now() - startBoot;
+  const payload = mockInteraction({ command: 'ping' });
+
+  for (let i = 0; i < 1000; i++) {
+    for (const fn of listeners) fn(payload);
+  }
+
+  const ITERATIONS = 100_000;
+  const startDispatch = performance.now();
+  for (let i = 0; i < ITERATIONS; i++) {
+    for (const fn of listeners) fn(payload);
+  }
+  const totalDispatchTimeMs = performance.now() - startDispatch;
+
+  const endMem = process.memoryUsage();
+  const opsPerSec = Math.round((ITERATIONS / totalDispatchTimeMs) * 1000);
+  const avgLatencyUs = Number(((totalDispatchTimeMs / ITERATIONS) * 1000).toFixed(2));
+  const memoryHeapMB = Number(((endMem.heapUsed - startMem.heapUsed) / 1024 / 1024).toFixed(2));
+  const memoryRssMB = Number((endMem.rss / 1024 / 1024).toFixed(2));
+
+  return {
+    name: 'Raw Oceanic.js (Baseline)',
+    bootstrapMs: Number(bootTime.toFixed(2)),
+    memoryHeapMB: Math.max(0, memoryHeapMB),
+    memoryRssMB,
+    opsPerSec,
+    avgLatencyUs,
+  };
+}
+
+async function benchmarkRawDiscordeno(): Promise<MetricResult> {
+  if (global.gc) global.gc();
+  const startMem = process.memoryUsage();
+  const startBoot = performance.now();
+
+  const service = new BenchmarkService();
+  const events = {
+    interactionCreate: (interaction: any) => {
+      const res = service.compute(10);
+      return { content: `Pong! Result: ${res}` };
+    },
+  };
+
+  const bootTime = performance.now() - startBoot;
+  const payload = mockInteraction({ command: 'ping' });
+
+  for (let i = 0; i < 1000; i++) {
+    events.interactionCreate(payload);
+  }
+
+  const ITERATIONS = 100_000;
+  const startDispatch = performance.now();
+  for (let i = 0; i < ITERATIONS; i++) {
+    events.interactionCreate(payload);
+  }
+  const totalDispatchTimeMs = performance.now() - startDispatch;
+
+  const endMem = process.memoryUsage();
+  const opsPerSec = Math.round((ITERATIONS / totalDispatchTimeMs) * 1000);
+  const avgLatencyUs = Number(((totalDispatchTimeMs / ITERATIONS) * 1000).toFixed(2));
+  const memoryHeapMB = Number(((endMem.heapUsed - startMem.heapUsed) / 1024 / 1024).toFixed(2));
+  const memoryRssMB = Number((endMem.rss / 1024 / 1024).toFixed(2));
+
+  return {
+    name: 'Raw Discordeno (Baseline)',
+    bootstrapMs: Number(bootTime.toFixed(2)),
+    memoryHeapMB: Math.max(0, memoryHeapMB),
+    memoryRssMB,
+    opsPerSec,
+    avgLatencyUs,
+  };
+}
+
 // ─── 3. Execution Suite ───────────────────────────────────────────────────────
 async function runSuite() {
   const isJson = process.argv.includes('--json');
@@ -158,22 +285,23 @@ async function runSuite() {
 
   const results: MetricResult[] = [];
 
-  // Baseline
+  // Core Pure Baseline
+  results.push(await benchmarkShardixWithAdapter('Shardix Core (Mock Adapter)', new MockDiscordAdapter()));
+
+  // Pair 1: Discord.js
   results.push(await benchmarkRawDiscordJs());
-
-  // Shardix Mock Adapter (pure core overhead test)
-  results.push(await benchmarkShardixWithAdapter('Shardix (Mock/Pure Core)', new MockDiscordAdapter()));
-
-  // Shardix + Discord.js
   results.push(await benchmarkShardixWithAdapter('Shardix + DiscordJSAdapter', new DiscordJSAdapter()));
 
-  // Shardix + Eris
+  // Pair 2: Eris
+  results.push(await benchmarkRawEris());
   results.push(await benchmarkShardixWithAdapter('Shardix + ErisAdapter', new ErisAdapter()));
 
-  // Shardix + Oceanic.js
+  // Pair 3: Oceanic.js
+  results.push(await benchmarkRawOceanic());
   results.push(await benchmarkShardixWithAdapter('Shardix + OceanicAdapter', new OceanicAdapter()));
 
-  // Shardix + Discordeno
+  // Pair 4: Discordeno
+  results.push(await benchmarkRawDiscordeno());
   results.push(await benchmarkShardixWithAdapter('Shardix + DiscordenoAdapter', new DiscordenoAdapter()));
 
   if (isJson) {

@@ -8,14 +8,17 @@ O Shardix foi projetado para **altíssimo throughput e latência quase nula**. A
 
 Abaixo estão as métricas empíricas medidas no Node.js v22 através de 100.000 disparos de interação por adapter usando a suíte oficial de benchmarks do Shardix.
 
-| Engine / Configuração de Adapter | Cold Start (ms) | Overhead de Heap (MB) | Throughput (Ops / sec) | Latência Média (µs) | Overhead vs Puro |
-|----------------------------------|-----------------|-----------------------|------------------------|---------------------|------------------|
-| **Discord.js Puro (Baseline)** | 0.01 ms | 0.00 MB | 10.145.383 ops/sec | 0.10 µs | 0.00 µs (Baseline) |
-| **Shardix + Mock Adapter** | 1.99 ms | 6.02 MB | 258.552 ops/sec | 3.87 µs | +3.77 µs |
-| **Shardix + DiscordJSAdapter** | 0.31 ms | 0.00 MB | **266.988 ops/sec** | **3.75 µs** | **+3.65 µs** |
-| **Shardix + DiscordenoAdapter** | 0.43 ms | 0.00 MB | 243.208 ops/sec | 4.11 µs | +4.01 µs |
-| **Shardix + ErisAdapter** | 0.51 ms | 0.00 MB | 133.083 ops/sec | 7.51 µs | +7.41 µs |
-| **Shardix + OceanicAdapter** | 1.25 ms | 10.13 MB | 105.527 ops/sec | 9.48 µs | +9.38 µs |
+| Engine / Configuração de Adapter | Cold Start (ms) | Heap (MB) | Throughput (Ops / sec) | Latência (µs) | Overhead vs Puro |
+|----------------------------------|-----------------|-----------|------------------------|---------------|------------------|
+| **Shardix Core (Mock Adapter)** | 1.88 ms | 3.36 MB | 238.071 ops/sec | 4.20 µs | — |
+| **Raw Discord.js (Baseline)** | 0.00 ms | 2.58 MB | 18.665.074 ops/sec | 0.05 µs | Baseline |
+| **Shardix + DiscordJSAdapter** | 0.33 ms | 9.68 MB | **239.446 ops/sec** | **4.18 µs** | **+4.13 µs** |
+| **Raw Eris (Baseline)** | 0.00 ms | 0.00 MB | 22.654.162 ops/sec | 0.04 µs | Baseline |
+| **Shardix + ErisAdapter** | 0.54 ms | 0.00 MB | **215.169 ops/sec** | **4.65 µs** | **+4.61 µs** |
+| **Raw Oceanic.js (Baseline)** | 0.00 ms | 8.04 MB | 11.698.096 ops/sec | 0.09 µs | Baseline |
+| **Shardix + OceanicAdapter** | 1.18 ms | 0.00 MB | **161.729 ops/sec** | **6.18 µs** | **+6.09 µs** |
+| **Raw Discordeno (Baseline)** | 0.04 ms | 6.50 MB | 32.059.502 ops/sec | 0.03 µs | Baseline |
+| **Shardix + DiscordenoAdapter** | 0.37 ms | 0.00 MB | **152.402 ops/sec** | **6.56 µs** | **+6.53 µs** |
 
 ---
 
