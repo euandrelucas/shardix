@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-08-02T20:14:24.862Z",
+  "platform": "win32",
+  "arch": "x64",
+  "nodeVersion": "v22.22.0",
+  "results": [
+    {
+      "name": "Raw Discord.js (Baseline)",
+      "bootstrapMs": 0.01,
+      "memoryHeapMB": 3.99,
+      "memoryRssMB": 91.7,
+      "opsPerSec": 13712342,
+      "avgLatencyUs": 0.07
+    },
+    {
+      "name": "Shardix (Mock/Pure Core)",
+      "bootstrapMs": 1.86,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 97.28,
+      "opsPerSec": 243021,
+      "avgLatencyUs": 4.11
+    },
+    {
+      "name": "Shardix + DiscordJSAdapter",
+      "bootstrapMs": 0.31,
+      "memoryHeapMB": 9.18,
+      "memoryRssMB": 129.52,
+      "opsPerSec": 227174,
+      "avgLatencyUs": 4.4
+    },
+    {
+      "name": "Shardix + ErisAdapter",
+      "bootstrapMs": 0.62,
+      "memoryHeapMB": 7.76,
+      "memoryRssMB": 131.75,
+      "opsPerSec": 130495,
+      "avgLatencyUs": 7.66
+    },
+    {
+      "name": "Shardix + OceanicAdapter",
+      "bootstrapMs": 1.22,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 139,
+      "opsPerSec": 232672,
+      "avgLatencyUs": 4.3
+    },
+    {
+      "name": "Shardix + DiscordenoAdapter",
+      "bootstrapMs": 0.33,
+      "memoryHeapMB": 10.73,
+      "memoryRssMB": 147.36,
+      "opsPerSec": 132799,
+      "avgLatencyUs": 7.53
+    }
+  ]
+}

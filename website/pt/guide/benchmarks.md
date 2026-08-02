@@ -48,9 +48,19 @@ npx tsx scripts/benchmark-suite.ts
 
 ---
 
+## Benchmarks Automatizados no CI (GitHub Actions)
+
+O Shardix executa benchmarks automatizados de performance de múltiplos adapters em uma máquina Linux dedicada (`ubuntu-latest`) a cada release e atualização na branch principal.
+
+- **GitHub Actions Workflow**: `.github/workflows/benchmark.yml`
+- **Últimos Resultados CI (JSON)**: `docs/benchmark-latest.json`
+- **Últimos Resultados CI (Markdown)**: `docs/benchmark-latest.md`
+
+---
+
 ## Metodologia
 
-- **Máquina de Teste**: Windows 11 / AMD Ryzen 9 / Node.js 22.x
+- **Ambientes de Teste**: Windows 11 (Local) / Ubuntu 24.04 LTS (GitHub Actions CI)
 - **Iterações**: 100.000 interações executadas por adapter após 1.000 requisições de aquecimento (warmup).
 - **Garbage Collection**: GC forçado antes dos cálculos de delta de memória.
 - **Payload**: Payload padrão de Slash Command do Discord contendo metadados de usuário, parâmetros de servidor e opções de comando.

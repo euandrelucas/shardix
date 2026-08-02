@@ -1,0 +1,54 @@
+name: Performance Benchmark Suite
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    name: Run Multi-Adapter Benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Monorepo
+        run: pnpm build
+
+      - name: Run Benchmark Suite
+        run: npx tsx scripts/benchmark-suite.ts --save
+
+      - name: Publish Benchmark Summary to GitHub Actions Step Summary
+        run: |
+          if [ -f docs/benchmark-latest.md ]; then
+            cat docs/benchmark-latest.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Commit Updated Benchmark Results
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/benchmark-latest.json docs/benchmark-latest.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(benchmark): update automated benchmark results [skip ci]" && git push)

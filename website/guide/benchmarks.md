@@ -48,9 +48,19 @@ npx tsx scripts/benchmark-suite.ts
 
 ---
 
+## Automated CI Benchmarks (GitHub Actions)
+
+Shardix runs automated multi-adapter performance benchmarks on a dedicated Linux runner (`ubuntu-latest`) on every release and main branch update.
+
+- **GitHub Actions Workflow**: `.github/workflows/benchmark.yml`
+- **Latest CI Results (JSON)**: `docs/benchmark-latest.json`
+- **Latest CI Results (Markdown)**: `docs/benchmark-latest.md`
+
+---
+
 ## Methodology
 
-- **Test Machine**: Windows 11 / AMD Ryzen 9 / Node.js 22.x
+- **Test Environments**: Windows 11 (Local) / Ubuntu 24.04 LTS (GitHub Actions CI)
 - **Iterations**: 100,000 interaction dispatches per adapter after 1,000 warmup requests.
 - **Garbage Collection**: Forced GC prior to memory delta calculations.
 - **Payload**: Standard Discord Slash Command payload containing user metadata, guild parameters, and command option tokens.
