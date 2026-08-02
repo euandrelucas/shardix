@@ -1,3 +1,4 @@
+import path from 'node:path';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { generateComponent, GenerateType } from './commands/generate.js';
@@ -30,9 +31,37 @@ async function main() {
   }
 
   if (command === 'dev') {
-    console.log(pc.cyan('⚡ Starting Shardix Development Server with Hot Reloading...'));
-    console.log(pc.gray('[Shardix Dev] Watching src/**/* for changes...'));
-    console.log(pc.green('✔ Development server active (Press Ctrl+C to exit)'));
+    const { spawn } = await import('node:child_process');
+    const { existsSync } = await import('node:fs');
+
+    const entryPoints = ['src/main.ts', 'src/index.ts', 'main.ts'];
+    const entryPoint = entryPoints.find((p) => existsSync(path.join(process.cwd(), p)));
+
+    if (!entryPoint) {
+      console.error(pc.red('❌ Could not find entry point. Expected: src/main.ts or src/index.ts'));
+      process.exit(1);
+    }
+
+    console.log(pc.cyan(`⚡ Starting Shardix development server...`));
+    console.log(pc.gray(`Entry: ${entryPoint} | Watching for changes...`));
+    console.log(pc.gray('Press Ctrl+C to stop\n'));
+
+    const child = spawn('npx', ['tsx', 'watch', entryPoint], {
+      cwd: process.cwd(),
+      stdio: 'inherit',
+      shell: true,
+    });
+
+    child.on('error', (err) => {
+      console.error(pc.red('❌ Failed to start dev server:'), err.message);
+      console.log(pc.yellow('Tip: Make sure tsx is installed: npm install -D tsx'));
+      process.exit(1);
+    });
+
+    process.on('SIGINT', () => {
+      child.kill('SIGINT');
+      process.exit(0);
+    });
     return;
   }
 
@@ -52,19 +81,85 @@ async function main() {
   }
 
   if (command === 'info') {
+    let cliVersion = 'unknown';
+    try {
+      const { createRequire } = await import('node:module');
+      const req = createRequire(import.meta.url);
+      const pkg = req('../../package.json') as { version: string };
+      cliVersion = pkg.version;
+    } catch {
+      cliVersion = '0.8.1';
+    }
     console.log(pc.cyan('⚡ Shardix Environment Information'));
     console.log(`OS: ${process.platform} (${process.arch})`);
     console.log(`Node.js: ${process.version}`);
-    console.log(`Shardix Core: v0.6.0`);
-    console.log(`Shardix CLI: v0.6.0`);
+    console.log(`Shardix CLI: v${cliVersion}`);
+    console.log(`Package Manager: ${process.env.npm_config_user_agent?.split('/')[0] || 'npm'}`);
     return;
   }
 
   if (command === 'doctor') {
-    console.log(pc.green('✔ Node.js version >= 18'));
-    console.log(pc.green('✔ Distributed Runtime configuration valid'));
-    console.log(pc.green('✔ Health check probe endpoints ready'));
-    console.log(pc.cyan('Shardix Doctor: Production environment ready! 🚀'));
+    const checks: Array<{ name: string; ok: boolean; message?: string }> = [];
+
+    // Check Node.js version
+    const nodeVersion = parseInt(process.version.replace('v', '').split('.')[0]!);
+    checks.push({
+      name: 'Node.js >= 18',
+      ok: nodeVersion >= 18,
+      message: nodeVersion >= 18 ? `Node.js ${process.version}` : `Found ${process.version}, requires >= 18`,
+    });
+
+    // Check for .env file
+    const { existsSync } = await import('node:fs');
+    const hasEnv = existsSync(path.join(process.cwd(), '.env'));
+    checks.push({
+      name: '.env file exists',
+      ok: hasEnv,
+      message: hasEnv ? '.env found' : '.env not found — create one from .env.example',
+    });
+
+    // Check for tsconfig.json
+    const hasTsConfig = existsSync(path.join(process.cwd(), 'tsconfig.json'));
+    checks.push({
+      name: 'tsconfig.json exists',
+      ok: hasTsConfig,
+      message: hasTsConfig ? 'tsconfig.json found' : 'tsconfig.json not found',
+    });
+
+    // Check for discord.js or other adapter
+    const hasDiscordJS = existsSync(path.join(process.cwd(), 'node_modules', 'discord.js'));
+    const hasEris = existsSync(path.join(process.cwd(), 'node_modules', 'eris'));
+    const hasOceanic = existsSync(path.join(process.cwd(), 'node_modules', 'oceanic.js'));
+    const hasAdapter = hasDiscordJS || hasEris || hasOceanic;
+    checks.push({
+      name: 'Discord adapter installed',
+      ok: hasAdapter,
+      message: hasAdapter
+        ? `Found: ${[hasDiscordJS && 'discord.js', hasEris && 'eris', hasOceanic && 'oceanic.js'].filter(Boolean).join(', ')}`
+        : 'No adapter found — run: npm install discord.js',
+    });
+
+    // Check DISCORD_TOKEN in env
+    const hasToken = !!process.env.DISCORD_TOKEN;
+    checks.push({
+      name: 'DISCORD_TOKEN set',
+      ok: hasToken,
+      message: hasToken ? 'Token found in environment' : 'DISCORD_TOKEN not set in .env',
+    });
+
+    let allOk = true;
+    console.log(pc.cyan('\n⚡ Shardix Doctor'));
+    for (const check of checks) {
+      if (!check.ok) allOk = false;
+      console.log(`${check.ok ? pc.green('✔') : pc.red('✘')} ${check.name}${check.message ? pc.gray(` — ${check.message}`) : ''}`);
+    }
+
+    if (allOk) {
+      console.log(pc.green('\n✅ Everything looks good! Your environment is ready.'));
+    } else {
+      console.log(pc.yellow('\n⚠️  Some checks failed. Review the issues above.'));
+      process.exitCode = 1;
+    }
     return;
   }
 
@@ -216,4 +311,7 @@ async function main() {
   );
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

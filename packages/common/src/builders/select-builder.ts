@@ -1,13 +1,6 @@
-export enum ComponentType {
-  ActionRow = 1,
-  Button = 2,
-  StringSelect = 3,
-  TextInput = 4,
-  UserSelect = 5,
-  RoleSelect = 6,
-  MentionableSelect = 7,
-  ChannelSelect = 8,
-}
+import { ComponentType } from './component-type.js';
+
+export { ComponentType };
 
 export interface SelectOption {
   label: string;
@@ -17,9 +10,20 @@ export interface SelectOption {
   default?: boolean;
 }
 
+export interface SelectMenuData {
+  type: ComponentType;
+  custom_id: string;
+  placeholder?: string;
+  min_values?: number;
+  max_values?: number;
+  disabled?: boolean;
+  options: SelectOption[];
+}
+
 export class SelectMenuBuilder {
-  private data: any = {
+  private data: SelectMenuData = {
     type: ComponentType.StringSelect,
+    custom_id: '',
     options: [],
   };
 
@@ -53,7 +57,17 @@ export class SelectMenuBuilder {
     return this;
   }
 
-  public toJSON() {
-    return this.data;
+  public setOptions(options: SelectOption[]): this {
+    this.data.options = options;
+    return this;
+  }
+
+  public setType(type: ComponentType): this {
+    this.data.type = type;
+    return this;
+  }
+
+  public toJSON(): SelectMenuData {
+    return { ...this.data, options: [...this.data.options] };
   }
 }

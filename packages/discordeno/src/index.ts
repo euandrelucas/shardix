@@ -6,9 +6,15 @@ export interface DiscordenoClientOptions {
   [key: string]: any;
 }
 
+/**
+ * Discordeno adapter for Shardix.
+ *
+ * @experimental This adapter is in active development. Some features may be incomplete.
+ * For full feature support, use the discord.js adapter (@shardix/discordjs).
+ */
 export class DiscordenoAdapter implements DiscordAdapter<any> {
   public readonly name = 'DiscordenoAdapter';
-  public readonly version = '0.8.0';
+  public readonly version = '0.8.1';
   private bot: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
@@ -47,7 +53,7 @@ export class DiscordenoAdapter implements DiscordAdapter<any> {
           "[Shardix] Error: '@discordeno/bot' package is not installed. Please install it using 'pnpm add @discordeno/bot' or 'npm install @discordeno/bot'."
         );
       }
-      this.isConnected = true;
+      // Do not mark as connected when library is unavailable
       return;
     }
 
@@ -105,9 +111,12 @@ export class DiscordenoAdapter implements DiscordAdapter<any> {
     }
   }
 
-  public onEvent(eventName: string, handler: (...args: any[]) => void | Promise<void>): void {
+  public onEvent(eventName: string, handler: (...args: unknown[]) => void | Promise<void>): void {
     if (this.bot?.events) {
-      this.bot.events[eventName] = async (...args: any[]) => {
+      // Store original handler and wrap in combined handler to avoid overwriting
+      const existing = this.bot.events[eventName];
+      this.bot.events[eventName] = async (...args: unknown[]) => {
+        if (existing) await existing(...args);
         await handler(...args);
       };
     }

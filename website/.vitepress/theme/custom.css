@@ -755,3 +755,48 @@ body {
   color: var(--shardix-blurple) !important;
   border-bottom-color: var(--shardix-blurple) !important;
 }
+
+/* Tech stack compatibility showcase */
+.tech-compat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 0;
+  border-top: 1px solid var(--vp-c-divider);
+  margin-top: 2rem;
+}
+
+.tech-compat p {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tech-logos {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tech-logos a {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  filter: grayscale(40%);
+}
+
+.tech-logos a:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.tech-logos img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}

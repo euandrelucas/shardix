@@ -9,7 +9,6 @@ import {
   Guard,
   Pipe,
   Interceptor,
-  Middleware,
 } from '../interfaces/index.js';
 
 export function Injectable(options?: InjectableOptions): ClassDecorator {
@@ -120,7 +119,11 @@ export function On(eventName: string): MethodDecorator {
 }
 
 export function Once(eventName: string): MethodDecorator {
-  return Event(eventName);
+  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    const existing = Reflect.getMetadata(METADATA_KEYS.EVENT, target.constructor) || [];
+    existing.push({ methodName: propertyKey, eventName, once: true });
+    Reflect.defineMetadata(METADATA_KEYS.EVENT, existing, target.constructor);
+  };
 }
 
 export function Cron(expression: string): MethodDecorator {
@@ -171,6 +174,18 @@ export function UseInterceptors(...interceptors: Type<Interceptor>[]): MethodDec
     } else {
       const existing = Reflect.getMetadata(METADATA_KEYS.INTERCEPTORS, target) || [];
       Reflect.defineMetadata(METADATA_KEYS.INTERCEPTORS, [...existing, ...interceptors], target);
+    }
+  };
+}
+
+export function UseFilters(...filters: Type<any>[]): MethodDecorator & ClassDecorator {
+  return (target: object, propertyKey?: string | symbol, descriptor?: PropertyDescriptor) => {
+    if (propertyKey && descriptor) {
+      const existing = Reflect.getMetadata(METADATA_KEYS.FILTERS, target.constructor, propertyKey) || [];
+      Reflect.defineMetadata(METADATA_KEYS.FILTERS, [...existing, ...filters], target.constructor, propertyKey);
+    } else {
+      const existing = Reflect.getMetadata(METADATA_KEYS.FILTERS, target) || [];
+      Reflect.defineMetadata(METADATA_KEYS.FILTERS, [...existing, ...filters], target);
     }
   };
 }

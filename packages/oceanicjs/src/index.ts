@@ -6,9 +6,15 @@ export interface OceanicClientOptions {
   [key: string]: any;
 }
 
+/**
+ * Oceanic.js adapter for Shardix.
+ *
+ * @experimental This adapter is in active development. Some features may be incomplete.
+ * For full feature support, use the discord.js adapter (@shardix/discordjs).
+ */
 export class OceanicAdapter implements DiscordAdapter<any> {
   public readonly name = 'OceanicAdapter';
-  public readonly version = '0.8.0';
+  public readonly version = '0.8.1';
   private client: any;
   private rawHandler?: (event: RawDiscordEvent) => void | Promise<void>;
   private isConnected = false;
@@ -49,7 +55,7 @@ export class OceanicAdapter implements DiscordAdapter<any> {
           "[Shardix] Error: 'oceanic.js' package is not installed. Please install it using 'pnpm add oceanic.js' or 'npm install oceanic.js'."
         );
       }
-      this.isConnected = true;
+      // Do not mark as connected when library is unavailable
       return;
     }
 
@@ -98,9 +104,19 @@ export class OceanicAdapter implements DiscordAdapter<any> {
             },
           };
           const result: any = await this.rawHandler(rawPayload);
-          if (result && typeof result === 'object' && 'data' in result && typeof interaction.createMessage === 'function') {
+          if (result && typeof result === 'object' && 'data' in result) {
+            const responseData = result.data as Record<string, unknown>;
             if (!interaction.acknowledged) {
-              await interaction.createMessage(result.data.content || result.data);
+              if (typeof interaction.createMessage === 'function') {
+                await interaction.createMessage({
+                  content: responseData?.content,
+                  embeds: responseData?.embeds,
+                  components: responseData?.components,
+                  flags: responseData?.flags,
+                });
+              } else if (typeof interaction.respond === 'function') {
+                await interaction.respond(responseData.content || responseData);
+              }
             }
           }
         }

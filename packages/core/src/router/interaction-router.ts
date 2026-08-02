@@ -28,12 +28,35 @@ export class InteractionRouter {
   private contextMenus = new Map<string, RouteMatch>();
   private eventHandlers = new Map<string, RouteMatch[]>();
   private rateLimits = new Map<string, { count: number; expiresAt: number }>();
+  private rateLimitCleanupTimer?: NodeJS.Timeout;
   private adapterRef?: any;
 
-  constructor(private container: Container) {}
+  constructor(private container: Container) {
+    // Periodically clean up expired rate limit entries to prevent memory leaks
+    this.rateLimitCleanupTimer = setInterval(() => this.cleanupExpiredRateLimits(), 60_000);
+    // Allow process to exit even if cleanup timer is running
+    if (this.rateLimitCleanupTimer.unref) {
+      this.rateLimitCleanupTimer.unref();
+    }
+  }
 
   public setAdapter(adapter: any): void {
     this.adapterRef = adapter;
+  }
+
+  private cleanupExpiredRateLimits(): void {
+    const now = Date.now();
+    for (const [key, record] of this.rateLimits.entries()) {
+      if (record.expiresAt <= now) {
+        this.rateLimits.delete(key);
+      }
+    }
+  }
+
+  public dispose(): void {
+    if (this.rateLimitCleanupTimer) {
+      clearInterval(this.rateLimitCleanupTimer);
+    }
   }
 
   public registerController(controllerClass: Type<any>): void {
@@ -227,11 +250,21 @@ export class InteractionRouter {
       const userId = payload.user?.id || payload.member?.user?.id || 'global';
       const key = `${userId}:${match.methodName}`;
       const now = Date.now();
-      const windowMs = typeof rateLimitMeta.window === 'number'
-        ? rateLimitMeta.window
-        : String(rateLimitMeta.window).endsWith('s')
-          ? parseInt(String(rateLimitMeta.window)) * 1000
-          : parseInt(String(rateLimitMeta.window)) * 60000;
+      const rawWindow = rateLimitMeta.window;
+      let windowMs: number;
+      if (typeof rawWindow === 'number') {
+        windowMs = rawWindow;
+      } else {
+        const windowStr = String(rawWindow);
+        if (windowStr.endsWith('m')) {
+          windowMs = parseInt(windowStr) * 60_000;
+        } else if (windowStr.endsWith('s')) {
+          windowMs = parseInt(windowStr) * 1_000;
+        } else {
+          // Treat plain string numbers as milliseconds
+          windowMs = parseInt(windowStr);
+        }
+      }
 
       const record = this.rateLimits.get(key);
       if (record && record.expiresAt > now) {

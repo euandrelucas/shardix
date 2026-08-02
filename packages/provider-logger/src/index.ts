@@ -3,7 +3,7 @@ import { Logger, LoggerOptions } from '@shardix/logger';
 
 export class LoggerProvider implements ProviderContract {
   public readonly name = 'LoggerProvider';
-  public readonly version = '0.3.0';
+  public readonly version = '0.8.1';
   private logger: Logger;
 
   constructor(options: LoggerOptions = {}) {

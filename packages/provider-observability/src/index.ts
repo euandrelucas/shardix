@@ -32,7 +32,7 @@ export class ObservabilityService {
 
 export class ObservabilityProvider implements ProviderContract {
   public readonly name = 'ObservabilityProvider';
-  public readonly version = '0.4.0';
+  public readonly version = '0.8.1';
   private service = new ObservabilityService();
 
   public async register(app: any): Promise<void> {

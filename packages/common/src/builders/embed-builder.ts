@@ -86,6 +86,28 @@ export class EmbedBuilder {
     return this;
   }
 
+  public addFields(...fields: EmbedField[]): this {
+    if (!this.data.fields) this.data.fields = [];
+    this.data.fields.push(...fields);
+    return this;
+  }
+
+  public setFields(...fields: EmbedField[]): this {
+    this.data.fields = [...fields];
+    return this;
+  }
+
+  public clearFields(): this {
+    this.data.fields = [];
+    return this;
+  }
+
+  public clone(): EmbedBuilder {
+    const copy = new EmbedBuilder();
+    copy['data'] = JSON.parse(JSON.stringify(this.data));
+    return copy;
+  }
+
   public toJSON(): EmbedData {
     return this.data;
   }

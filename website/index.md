@@ -6,7 +6,7 @@ hero:
   text: "Enterprise Discord Framework"
   tagline: "Build scalable, production-ready Discord bots with NestJS-inspired architecture. Zero vendor lock-in. Any library."
   image:
-    src: /logo.png
+    src: /logo-hero.svg
     alt: Shardix Framework
   actions:
     - theme: brand
@@ -56,6 +56,16 @@ features:
     link: /guide/testing
     linkText: Write tests
 ---
+
+<div class="tech-compat">
+  <p>Works with</p>
+  <div class="tech-logos">
+    <a href="https://nodejs.org" title="Node.js" target="_blank"><img src="https://nodejs.org/static/images/logo.svg" alt="Node.js" height="32"></a>
+    <a href="https://bun.sh" title="Bun" target="_blank"><img src="https://bun.sh/logo.svg" alt="Bun" height="32"></a>
+    <a href="https://www.typescriptlang.org" title="TypeScript" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="TypeScript" height="32"></a>
+    <a href="https://discord.js.org" title="Discord.js" target="_blank"><img src="https://discord.js.org/static/logo.svg" alt="Discord.js" height="32"></a>
+  </div>
+</div>
 
 ## Why Shardix?
 

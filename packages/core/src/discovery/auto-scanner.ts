@@ -3,7 +3,10 @@ import { ReflectionContainer } from '../reflection/reflection-container.js';
 import type { ShardixApplication } from '../application/shardix-application.js';
 
 export class AutoScanner {
-  public static scanAndRegister(app: ShardixApplication, exportList: any[]): void {
+  /** Tracks which (controller, eventName) pairs have already been bound to prevent duplicate listeners */
+  private static boundEvents = new WeakMap<object, Set<string>>();
+
+  public static scanAndRegister(app: ShardixApplication, exportList: unknown[]): void {
     for (const item of exportList) {
       if (typeof item === 'function') {
         const meta = ReflectionContainer.reflect(item as Type<any>);
@@ -16,11 +19,20 @@ export class AutoScanner {
 
           const adapter = app.getAdapter();
           if (adapter && typeof adapter.onEvent === 'function') {
-            const events: any[] = Reflect.getMetadata(METADATA_KEYS.EVENT, item) || [];
+            const events: Array<{ eventName: string }> = Reflect.getMetadata(METADATA_KEYS.EVENT, item) || [];
+            let bound = AutoScanner.boundEvents.get(item);
+            if (!bound) {
+              bound = new Set<string>();
+              AutoScanner.boundEvents.set(item, bound);
+            }
             for (const ev of events) {
-              adapter.onEvent(ev.eventName, (...args: any[]) =>
-                app.getRouter().handleEvent(ev.eventName, ...args)
-              );
+              const boundKey = `${String(item)}:${ev.eventName}`;
+              if (!bound.has(boundKey)) {
+                bound.add(boundKey);
+                adapter.onEvent(ev.eventName, (...args: unknown[]) =>
+                  app.getRouter().handleEvent(ev.eventName, ...args)
+                );
+              }
             }
           }
         } else if (meta.isInjectable) {

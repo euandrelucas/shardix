@@ -43,7 +43,13 @@ export class RedisCacheStore implements CacheStore {
 
   public async get<T>(key: string): Promise<T | null> {
     const data = await this.redis.get(key);
-    return data ? JSON.parse(data) : null;
+    if (!data) return null;
+    try {
+      return JSON.parse(data) as T;
+    } catch {
+      console.warn(`[RedisCacheStore] Failed to parse cached value for key "${key}" as JSON. Returning null.`);
+      return null;
+    }
   }
 
   public async set(key: string, value: any, ttlSeconds?: number): Promise<void> {

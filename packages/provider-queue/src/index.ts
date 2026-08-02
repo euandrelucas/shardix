@@ -42,7 +42,7 @@ export class QueueService {
 
 export class QueueProvider implements ProviderContract {
   public readonly name = 'QueueProvider';
-  public readonly version = '0.4.0';
+  public readonly version = '0.8.1';
   private queueService = new QueueService();
 
   public async register(app: any): Promise<void> {

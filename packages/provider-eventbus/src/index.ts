@@ -7,7 +7,7 @@ export interface EventBusProviderOptions {
 
 export class EventBusProvider implements ProviderContract {
   public readonly name = 'EventBusProvider';
-  public readonly version = '0.3.0';
+  public readonly version = '0.8.1';
   private eventBus: EventBus;
 
   constructor(options: EventBusProviderOptions = {}) {

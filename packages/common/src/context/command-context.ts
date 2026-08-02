@@ -139,74 +139,103 @@ export class CommandContext {
     return this.nativeInteraction as T;
   }
 
-  /** Wait for a button interaction */
+  /** Wait for a button interaction from this user (requires native discord.js interaction) */
   public async awaitButton(customId: string, timeout = 30000): Promise<CommandContext | null> {
-    if (this.nativeInteraction && typeof this.nativeInteraction.channel?.awaitMessageComponent === 'function') {
-      try {
-        const { ComponentType } = require('discord.js');
-        const collected = await this.nativeInteraction.channel.awaitMessageComponent({
-          filter: (i: any) => i.customId === customId && i.user.id === this.user.id,
-          componentType: ComponentType?.Button ?? 2,
-          time: timeout,
-        });
-        return new CommandContext({
+    if (!this.nativeInteraction) return null;
+    const channel = this.nativeInteraction.channel;
+    if (!channel || typeof channel.awaitMessageComponent !== 'function') return null;
+    try {
+      const BUTTON_TYPE = 2; // ComponentType.Button
+      const collected = await channel.awaitMessageComponent({
+        filter: (i: Record<string, unknown>) =>
+          i['customId'] === customId && (i['user'] as Record<string, unknown>)?.['id'] === this.user.id,
+        componentType: BUTTON_TYPE,
+        time: timeout,
+      });
+      return new CommandContext(
+        {
           ...this.raw,
-          id: collected.id,
-          token: collected.token,
-          data: { custom_id: collected.customId },
+          id: collected.id as string,
+          token: collected.token as string,
+          data: { custom_id: collected.customId as string },
           _nativeInteraction: collected,
-        } as any, this.adapterRef);
-      } catch {
-        return null; // Timed out
-      }
+        } as InteractionPayload,
+        this.adapterRef
+      );
+    } catch {
+      return null;
     }
-    return null;
   }
 
   /** Wait for a modal submission */
   public async awaitModal(customId: string, timeout = 30000): Promise<CommandContext | null> {
-    if (this.nativeInteraction && typeof this.nativeInteraction.awaitModalSubmit === 'function') {
-      try {
-        const collected = await this.nativeInteraction.awaitModalSubmit({
-          filter: (i: any) => i.customId === customId,
-          time: timeout,
-        });
-        return new CommandContext({
+    if (!this.nativeInteraction || typeof this.nativeInteraction.awaitModalSubmit !== 'function') return null;
+    try {
+      const collected = await this.nativeInteraction.awaitModalSubmit({
+        filter: (i: Record<string, unknown>) => i['customId'] === customId,
+        time: timeout,
+      });
+      return new CommandContext(
+        {
           ...this.raw,
-          id: collected.id,
-          token: collected.token,
-          data: { custom_id: collected.customId, components: collected.components },
+          id: collected.id as string,
+          token: collected.token as string,
+          data: { custom_id: collected.customId as string, components: collected.components },
           _nativeInteraction: collected,
-        } as any, this.adapterRef);
-      } catch {
-        return null;
-      }
+        } as InteractionPayload,
+        this.adapterRef
+      );
+    } catch {
+      return null;
     }
-    return null;
   }
 
-  /** Wait for a select menu interaction */
+  /** Wait for a select menu interaction from this user */
   public async awaitSelect(customId: string, timeout = 30000): Promise<CommandContext | null> {
-    if (this.nativeInteraction && typeof this.nativeInteraction.channel?.awaitMessageComponent === 'function') {
-      try {
-        const { ComponentType } = require('discord.js');
-        const collected = await this.nativeInteraction.channel.awaitMessageComponent({
-          filter: (i: any) => i.customId === customId && i.user.id === this.user.id,
-          componentType: ComponentType?.StringSelect ?? 3,
-          time: timeout,
-        });
-        return new CommandContext({
+    if (!this.nativeInteraction) return null;
+    const channel = this.nativeInteraction.channel;
+    if (!channel || typeof channel.awaitMessageComponent !== 'function') return null;
+    try {
+      const STRING_SELECT_TYPE = 3; // ComponentType.StringSelect
+      const collected = await channel.awaitMessageComponent({
+        filter: (i: Record<string, unknown>) =>
+          i['customId'] === customId && (i['user'] as Record<string, unknown>)?.['id'] === this.user.id,
+        componentType: STRING_SELECT_TYPE,
+        time: timeout,
+      });
+      return new CommandContext(
+        {
           ...this.raw,
-          id: collected.id,
-          token: collected.token,
-          data: { custom_id: collected.customId, values: collected.values },
+          id: collected.id as string,
+          token: collected.token as string,
+          data: { custom_id: collected.customId as string, values: collected.values as string[] },
           _nativeInteraction: collected,
-        } as any, this.adapterRef);
-      } catch {
-        return null;
-      }
+        } as InteractionPayload,
+        this.adapterRef
+      );
+    } catch {
+      return null;
     }
-    return null;
+  }
+
+  /** Show a modal dialog (requires native discord.js interaction) */
+  public async showModal(modal: { toJSON(): unknown } | unknown): Promise<void> {
+    if (!this.nativeInteraction || typeof this.nativeInteraction.showModal !== 'function') {
+      throw new Error('[CommandContext] showModal() requires a native discord.js interaction object.');
+    }
+    const modalData = modal !== null && typeof modal === 'object' && 'toJSON' in modal
+      ? (modal as { toJSON(): unknown }).toJSON()
+      : modal;
+    await this.nativeInteraction.showModal(modalData);
+  }
+
+  /** Delete the original reply */
+  public async deleteReply(): Promise<void> {
+    if (this.nativeInteraction && typeof this.nativeInteraction.deleteReply === 'function') {
+      await this.nativeInteraction.deleteReply();
+      return;
+    }
+    throw new Error('[CommandContext] deleteReply() requires a native discord.js interaction object.');
   }
 
   private _normalizeReplyOptions(options: string | CommandResponseOptions | any): any {

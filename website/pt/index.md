@@ -5,6 +5,9 @@ hero:
   name: "Shardix"
   text: "Framework Discord Enterprise"
   tagline: "Construa bots de Discord escaláveis e prontos para produção com arquitetura inspirada no NestJS. Zero vendor lock-in. Qualquer biblioteca."
+  image:
+    src: /logo-hero.svg
+    alt: Shardix Framework
   actions:
     - theme: brand
       text: Primeiros Passos →
@@ -53,6 +56,16 @@ features:
     link: /pt/guide/testing
     linkText: Escrever testes
 ---
+
+<div class="tech-compat">
+  <p>Compatível com</p>
+  <div class="tech-logos">
+    <a href="https://nodejs.org" title="Node.js" target="_blank"><img src="https://nodejs.org/static/images/logo.svg" alt="Node.js" height="32"></a>
+    <a href="https://bun.sh" title="Bun" target="_blank"><img src="https://bun.sh/logo.svg" alt="Bun" height="32"></a>
+    <a href="https://www.typescriptlang.org" title="TypeScript" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="TypeScript" height="32"></a>
+    <a href="https://discord.js.org" title="Discord.js" target="_blank"><img src="https://discord.js.org/static/logo.svg" alt="Discord.js" height="32"></a>
+  </div>
+</div>
 
 ## Por que Shardix?
 

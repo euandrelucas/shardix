@@ -8,7 +8,7 @@ export interface DashboardProviderOptions {
 
 export class DashboardProvider implements ProviderContract {
   public readonly name = 'DashboardProvider';
-  public readonly version = '0.5.0';
+  public readonly version = '0.8.1';
   private server: DashboardApiServer;
 
   constructor(options: DashboardProviderOptions = {}) {

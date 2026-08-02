@@ -66,8 +66,5 @@ export function Catch(...exceptions: any[]): ClassDecorator {
   };
 }
 
-export function UseFilters(...filters: any[]): MethodDecorator & ClassDecorator {
-  return (target: object, propertyKey?: string | symbol) => {
-    Reflect.defineMetadata('shardix:exception_filters', filters, propertyKey ? target : target, propertyKey as any);
-  };
-}
+// UseFilters is now exported from decorators/index.ts using METADATA_KEYS.FILTERS
+// This duplicate has been removed to prevent export conflicts

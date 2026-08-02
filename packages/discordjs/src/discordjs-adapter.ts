@@ -8,7 +8,12 @@ export interface DiscordJSAdapterOptions {
 
 export class DiscordJSAdapter implements DiscordAdapter<any> {
   public readonly name = 'DiscordJSAdapter';
+  public readonly version = '0.8.1';
   private client: any;
+
+  public getStatus(): boolean {
+    return this.client?.isReady() ?? false;
+  }
   private rawHandler?: (event: RawDiscordEvent) => any | Promise<any>;
   private pendingInteractions = new Map<string, any>();
 
@@ -144,7 +149,10 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
         if (!interaction.replied && !interaction.deferred) {
           try {
             await interaction.reply({ content: 'An error occurred while processing this interaction.', ephemeral: true });
-          } catch {}
+          } catch (replyErr: unknown) {
+            const msg = replyErr instanceof Error ? replyErr.message : String(replyErr);
+            console.warn('[DiscordJSAdapter] Failed to send fallback error reply:', msg);
+          }
         }
         console.error('[DiscordJSAdapter] Error handling interaction:', err?.message || err);
       } finally {
@@ -181,7 +189,10 @@ export class DiscordJSAdapter implements DiscordAdapter<any> {
           });
         }
         return;
-      } catch {}
+      } catch (nativeErr: unknown) {
+        const msg = nativeErr instanceof Error ? nativeErr.message : String(nativeErr);
+        console.debug('[DiscordJSAdapter] Native reply failed, falling back to REST:', msg);
+      }
     }
     // Fallback to REST API
     if (this.client?.rest) {

@@ -59,11 +59,13 @@ export function createProjectFiles(options: InitProjectOptions): string {
       dev: 'tsx watch src/main.ts',
       'register-commands': 'tsx src/register-commands.ts',
       'lint': 'tsc --noEmit',
+      'test': 'vitest run',
+      'test:watch': 'vitest',
     },
     dependencies: {
-      '@shardix/core': '^0.8.0',
-      '@shardix/common': '^0.8.0',
-      [selectedAdapter.pkg]: '^0.8.0',
+      '@shardix/core': '^0.8.1',
+      '@shardix/common': '^0.8.1',
+      [selectedAdapter.pkg]: '^0.8.1',
       [selectedAdapter.client]: selectedAdapter.clientVer,
       'dotenv': '^16.4.7',
     },
@@ -72,6 +74,7 @@ export function createProjectFiles(options: InitProjectOptions): string {
       'tsx': '^4.19.2',
       'tsup': '^8.3.5',
       'typescript': '^5.7.2',
+      'vitest': '^2.1.8',
     },
   };
 
@@ -254,10 +257,6 @@ bootstrap().catch((err) => {
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { ShardixFactory } from '@shardix/core';
-import { ${selectedClass.className} } from '${selectedClass.importPath}';
-import { AppModule } from './app.module.js';
-
 // Commands to register (must match your @SlashCommand decorators)
 const commands = [
   {
@@ -276,28 +275,36 @@ async function registerCommands() {
   const guildId = process.env.GUILD_ID;
 
   if (!token || !clientId) {
-    console.error('❌ Missing DISCORD_TOKEN or CLIENT_ID in .env');
+    console.error('\\u274c Missing DISCORD_TOKEN or CLIENT_ID in .env');
     process.exit(1);
   }
 
-  try {
-    const { REST, Routes } = require('${selectedAdapter.client === 'discord.js' ? 'discord.js' : selectedAdapter.client}');
-    const rest = new REST({ version: '10' }).setToken(token);
+  const baseUrl = 'https://discord.com/api/v10';
+  const endpoint = guildId
+    ? \\\`\\\${baseUrl}/applications/\\\${clientId}/guilds/\\\${guildId}/commands\\\`
+    : \\\`\\\${baseUrl}/applications/\\\${clientId}/commands\\\`;
 
-    console.log('📡 Registering slash commands...');
+  console.log('\\uD83D\\uDCE1 Registering slash commands via Discord REST API...');
 
-    if (guildId) {
-      await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
-      console.log(\`✅ Registered \${commands.length} guild commands in \${guildId}\`);
-      console.log('ℹ️  Guild commands update instantly!');
-    } else {
-      await rest.put(Routes.applicationCommands(clientId), { body: commands });
-      console.log(\`✅ Registered \${commands.length} global commands\`);
-      console.log('ℹ️  Global commands may take up to 1 hour to propagate');
-    }
-  } catch (err: any) {
-    console.error('❌ Failed to register commands:', err?.message || err);
+  const response = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      Authorization: \\\`Bot \\\${token}\\\`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(commands),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error('\\u274c Failed to register commands:', response.status, error);
     process.exit(1);
+  }
+
+  const registered = await response.json() as any[];
+  console.log(\\\`\\u2705 Registered \\\${registered.length} commands\\\${guildId ? \\\` in guild \\\${guildId}\\\` : ' globally'}\\\`);
+  if (!guildId) {
+    console.log('\\u2139\\uFE0F  Global commands may take up to 1 hour to propagate');
   }
 }
 

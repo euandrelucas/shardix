@@ -1,6 +1,6 @@
 {
   "name": "@shardix/cli",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Official CLI and project generator for Shardix Framework",
   "main": "./dist/index.js",
   "bin": {

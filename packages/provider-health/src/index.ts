@@ -10,7 +10,7 @@ export interface HealthCheckResult {
 
 export class HealthProvider implements ProviderContract {
   public readonly name = 'HealthProvider';
-  public readonly version = '0.3.0';
+  public readonly version = '0.8.1';
   private checks = new Map<string, HealthCheckFn>();
   private startTime = Date.now();
 
