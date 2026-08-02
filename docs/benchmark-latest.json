@@ -1,80 +1,80 @@
 {
-  "timestamp": "2026-08-02T20:25:55.161Z",
+  "timestamp": "2026-08-02T20:29:06.222Z",
   "platform": "win32",
   "arch": "x64",
   "nodeVersion": "v22.22.0",
   "results": [
     {
       "name": "Shardix Core (Mock Adapter)",
-      "bootstrapMs": 1.88,
-      "memoryHeapMB": 3.36,
-      "memoryRssMB": 96.54,
-      "opsPerSec": 238071,
-      "avgLatencyUs": 4.2
+      "bootstrapMs": 2.14,
+      "memoryHeapMB": 3.02,
+      "memoryRssMB": 97.58,
+      "opsPerSec": 248847,
+      "avgLatencyUs": 4.02
     },
     {
       "name": "Raw Discord.js (Baseline)",
-      "bootstrapMs": 0,
-      "memoryHeapMB": 2.58,
-      "memoryRssMB": 97.22,
-      "opsPerSec": 18665074,
-      "avgLatencyUs": 0.05
+      "bootstrapMs": 0.05,
+      "memoryHeapMB": 3.34,
+      "memoryRssMB": 97.5,
+      "opsPerSec": 2193391,
+      "avgLatencyUs": 0.46
     },
     {
       "name": "Shardix + DiscordJSAdapter",
-      "bootstrapMs": 0.33,
-      "memoryHeapMB": 9.68,
-      "memoryRssMB": 128.76,
-      "opsPerSec": 239446,
-      "avgLatencyUs": 4.18
+      "bootstrapMs": 0.45,
+      "memoryHeapMB": 9.91,
+      "memoryRssMB": 129.6,
+      "opsPerSec": 259703,
+      "avgLatencyUs": 3.85
     },
     {
       "name": "Raw Eris (Baseline)",
-      "bootstrapMs": 0,
+      "bootstrapMs": 0.03,
       "memoryHeapMB": 0,
-      "memoryRssMB": 129.14,
-      "opsPerSec": 22654162,
-      "avgLatencyUs": 0.04
+      "memoryRssMB": 130.04,
+      "opsPerSec": 4383216,
+      "avgLatencyUs": 0.23
     },
     {
       "name": "Shardix + ErisAdapter",
-      "bootstrapMs": 0.54,
-      "memoryHeapMB": 0,
-      "memoryRssMB": 131.23,
-      "opsPerSec": 215169,
-      "avgLatencyUs": 4.65
+      "bootstrapMs": 0.57,
+      "memoryHeapMB": 8.14,
+      "memoryRssMB": 132.2,
+      "opsPerSec": 245881,
+      "avgLatencyUs": 4.07
     },
     {
       "name": "Raw Oceanic.js (Baseline)",
-      "bootstrapMs": 0,
-      "memoryHeapMB": 8.04,
-      "memoryRssMB": 131.34,
-      "opsPerSec": 11698096,
-      "avgLatencyUs": 0.09
+      "bootstrapMs": 0.05,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 131.48,
+      "opsPerSec": 5260306,
+      "avgLatencyUs": 0.19
     },
     {
       "name": "Shardix + OceanicAdapter",
-      "bootstrapMs": 1.18,
+      "bootstrapMs": 0.31,
       "memoryHeapMB": 0,
-      "memoryRssMB": 138.86,
-      "opsPerSec": 161729,
-      "avgLatencyUs": 6.18
+      "memoryRssMB": 139.38,
+      "opsPerSec": 264750,
+      "avgLatencyUs": 3.78
     },
     {
       "name": "Raw Discordeno (Baseline)",
-      "bootstrapMs": 0.04,
-      "memoryHeapMB": 6.5,
-      "memoryRssMB": 138.18,
-      "opsPerSec": 32059502,
-      "avgLatencyUs": 0.03
+      "bootstrapMs": 0.05,
+      "memoryHeapMB": 5.56,
+      "memoryRssMB": 138.81,
+      "opsPerSec": 4311999,
+      "avgLatencyUs": 0.23
     },
     {
       "name": "Shardix + DiscordenoAdapter",
-      "bootstrapMs": 0.37,
+      "bootstrapMs": 0.36,
       "memoryHeapMB": 0,
-      "memoryRssMB": 146.8,
-      "opsPerSec": 152402,
-      "avgLatencyUs": 6.56
+      "memoryRssMB": 147.21,
+      "opsPerSec": 223671,
+      "avgLatencyUs": 4.47
     }
   ]
 }
