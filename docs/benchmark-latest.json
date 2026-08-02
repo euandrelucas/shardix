@@ -1,56 +1,56 @@
 {
-  "timestamp": "2026-08-02T20:14:24.862Z",
-  "platform": "win32",
+  "timestamp": "2026-08-02T20:17:20.083Z",
+  "platform": "linux",
   "arch": "x64",
-  "nodeVersion": "v22.22.0",
+  "nodeVersion": "v22.23.1",
   "results": [
     {
       "name": "Raw Discord.js (Baseline)",
       "bootstrapMs": 0.01,
-      "memoryHeapMB": 3.99,
-      "memoryRssMB": 91.7,
-      "opsPerSec": 13712342,
-      "avgLatencyUs": 0.07
+      "memoryHeapMB": 1.92,
+      "memoryRssMB": 100.16,
+      "opsPerSec": 17610635,
+      "avgLatencyUs": 0.06
     },
     {
       "name": "Shardix (Mock/Pure Core)",
-      "bootstrapMs": 1.86,
+      "bootstrapMs": 2.58,
       "memoryHeapMB": 0,
-      "memoryRssMB": 97.28,
-      "opsPerSec": 243021,
-      "avgLatencyUs": 4.11
+      "memoryRssMB": 108.16,
+      "opsPerSec": 292755,
+      "avgLatencyUs": 3.42
     },
     {
       "name": "Shardix + DiscordJSAdapter",
-      "bootstrapMs": 0.31,
-      "memoryHeapMB": 9.18,
-      "memoryRssMB": 129.52,
-      "opsPerSec": 227174,
-      "avgLatencyUs": 4.4
+      "bootstrapMs": 0.39,
+      "memoryHeapMB": 9.63,
+      "memoryRssMB": 139.57,
+      "opsPerSec": 299758,
+      "avgLatencyUs": 3.34
     },
     {
       "name": "Shardix + ErisAdapter",
-      "bootstrapMs": 0.62,
-      "memoryHeapMB": 7.76,
-      "memoryRssMB": 131.75,
-      "opsPerSec": 130495,
-      "avgLatencyUs": 7.66
+      "bootstrapMs": 0.49,
+      "memoryHeapMB": 7.63,
+      "memoryRssMB": 142.07,
+      "opsPerSec": 305256,
+      "avgLatencyUs": 3.28
     },
     {
       "name": "Shardix + OceanicAdapter",
-      "bootstrapMs": 1.22,
+      "bootstrapMs": 1.19,
       "memoryHeapMB": 0,
-      "memoryRssMB": 139,
-      "opsPerSec": 232672,
-      "avgLatencyUs": 4.3
+      "memoryRssMB": 151.29,
+      "opsPerSec": 304545,
+      "avgLatencyUs": 3.28
     },
     {
       "name": "Shardix + DiscordenoAdapter",
-      "bootstrapMs": 0.33,
-      "memoryHeapMB": 10.73,
-      "memoryRssMB": 147.36,
-      "opsPerSec": 132799,
-      "avgLatencyUs": 7.53
+      "bootstrapMs": 0.4,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 160.32,
+      "opsPerSec": 306905,
+      "avgLatencyUs": 3.26
     }
   ]
 }
