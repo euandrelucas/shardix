@@ -1,10 +1,16 @@
 {
+<<<<<<< HEAD
   "timestamp": "2026-08-04T12:34:32.799Z",
   "platform": "win32",
+=======
+  "timestamp": "2026-08-02T20:37:11.945Z",
+  "platform": "linux",
+>>>>>>> 831791149a8249c5a6a8cb90da7aa1028dd3e588
   "arch": "x64",
   "nodeVersion": "v22.22.0",
   "results": [
     {
+<<<<<<< HEAD
       "name": "Shardix Core (Mock)",
       "library": "shardix",
       "type": "shardix",
@@ -138,6 +144,78 @@
       "p95LatencyUs": 7.8,
       "p99LatencyUs": 11.9,
       "concurrentOpsPerSec": 193989
+=======
+      "name": "Shardix Core (Mock Adapter)",
+      "bootstrapMs": 2.64,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 159.08,
+      "opsPerSec": 299482,
+      "avgLatencyUs": 3.34
+    },
+    {
+      "name": "Raw Discord.js (Real v14 Client)",
+      "bootstrapMs": 22.92,
+      "memoryHeapMB": 69.16,
+      "memoryRssMB": 219.2,
+      "opsPerSec": 638676,
+      "avgLatencyUs": 1.57
+    },
+    {
+      "name": "Shardix + DiscordJSAdapter",
+      "bootstrapMs": 3.62,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 220.31,
+      "opsPerSec": 310578,
+      "avgLatencyUs": 3.22
+    },
+    {
+      "name": "Raw Eris (Real v0.18 Client)",
+      "bootstrapMs": 0.84,
+      "memoryHeapMB": 40.7,
+      "memoryRssMB": 257.56,
+      "opsPerSec": 863751,
+      "avgLatencyUs": 1.16
+    },
+    {
+      "name": "Shardix + ErisAdapter",
+      "bootstrapMs": 0.36,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 260.19,
+      "opsPerSec": 308065,
+      "avgLatencyUs": 3.25
+    },
+    {
+      "name": "Raw Oceanic.js (Real v1.14 Client)",
+      "bootstrapMs": 1.32,
+      "memoryHeapMB": 45.47,
+      "memoryRssMB": 296.69,
+      "opsPerSec": 862210,
+      "avgLatencyUs": 1.16
+    },
+    {
+      "name": "Shardix + OceanicAdapter",
+      "bootstrapMs": 0.42,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 298.19,
+      "opsPerSec": 310533,
+      "avgLatencyUs": 3.22
+    },
+    {
+      "name": "Raw Discordeno (Real v21 Bot)",
+      "bootstrapMs": 5,
+      "memoryHeapMB": 10.56,
+      "memoryRssMB": 298.56,
+      "opsPerSec": 7458826,
+      "avgLatencyUs": 0.13
+    },
+    {
+      "name": "Shardix + DiscordenoAdapter",
+      "bootstrapMs": 0.34,
+      "memoryHeapMB": 0,
+      "memoryRssMB": 298.69,
+      "opsPerSec": 312062,
+      "avgLatencyUs": 3.2
+>>>>>>> 831791149a8249c5a6a8cb90da7aa1028dd3e588
     }
   ]
 }
