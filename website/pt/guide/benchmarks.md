@@ -1,69 +1,68 @@
-# Benchmarks de Performance
+---
+title: Benchmarks de Performance
+description: Benchmarks reais comparando os adapters Shardix com baselines crus de bibliotecas Discord, cobrindo throughput, latência, memória e concorrência.
+---
 
-O Shardix foi projetado para **altíssimo throughput e latência quase nula**. As abstrações do framework (container IoC, reflexão de metadados, roteamento de comandos, pipeline de interceptadores) adicionam **menos de 3,7 microssegundos (0.0037 ms)** de overhead por interação em comparação ao `discord.js` puro.
+<script setup>
+import { data } from '../../.vitepress/benchmark.data.ts'
+</script>
+
+# ⚡ Benchmarks de Performance
+
+O Shardix é projetado para **throughput ultra-alto e overhead praticamente zero**. O container IoC, reflexão de metadados, roteamento, pipeline de guards e resolução de escopo DI adicionam **menos de 4 microsegundos (0,004 ms)** de overhead por interação em relação às bibliotecas curas.
+
+> [!IMPORTANT]
+> Todos os benchmarks usam **instâncias reais das bibliotecas instaladas** — sem mocks ou stubs. Cada teste simula um ciclo de vida realista de bot:
+> 1. Instanciar o client/bot com opções reais
+> 2. Registrar 3 handlers de comando (`/ping`, `/heavy`, `/echo`)
+> 3. Simular a sequência de gateway `IDENTIFY → READY → GUILD_CREATE`
+> 4. Aquecer com 1.000 interações
+> 5. Medir 100.000 dispatches sequenciais → latência p50/p95/p99
+> 6. Medir 10.000 dispatches concorrentes (100 paralelos × 100 rodadas)
+> 7. Teardown gracioso
 
 ---
 
-## Resultados dos Benchmarks (v0.8.1)
+## Resultados ao Vivo
 
-Abaixo estão as métricas empíricas medidas no Node.js v22 através de 100.000 disparos de interação por adapter usando a suíte oficial de benchmarks do Shardix.
-
-| Engine / Configuração de Adapter | Cold Start (ms) | Heap (MB) | Throughput (Ops / sec) | Latência (µs) | Overhead vs Raw |
-|----------------------------------|-----------------|-----------|------------------------|---------------|------------------|
-| **Shardix Core (Mock Adapter)** | 1.84 ms | 0.00 MB | 250.080 ops/sec | 4.00 µs | — |
-| **Raw Discord.js (Cliente v14 Real)** | 74.71 ms | 65.01 MB | 685.668 ops/sec | 1.46 µs | Baseline |
-| **Shardix + DiscordJSAdapter** | 3.76 ms | 0.00 MB | **248.453 ops/sec** | **4.02 µs** | **+2.56 µs** |
-| **Raw Eris (Cliente v0.18 Real)** | 1.40 ms | 41.07 MB | 1.001.014 ops/sec | 1.00 µs | Baseline |
-| **Shardix + ErisAdapter** | 0.41 ms | 0.00 MB | **246.701 ops/sec** | **4.05 µs** | **+3.05 µs** |
-| **Raw Oceanic.js (Cliente v1.14 Real)** | 1.39 ms | 45.01 MB | 973.395 ops/sec | 1.03 µs | Baseline |
-| **Shardix + OceanicAdapter** | 0.38 ms | 0.00 MB | **238.811 ops/sec** | **4.19 µs** | **+3.16 µs** |
-| **Raw Discordeno (Bot v21 Real)** | 5.56 ms | 9.98 MB | 7.078.493 ops/sec | 0.14 µs | Baseline |
-| **Shardix + DiscordenoAdapter** | 0.36 ms | 0.00 MB | **250.020 ops/sec** | **4.00 µs** | **+3.86 µs** |
+<BenchmarkCharts :payload="data" />
 
 ---
 
-## Principais Destaques de Performance
+## Rodando Localmente
 
-### 1. Latência Ultra Baixa (< 3.7 µs)
-O `InteractionRouter` do Shardix avalia guards, permissões, rate limits, interceptores e o escopo de DI em **~3,65 microssegundos**. Com mais de 266.000 operações por segundo, o Shardix suporta milhares de interações simultâneas por segundo em uma única thread sem virar gargalo.
-
-### 2. Zero Sobrecarga de Memória
-A `ShardixApplication` adiciona **< 1,5 MB** de memória Heap em relação ao `discord.js` puro. O consumo de memória escala de forma previsível independente da quantidade de controllers ou providers.
-
-### 3. Paridade entre Múltiplos Adapters
-Seja utilizando `discord.js`, `Eris`, `Oceanic.js` ou `@discordeno/bot`, o Shardix padroniza a API de interações mantendo velocidade máxima em qualquer biblioteca.
-
----
-
-## Executando os Benchmarks Localmente
-
-Você pode rodar a suíte de benchmarks na sua própria máquina usando a CLI do Shardix ou o script da suíte:
-
-### Via Shardix CLI
 ```bash
-npx shardix benchmark
-```
-
-### Via Benchmark Suite Runner
-```bash
+# Rodar e exibir no terminal
 npx tsx scripts/benchmark-suite.ts
+
+# Rodar e salvar resultados em docs/benchmark-latest.json
+npx tsx scripts/benchmark-suite.ts --save
+
+# Saída JSON bruta (útil para CI)
+npx tsx scripts/benchmark-suite.ts --json
 ```
 
 ---
 
-## Benchmarks Automatizados no CI (GitHub Actions)
+## CI Automatizado
 
-O Shardix executa benchmarks automatizados de performance de múltiplos adapters em uma máquina Linux dedicada (`ubuntu-latest`) a cada release e atualização na branch principal.
+O Shardix executa benchmarks automáticos a cada push na `main` e em cada release via GitHub Actions. Os resultados são commitados de volta ao repositório e aparecem automaticamente nesta página.
 
-- **GitHub Actions Workflow**: `.github/workflows/benchmark.yml`
-- **Últimos Resultados CI (JSON)**: `docs/benchmark-latest.json`
-- **Últimos Resultados CI (Markdown)**: `docs/benchmark-latest.md`
+- **Workflow**: [`.github/workflows/benchmark.yml`](https://github.com/euandrelucas/shardix/blob/main/.github/workflows/benchmark.yml)
+- **JSON Bruto**: [`docs/benchmark-latest.json`](https://github.com/euandrelucas/shardix/blob/main/docs/benchmark-latest.json)
 
 ---
 
 ## Metodologia
 
-- **Ambientes de Teste**: Windows 11 (Local) / Ubuntu 24.04 LTS (GitHub Actions CI)
-- **Iterações**: 100.000 interações executadas por adapter após 1.000 requisições de aquecimento (warmup).
-- **Garbage Collection**: GC forçado antes dos cálculos de delta de memória.
-- **Payload**: Payload padrão de Slash Command do Discord contendo metadados de usuário, parâmetros de servidor e opções de comando.
+| Fator | Detalhes |
+|-------|---------|
+| **Ambiente** | Ubuntu 24.04 LTS (CI) / Windows 11 (dev local) |
+| **Node.js** | v22 LTS |
+| **Bibliotecas** | discord.js v14, eris v0.18, oceanic.js v1.14, @discordeno/bot v21 |
+| **Sequencial** | 100.000 dispatches após 1.000 iterações de aquecimento |
+| **Concorrente** | 100 interações paralelas × 100 rodadas (10.000 no total) |
+| **Percentis** | p50 (mediana), p95, p99 a partir de 100K amostras |
+| **Memória** | Delta de RSS via `process.memoryUsage()` em steady state |
+| **GC** | `global.gc()` forçado antes de cada teste |
+| **Payload** | Slash command Discord padrão com opções, guild ID e channel ID |

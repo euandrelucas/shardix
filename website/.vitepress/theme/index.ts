@@ -4,14 +4,16 @@
 import DefaultTheme from 'vitepress/theme'
 import './custom.css'
 import { EnhanceAppContext } from 'vitepress'
+import BenchmarkCharts from '../components/BenchmarkCharts.vue'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app, router, siteData }: EnhanceAppContext) {
+    // Register BenchmarkCharts globally so it can be used in any .md page
+    app.component('BenchmarkCharts', BenchmarkCharts)
+
     // Force dark mode as the default appearance
-    // This ensures the site always looks right even before hydration
     if (typeof window !== 'undefined') {
-      // Set dark mode immediately to prevent flash of light theme
       document.documentElement.classList.add('dark')
       document.documentElement.setAttribute('data-theme', 'dark')
     }

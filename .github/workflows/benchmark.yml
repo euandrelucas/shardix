@@ -37,18 +37,32 @@ jobs:
         run: pnpm build
 
       - name: Run Benchmark Suite
-        run: npx tsx scripts/benchmark-suite.ts --save
+        # --expose-gc enables global.gc() for accurate memory measurements
+        run: node --expose-gc $(which npx) tsx scripts/benchmark-suite.ts --save
 
-      - name: Publish Benchmark Summary to GitHub Actions Step Summary
+      - name: Publish Benchmark Summary to GitHub Step Summary
         run: |
+          echo "## ⚡ Shardix Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           if [ -f docs/benchmark-latest.md ]; then
             cat docs/benchmark-latest.md >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Commit Updated Benchmark Results
+      - name: Build Documentation Site
+        working-directory: website
+        run: pnpm docs:build
+
+      - name: Commit Updated Benchmark Results + Docs
         if: github.ref == 'refs/heads/main'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/benchmark-latest.json docs/benchmark-latest.md
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore(benchmark): update automated benchmark results [skip ci]" && git push)
+
+      - name: Upload Benchmark JSON as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.sha }}
+          path: docs/benchmark-latest.json
+          retention-days: 90

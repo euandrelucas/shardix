@@ -1,154 +1,143 @@
 {
-<<<<<<< HEAD
-  "timestamp": "2026-08-02T20:34:56.485Z",
+  "timestamp": "2026-08-04T12:34:32.799Z",
   "platform": "win32",
-=======
-  "timestamp": "2026-08-02T20:31:25.303Z",
-  "platform": "linux",
->>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
   "arch": "x64",
-  "nodeVersion": "v22.23.1",
+  "nodeVersion": "v22.22.0",
   "results": [
     {
-      "name": "Shardix Core (Mock Adapter)",
-<<<<<<< HEAD
-      "bootstrapMs": 1.84,
+      "name": "Shardix Core (Mock)",
+      "library": "shardix",
+      "type": "shardix",
+      "bootstrapMs": 4.6,
+      "shutdownMs": 0.52,
+      "memoryHeapMB": 5.48,
+      "memoryRssMB": 147.86,
+      "opsPerSec": 104540,
+      "avgLatencyUs": 9.57,
+      "p50LatencyUs": 7.8,
+      "p95LatencyUs": 13,
+      "p99LatencyUs": 19.9,
+      "concurrentOpsPerSec": 126804
+    },
+    {
+      "name": "Raw Discord.js v14",
+      "library": "discord.js",
+      "type": "raw",
+      "bootstrapMs": 252.86,
+      "shutdownMs": 5.57,
       "memoryHeapMB": 0,
-      "memoryRssMB": 146.2,
-      "opsPerSec": 250080,
-      "avgLatencyUs": 4
+      "memoryRssMB": 152.38,
+      "opsPerSec": 958491,
+      "avgLatencyUs": 1.04,
+      "p50LatencyUs": 0.4,
+      "p95LatencyUs": 1,
+      "p99LatencyUs": 1.8,
+      "concurrentOpsPerSec": 1049703
     },
     {
-      "name": "Raw Discord.js (Real v14 Client)",
-      "bootstrapMs": 74.71,
-      "memoryHeapMB": 65.01,
-      "memoryRssMB": 205.05,
-      "opsPerSec": 685668,
-      "avgLatencyUs": 1.46
-    },
-    {
-      "name": "Shardix + DiscordJSAdapter",
-      "bootstrapMs": 3.76,
+      "name": "Shardix + Discord.js",
+      "library": "discord.js",
+      "type": "shardix",
+      "bootstrapMs": 0.6,
+      "shutdownMs": 2.4,
       "memoryHeapMB": 0,
-      "memoryRssMB": 205.49,
-      "opsPerSec": 248453,
-      "avgLatencyUs": 4.02
+      "memoryRssMB": 155.04,
+      "opsPerSec": 150180,
+      "avgLatencyUs": 6.66,
+      "p50LatencyUs": 4.9,
+      "p95LatencyUs": 9.3,
+      "p99LatencyUs": 15.3,
+      "concurrentOpsPerSec": 182482
     },
     {
-      "name": "Raw Eris (Real v0.18 Client)",
-      "bootstrapMs": 1.4,
-      "memoryHeapMB": 41.07,
-      "memoryRssMB": 242.5,
-      "opsPerSec": 1001014,
-      "avgLatencyUs": 1
-=======
-      "bootstrapMs": 1.73,
-      "memoryHeapMB": 4.72,
-      "memoryRssMB": 113.43,
-      "opsPerSec": 287372,
-      "avgLatencyUs": 3.48
-    },
-    {
-      "name": "Raw Discord.js (Baseline)",
-      "bootstrapMs": 0.05,
+      "name": "Raw Eris v0.18",
+      "library": "eris",
+      "type": "raw",
+      "bootstrapMs": 1.93,
+      "shutdownMs": 0.1,
       "memoryHeapMB": 0,
-      "memoryRssMB": 113.43,
-      "opsPerSec": 3148361,
-      "avgLatencyUs": 0.32
+      "memoryRssMB": 157.98,
+      "opsPerSec": 1281366,
+      "avgLatencyUs": 0.78,
+      "p50LatencyUs": 0.3,
+      "p95LatencyUs": 0.8,
+      "p99LatencyUs": 1.4,
+      "concurrentOpsPerSec": 2298903
     },
     {
-      "name": "Shardix + DiscordJSAdapter",
-      "bootstrapMs": 0.39,
-      "memoryHeapMB": 10.07,
-      "memoryRssMB": 145.55,
-      "opsPerSec": 303251,
-      "avgLatencyUs": 3.3
-    },
-    {
-      "name": "Raw Eris (Baseline)",
-      "bootstrapMs": 0.06,
+      "name": "Shardix + Eris",
+      "library": "eris",
+      "type": "shardix",
+      "bootstrapMs": 0.54,
+      "shutdownMs": 0.26,
       "memoryHeapMB": 0,
-      "memoryRssMB": 145.8,
-      "opsPerSec": 4540394,
-      "avgLatencyUs": 0.22
->>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
+      "memoryRssMB": 160.32,
+      "opsPerSec": 183279,
+      "avgLatencyUs": 5.46,
+      "p50LatencyUs": 4.4,
+      "p95LatencyUs": 8.3,
+      "p99LatencyUs": 12,
+      "concurrentOpsPerSec": 194723
     },
     {
-      "name": "Shardix + ErisAdapter",
-      "bootstrapMs": 0.41,
-<<<<<<< HEAD
+      "name": "Raw Oceanic.js v1.14",
+      "library": "oceanic.js",
+      "type": "raw",
+      "bootstrapMs": 1.62,
+      "shutdownMs": 0.23,
+      "memoryHeapMB": 6.57,
+      "memoryRssMB": 162.26,
+      "opsPerSec": 869319,
+      "avgLatencyUs": 1.15,
+      "p50LatencyUs": 0.5,
+      "p95LatencyUs": 1,
+      "p99LatencyUs": 2,
+      "concurrentOpsPerSec": 1354775
+    },
+    {
+      "name": "Shardix + Oceanic.js",
+      "library": "oceanic.js",
+      "type": "shardix",
+      "bootstrapMs": 0.76,
+      "shutdownMs": 0.19,
       "memoryHeapMB": 0,
-      "memoryRssMB": 243.64,
-      "opsPerSec": 246701,
-      "avgLatencyUs": 4.05
+      "memoryRssMB": 150.35,
+      "opsPerSec": 123641,
+      "avgLatencyUs": 8.09,
+      "p50LatencyUs": 5.6,
+      "p95LatencyUs": 11,
+      "p99LatencyUs": 16.7,
+      "concurrentOpsPerSec": 134485
     },
     {
-      "name": "Raw Oceanic.js (Real v1.14 Client)",
-      "bootstrapMs": 1.39,
-      "memoryHeapMB": 45.01,
-      "memoryRssMB": 281.86,
-      "opsPerSec": 973395,
-      "avgLatencyUs": 1.03
-    },
-    {
-      "name": "Shardix + OceanicAdapter",
-      "bootstrapMs": 0.38,
+      "name": "Raw Discordeno v21",
+      "library": "discordeno",
+      "type": "raw",
+      "bootstrapMs": 9.31,
+      "shutdownMs": 0,
       "memoryHeapMB": 0,
-      "memoryRssMB": 282.57,
-      "opsPerSec": 238811,
-      "avgLatencyUs": 4.19
+      "memoryRssMB": 157.75,
+      "opsPerSec": 1433897,
+      "avgLatencyUs": 0.7,
+      "p50LatencyUs": 0.2,
+      "p95LatencyUs": 0.6,
+      "p99LatencyUs": 1.2,
+      "concurrentOpsPerSec": 3243383
     },
     {
-      "name": "Raw Discordeno (Real v21 Bot)",
-      "bootstrapMs": 5.56,
-      "memoryHeapMB": 9.98,
-      "memoryRssMB": 282.1,
-      "opsPerSec": 7078493,
-      "avgLatencyUs": 0.14
-=======
-      "memoryHeapMB": 8.15,
-      "memoryRssMB": 147.55,
-      "opsPerSec": 307622,
-      "avgLatencyUs": 3.25
-    },
-    {
-      "name": "Raw Oceanic.js (Baseline)",
-      "bootstrapMs": 0.03,
-      "memoryHeapMB": 0.59,
-      "memoryRssMB": 147.67,
-      "opsPerSec": 4633405,
-      "avgLatencyUs": 0.22
-    },
-    {
-      "name": "Shardix + OceanicAdapter",
-      "bootstrapMs": 1.12,
+      "name": "Shardix + Discordeno",
+      "library": "discordeno",
+      "type": "shardix",
+      "bootstrapMs": 0.55,
+      "shutdownMs": 0.17,
       "memoryHeapMB": 0,
-      "memoryRssMB": 156.91,
-      "opsPerSec": 303925,
-      "avgLatencyUs": 3.29
-    },
-    {
-      "name": "Raw Discordeno (Baseline)",
-      "bootstrapMs": 0.05,
-      "memoryHeapMB": 7.01,
-      "memoryRssMB": 156.91,
-      "opsPerSec": 4304819,
-      "avgLatencyUs": 0.23
->>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
-    },
-    {
-      "name": "Shardix + DiscordenoAdapter",
-      "bootstrapMs": 0.35,
-      "memoryHeapMB": 0,
-<<<<<<< HEAD
-      "memoryRssMB": 282.23,
-      "opsPerSec": 250020,
-      "avgLatencyUs": 4
-=======
-      "memoryRssMB": 165.01,
-      "opsPerSec": 307519,
-      "avgLatencyUs": 3.25
->>>>>>> 54b314cab0603fc32f8f5ec63f67457f9e32ecad
+      "memoryRssMB": 160.07,
+      "opsPerSec": 180495,
+      "avgLatencyUs": 5.54,
+      "p50LatencyUs": 4.5,
+      "p95LatencyUs": 7.8,
+      "p99LatencyUs": 11.9,
+      "concurrentOpsPerSec": 193989
     }
   ]
 }
