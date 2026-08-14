@@ -1,0 +1,19 @@
+{
+  "name": "@shardix/storage",
+  "version": "0.9.0",
+  "description": "Official Storage Abstraction Layer for Shardix Framework — Local, S3, R2, MinIO drivers",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": { "build": "tsup", "clean": "rimraf dist" },
+  "publishConfig": { "access": "public" },
+  "dependencies": { "@shardix/common": "workspace:*" },
+  "devDependencies": { "rimraf": "^6.0.1", "tsup": "^8.3.5", "typescript": "^5.7.2" }
+}

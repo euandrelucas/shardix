@@ -462,6 +462,8 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/dashboard-web: {}
+
   packages/discordeno:
     dependencies:
       '@discordeno/bot':
@@ -759,6 +761,9 @@ importers:
         specifier: workspace:*
         version: link:../common
     devDependencies:
+      '@types/ws':
+        specifier: ^8.5.13
+        version: 8.18.1
       rimraf:
         specifier: ^6.0.1
         version: 6.1.3
@@ -768,6 +773,10 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+    optionalDependencies:
+      ws:
+        specifier: ^8.18.0
+        version: 8.21.1
 
   packages/provider-queue:
     dependencies:
@@ -799,6 +808,41 @@ importers:
       '@shardix/ipc':
         specifier: workspace:*
         version: link:../ipc
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/scheduler:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../common
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+    devDependencies:
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.1.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(@swc/core@1.15.46)(postcss@8.5.22)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/storage:
+    dependencies:
+      '@shardix/common':
+        specifier: workspace:*
+        version: link:../common
     devDependencies:
       rimraf:
         specifier: ^6.0.1

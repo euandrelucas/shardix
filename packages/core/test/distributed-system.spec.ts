@@ -69,12 +69,12 @@ describe('Distributed Runtime, Cluster, IPC & Queue (v0.4)', () => {
     app.use(provider);
     await app.start();
 
-    const obs = provider.getService();
-    obs.recordCommand();
-    obs.recordCommand();
+    const recorder = provider.getRecorder();
+    recorder.recordCommand('test', 10);
+    recorder.recordCommand('test', 10);
 
-    const metrics = obs.getMetrics();
-    expect(metrics.totalCommandsExecuted).toBe(2);
+    const metrics = provider.getMetrics();
+    expect(metrics.commandsTotal).toBe(2);
 
     await app.stop();
   });

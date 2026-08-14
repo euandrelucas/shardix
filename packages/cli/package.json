@@ -7,6 +7,10 @@
     "shardix": "./bin/create-shardix.js",
     "create-shardix": "./bin/create-shardix.js"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "publishConfig": {
     "access": "public"
   },

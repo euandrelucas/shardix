@@ -47,7 +47,6 @@ export function createProjectFiles(options: InitProjectOptions): string {
   const selectedAdapter = adapterPkgMap[adapter] || adapterPkgMap.discordjs;
   const selectedClass = adapterClassMap[adapter] || adapterClassMap.discordjs;
 
-  // ─── 1. package.json ────────────────────────────────────────────────────────
   const packageJson = {
     name: projectName,
     version: '1.0.0',
@@ -80,7 +79,6 @@ export function createProjectFiles(options: InitProjectOptions): string {
 
   fs.writeFileSync(path.join(projectDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 
-  // ─── 2. tsconfig.json ───────────────────────────────────────────────────────
   const tsConfig = {
     compilerOptions: {
       target: 'ES2022',
@@ -101,7 +99,6 @@ export function createProjectFiles(options: InitProjectOptions): string {
 
   fs.writeFileSync(path.join(projectDir, 'tsconfig.json'), JSON.stringify(tsConfig, null, 2));
 
-  // ─── 3. .env ────────────────────────────────────────────────────────────────
   const envContent = `# Discord Bot Configuration
 DISCORD_TOKEN=your_discord_bot_token_here
 CLIENT_ID=your_discord_application_id_here
@@ -116,7 +113,6 @@ LOG_LEVEL=info
   fs.writeFileSync(path.join(projectDir, '.env'), envContent);
   fs.writeFileSync(path.join(projectDir, '.env.example'), envContent.replace('your_discord_bot_token_here', 'YOUR_TOKEN').replace('your_discord_application_id_here', 'YOUR_CLIENT_ID'));
 
-  // ─── 4. .gitignore ──────────────────────────────────────────────────────────
   fs.writeFileSync(path.join(projectDir, '.gitignore'), `node_modules/
 dist/
 .env
@@ -124,7 +120,6 @@ dist/
 .turbo/
 `);
 
-  // ─── 5. src/app.module.ts ────────────────────────────────────────────────────
   const appModuleContent = `import { Module } from '@shardix/common';
 import { PingController } from './ping.controller.js';
 import { UserService } from './user.service.js';
@@ -137,7 +132,6 @@ export class AppModule {}
 `;
   fs.writeFileSync(path.join(srcDir, 'app.module.ts'), appModuleContent);
 
-  // ─── 6. src/user.service.ts ─────────────────────────────────────────────────
   const userServiceContent = `import { Injectable } from '@shardix/common';
 
 @Injectable()
@@ -149,7 +143,6 @@ export class UserService {
 `;
   fs.writeFileSync(path.join(srcDir, 'user.service.ts'), userServiceContent);
 
-  // ─── 7. src/ping.controller.ts ──────────────────────────────────────────────
   const pingControllerContent = `import { Controller, SlashCommand, Button, On, Once } from '@shardix/common';
 import { CommandContext, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from '@shardix/common';
 import { UserService } from './user.service.js';
@@ -217,7 +210,6 @@ export class PingController {
 `;
   fs.writeFileSync(path.join(srcDir, 'ping.controller.ts'), pingControllerContent);
 
-  // ─── 8. src/main.ts ─────────────────────────────────────────────────────────
   const mainTsContent = `import 'reflect-metadata';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -251,7 +243,6 @@ bootstrap().catch((err) => {
 `;
   fs.writeFileSync(path.join(srcDir, 'main.ts'), mainTsContent);
 
-  // ─── 9. src/register-commands.ts ─────────────────────────────────────────────
   // Script to register slash commands with Discord API
   const registerCommandsContent = `import 'reflect-metadata';
 import dotenv from 'dotenv';
@@ -312,7 +303,6 @@ registerCommands();
 `;
   fs.writeFileSync(path.join(srcDir, 'register-commands.ts'), registerCommandsContent);
 
-  // ─── 10. README.md ──────────────────────────────────────────────────────────
   const readmeContent = `# ${projectName}
 
 > Discord bot built with **[Shardix Framework](https://shardix.dev)** — Enterprise architecture for Discord applications.
@@ -364,7 +354,6 @@ src/
 `;
   fs.writeFileSync(path.join(projectDir, 'README.md'), readmeContent);
 
-  // ─── 11. Dockerfile (optional) ──────────────────────────────────────────────
   if (options.docker !== false) {
     const dockerfileContent = `FROM node:22-alpine AS builder
 WORKDIR /app
@@ -427,3 +416,4 @@ export function installDependencies(projectDir: string, packageManager: string):
     console.log(pc.yellow(`Run \`${installCmd}\` manually in the project directory.`));
   }
 }
+

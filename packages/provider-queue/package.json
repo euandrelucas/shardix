@@ -16,6 +16,7 @@
     "build": "tsup",
     "clean": "rimraf dist"
   },
+  "publishConfig": { "access": "public" },
   "dependencies": {
     "@shardix/common": "workspace:*"
   },

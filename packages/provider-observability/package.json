@@ -19,7 +19,11 @@
   "dependencies": {
     "@shardix/common": "workspace:*"
   },
+  "optionalDependencies": {
+    "ws": "^8.18.0"
+  },
   "devDependencies": {
+    "@types/ws": "^8.5.13",
     "rimraf": "^6.0.1",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"

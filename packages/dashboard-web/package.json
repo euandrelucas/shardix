@@ -1,0 +1,11 @@
+{
+  "name": "@shardix/dashboard-web",
+  "version": "0.9.0",
+  "description": "Shardix Production Platform Dashboard — Real-time monitoring web interface",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {},
+  "private": true
+}

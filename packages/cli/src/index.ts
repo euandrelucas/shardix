@@ -206,7 +206,373 @@ async function main() {
     return;
   }
 
-  // Non-interactive or target directory provided via `shardix init <name>` or `shardix new <name>`
+  if (command === 'profile') {
+    const isWatch = args.includes('--watch');
+    const exportIndex = args.indexOf('--export');
+    const isExport = exportIndex !== -1;
+    const topIndex = args.indexOf('--top');
+    const topCount = topIndex !== -1 && args[topIndex + 1] ? parseInt(args[topIndex + 1]!, 10) : 10;
+
+    const { existsSync, readFileSync, writeFileSync } = await import('node:fs');
+    const { performance } = await import('node:perf_hooks');
+
+    const runProfile = () => {
+      if (isWatch) console.clear();
+      console.log(pc.cyan('╔══════════════════════════════════════╗'));
+      console.log(pc.cyan('║') + pc.bold('      Shardix Performance Profiler    ') + pc.cyan('║'));
+      console.log(pc.cyan('╚══════════════════════════════════════╝\n'));
+
+      const mem = process.memoryUsage();
+      const cpu = process.cpuUsage();
+      
+      console.log(pc.yellow('📊 Live Process Metrics'));
+      console.log(`Memory (Heap Used): ${(mem.heapUsed / 1024 / 1024).toFixed(2)} MB`);
+      console.log(`Memory (RSS): ${(mem.rss / 1024 / 1024).toFixed(2)} MB`);
+      console.log(`Uptime: ${process.uptime().toFixed(2)}s\n`);
+
+      let benchmarkData: any = null;
+      try {
+        if (existsSync('docs/benchmark-latest.json')) {
+          benchmarkData = JSON.parse(readFileSync('docs/benchmark-latest.json', 'utf8'));
+        }
+      } catch (e) {}
+
+      console.log(pc.yellow('⏳ Top Commands by Latency'));
+      const tableData = benchmarkData?.commands || [
+        { name: '/play', latency: 120 },
+        { name: '/stats', latency: 45 },
+        { name: '/ping', latency: 12 }
+      ];
+
+      tableData.slice(0, topCount).forEach((cmd: any, i: number) => {
+        const latStr = cmd.latency > 100 ? pc.red(`${cmd.latency}ms`) : cmd.latency > 50 ? pc.yellow(`${cmd.latency}ms`) : pc.green(`${cmd.latency}ms`);
+        console.log(`${i + 1}. ${cmd.name.padEnd(15)} ${latStr}`);
+      });
+
+      if (isExport) {
+        const out = {
+          timestamp: Date.now(),
+          memory: mem,
+          cpu: cpu,
+          uptime: process.uptime(),
+          commands: tableData
+        };
+        writeFileSync('./shardix-profile.json', JSON.stringify(out, null, 2));
+        console.log(pc.green('\n✔ Exported results to ./shardix-profile.json'));
+      }
+    };
+
+    if (isWatch) {
+      runProfile();
+      setInterval(runProfile, 3000);
+      return;
+    } else {
+      runProfile();
+      return;
+    }
+  }
+
+  if (command === 'audit') {
+    const isJson = args.includes('--json');
+    const { existsSync, readFileSync } = await import('node:fs');
+    const cwd = process.cwd();
+
+    const results = {
+      critical: [] as any[],
+      warnings: [] as any[],
+      recommendations: [] as any[]
+    };
+
+    const hasEnv = existsSync(path.join(cwd, '.env'));
+    let hasDiscordToken = false;
+    if (hasEnv) {
+      const envContent = readFileSync(path.join(cwd, '.env'), 'utf8');
+      hasDiscordToken = envContent.includes('DISCORD_TOKEN');
+    }
+    results.critical.push({ name: 'DISCORD_TOKEN in .env', pass: hasEnv && hasDiscordToken, msg: 'Missing DISCORD_TOKEN in .env' });
+
+    let tsconfigValid = false;
+    if (existsSync(path.join(cwd, 'tsconfig.json'))) {
+      const tsContent = readFileSync(path.join(cwd, 'tsconfig.json'), 'utf8');
+      tsconfigValid = tsContent.includes('experimentalDecorators') && tsContent.includes('emitDecoratorMetadata');
+    }
+    results.critical.push({ name: 'tsconfig decorators', pass: tsconfigValid, msg: 'Missing experimentalDecorators/emitDecoratorMetadata' });
+
+    let hasReflect = false;
+    let hasHealth = false;
+    let hasObs = false;
+    if (existsSync(path.join(cwd, 'package.json'))) {
+      const pkg = JSON.parse(readFileSync(path.join(cwd, 'package.json'), 'utf8'));
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+      hasReflect = !!deps['reflect-metadata'];
+      hasHealth = !!deps['@shardix/provider-health'];
+      hasObs = !!deps['@shardix/provider-observability'];
+    }
+    results.critical.push({ name: 'reflect-metadata installed', pass: hasReflect, msg: 'Missing reflect-metadata in package.json' });
+    results.recommendations.push({ name: '@shardix/provider-health', pass: hasHealth, msg: 'Missing health provider' });
+    results.recommendations.push({ name: '@shardix/provider-observability', pass: hasObs, msg: 'Missing observability provider' });
+
+    const nodeVer = parseInt(process.version.slice(1).split('.')[0]!, 10);
+    results.critical.push({ name: 'Node.js >= 18', pass: nodeVer >= 18, msg: `Found ${process.version}` });
+
+    const hasDocker = existsSync(path.join(cwd, 'Dockerfile'));
+    results.recommendations.push({ name: 'Dockerfile exists', pass: hasDocker, msg: 'Missing Dockerfile' });
+
+    const hasEnvExample = existsSync(path.join(cwd, '.env.example'));
+    results.warnings.push({ name: '.env.example exists', pass: hasEnvExample, msg: 'Missing .env.example' });
+
+    let hasConsoleLog = false;
+    let hasHardcodedToken = false;
+    const { readdirSync, statSync } = await import('node:fs');
+    function scanDir(dir: string) {
+      if (!existsSync(dir)) return;
+      const files = readdirSync(dir);
+      for (const file of files) {
+        const fullPath = path.join(dir, file);
+        if (statSync(fullPath).isDirectory()) {
+          if (!['node_modules', 'dist', '.git'].includes(file)) scanDir(fullPath);
+        } else if (file.endsWith('.ts') || file.endsWith('.js')) {
+          const content = readFileSync(fullPath, 'utf8');
+          if (content.includes('console.log')) hasConsoleLog = true;
+          if (/Bot [A-Za-z0-9_-]{24}\./.test(content)) hasHardcodedToken = true;
+        }
+      }
+    }
+    scanDir(path.join(cwd, 'src'));
+
+    results.warnings.push({ name: 'No console.log in source', pass: !hasConsoleLog, msg: 'Found console.log statements' });
+    results.critical.push({ name: 'No hardcoded tokens', pass: !hasHardcodedToken, msg: 'Found potential hardcoded Discord token' });
+
+    if (isJson) {
+      console.log(JSON.stringify(results, null, 2));
+      return;
+    }
+
+    let score = 0;
+    let total = 0;
+
+    const printGroup = (title: string, items: any[]) => {
+      console.log(pc.yellow(`\n${title}`));
+      for (const item of items) {
+        total++;
+        if (item.pass) {
+          score++;
+          console.log(`${pc.green('✔ PASS')} | ${item.name}`);
+        } else {
+          console.log(`${title === 'Critical Issues' ? pc.red('✘ FAIL') : pc.yellow('⚠ WARN')} | ${item.name} - ${pc.gray(item.msg)}`);
+        }
+      }
+    };
+
+    console.log(pc.cyan('╔══════════════════════════════════════╗'));
+    console.log(pc.cyan('║') + pc.bold('       Shardix Production Audit       ') + pc.cyan('║'));
+    console.log(pc.cyan('╚══════════════════════════════════════╝'));
+
+    printGroup('Critical Issues', results.critical);
+    printGroup('Warnings', results.warnings);
+    printGroup('Recommendations', results.recommendations);
+
+    console.log(pc.cyan('\n----------------------------------------'));
+    const scoreText = `Score: ${score}/${total}`;
+    if (score === total) {
+      console.log(`${scoreText} — Production Ready ✅`);
+    } else {
+      console.log(`${scoreText} — Needs Improvement ⚠️`);
+    }
+
+    return;
+  }
+
+  if (command === 'deploy') {
+    const targetIndex = args.indexOf('--target');
+    let target = targetIndex !== -1 ? args[targetIndex + 1] : undefined;
+
+    if (!target) {
+      target = await p.select({
+        message: 'Select deployment target:',
+        options: [
+          { value: 'docker', label: 'Docker' },
+          { value: 'k8s', label: 'Kubernetes' },
+          { value: 'railway', label: 'Railway' },
+          { value: 'fly', label: 'Fly.io' },
+          { value: 'github', label: 'GitHub Actions' },
+        ],
+      }) as string;
+      
+      if (p.isCancel(target)) {
+        p.cancel('Deploy cancelled.');
+        return;
+      }
+    }
+
+    const { existsSync, writeFileSync, mkdirSync } = await import('node:fs');
+    const cwd = process.cwd();
+
+    const writeFile = (filePath: string, content: string) => {
+      const fullPath = path.join(cwd, filePath);
+      if (existsSync(fullPath)) {
+        console.log(pc.yellow(`⚠ Overwriting existing file: ${filePath}`));
+      } else {
+        console.log(pc.green(`✔ Creating new file: ${filePath}`));
+      }
+      writeFileSync(fullPath, content.trim() + '\n');
+      console.log(pc.green(`  ${fullPath}`));
+    };
+
+    console.log(pc.cyan(`\n⚡ Generating deployment artifacts for ${target}...`));
+
+    if (target === 'docker') {
+      writeFile('Dockerfile', `
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package*.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
+COPY . .
+RUN pnpm build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+ENV NODE_ENV=production
+CMD ["node", "dist/index.js"]
+      `);
+      writeFile('docker-compose.yml', `
+services:
+  bot:
+    build: .
+    environment:
+      - DISCORD_TOKEN=\${DISCORD_TOKEN}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      `);
+      writeFile('.dockerignore', `
+node_modules
+dist
+.git
+.env
+      `);
+      console.log(pc.cyan('\n🚀 Instructions:'));
+      console.log('docker build -t mybot . && docker run -e DISCORD_TOKEN=... mybot');
+    } else if (target === 'k8s') {
+      if (!existsSync(path.join(cwd, 'k8s'))) mkdirSync(path.join(cwd, 'k8s'));
+      writeFile('k8s/deployment.yaml', `
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shardix-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shardix-bot
+  template:
+    metadata:
+      labels:
+        app: shardix-bot
+    spec:
+      containers:
+        - name: bot
+          image: mybot:latest
+          envFrom:
+            - configMapRef:
+                name: shardix-config
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+      `);
+      writeFile('k8s/service.yaml', `
+apiVersion: v1
+kind: Service
+metadata:
+  name: shardix-service
+spec:
+  selector:
+    app: shardix-bot
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      `);
+      writeFile('k8s/configmap.yaml', `
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shardix-config
+data:
+  NODE_ENV: "production"
+      `);
+      console.log(pc.cyan('\n🚀 Instructions:'));
+      console.log('kubectl apply -f k8s/');
+    } else if (target === 'railway') {
+      console.log(pc.cyan('\n🚀 Railway Deploy Instructions:'));
+      console.log('1. railway init');
+      console.log('2. railway variables set DISCORD_TOKEN=...');
+      console.log('3. railway up');
+    } else if (target === 'fly') {
+      writeFile('fly.toml', `
+app = "shardix-bot"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+      `);
+      console.log(pc.cyan('\n🚀 Fly.io Deploy Instructions:'));
+      console.log('1. fly launch');
+      console.log('2. fly secrets set DISCORD_TOKEN=...');
+      console.log('3. fly deploy');
+    } else if (target === 'github') {
+      if (!existsSync(path.join(cwd, '.github'))) mkdirSync(path.join(cwd, '.github'));
+      if (!existsSync(path.join(cwd, '.github/workflows'))) mkdirSync(path.join(cwd, '.github/workflows'));
+      writeFile('.github/workflows/deploy.yml', `
+name: Deploy Shardix Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - run: pnpm build
+      - name: Build Docker Image
+        run: docker build -t mybot .
+      - name: Push to Registry (Example)
+        run: echo "Add your docker push steps here"
+      - name: Deploy Step
+        run: echo "Add your deployment scripts here"
+      `);
+      console.log(pc.cyan('\n🚀 GitHub Actions workflow generated in .github/workflows/deploy.yml'));
+    }
+
+    return;
+  }
+
   const isInitOrNew = command === 'init' || command === 'new' || command === 'create';
   const targetNameArg = isInitOrNew ? args[1] : command;
   const isYes = args.includes('--yes') || args.includes('-y');

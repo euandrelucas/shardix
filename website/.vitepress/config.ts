@@ -85,6 +85,19 @@ export default defineConfig({
               ],
             },
             {
+              text: '🚀 Production Platform (v0.9)',
+              collapsed: false,
+              items: [
+                { text: 'Health Checks & Probes', link: '/guide/health' },
+                { text: 'Scheduler (@Cron, @Interval)', link: '/guide/scheduler' },
+                { text: 'Observability & Live Metrics', link: '/guide/observability' },
+                { text: 'Queue System', link: '/guide/queue' },
+                { text: 'Event Bus', link: '/guide/event-bus' },
+                { text: 'Storage Layer', link: '/guide/storage' },
+                { text: 'Deploy Tools', link: '/guide/deploy' },
+              ],
+            },
+            {
               text: 'Ecosystem & Scaling',
               collapsed: false,
               items: [
@@ -164,6 +177,19 @@ export default defineConfig({
                 { text: 'Adapters Multi-Biblioteca', link: '/pt/guide/adapters' },
                 { text: 'Runtimes (Gateway, HTTP, Híbrido)', link: '/pt/guide/runtimes' },
                 { text: 'Benchmarks de Performance', link: '/pt/guide/benchmarks' },
+              ],
+            },
+            {
+              text: '🚀 Plataforma de Produção (v0.9)',
+              collapsed: false,
+              items: [
+                { text: 'Health Checks', link: '/pt/guide/health' },
+                { text: 'Scheduler', link: '/pt/guide/scheduler' },
+                { text: 'Observabilidade', link: '/pt/guide/observability' },
+                { text: 'Sistema de Filas', link: '/pt/guide/queue' },
+                { text: 'Event Bus', link: '/pt/guide/event-bus' },
+                { text: 'Camada de Storage', link: '/pt/guide/storage' },
+                { text: 'Ferramentas de Deploy', link: '/pt/guide/deploy' },
               ],
             },
             {

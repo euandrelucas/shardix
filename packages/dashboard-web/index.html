@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shardix Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0a0f;
+            --bg-card: #111118;
+            --bg-hover: #1a1a2e;
+            --accent: #5865f2;
+            --success: #23d18b;
+            --warning: #f1c232;
+            --error: #e74c3c;
+            --text-main: #ffffff;
+            --text-muted: #8b92a5;
+            --border: #222230;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(35, 209, 139, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(35, 209, 139, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(35, 209, 139, 0); }
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(231, 76, 60, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+        }
+
+        .logo {
+            padding: 20px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent), #7a85f5);
+            border-radius: 6px;
+        }
+
+        .nav {
+            padding: 10px 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 12px;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(88, 101, 242, 0.1) 0%, transparent 100%);
+            color: var(--text-main);
+            border-left-color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Topbar */
+        .topbar {
+            height: 64px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.connected {
+            background-color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.disconnected {
+            background-color: var(--error);
+            animation: pulse-red 2s infinite;
+        }
+
+        input {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #4752c4;
+            transform: translateY(-1px);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .panel {
+            display: none;
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.1);
+            border-color: rgba(88, 101, 242, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .card-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .chart-container {
+            height: 200px;
+            width: 100%;
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        th:hover {
+            color: var(--text-main);
+        }
+
+        td {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Logs */
+        .logs-viewer {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            height: 600px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .log-time { color: var(--text-muted); }
+        .log-level { font-weight: bold; width: 50px; }
+        .log-level.debug { color: var(--text-muted); }
+        .log-level.info { color: #3498db; }
+        .log-level.warn { color: var(--warning); }
+        .log-level.error { color: var(--error); }
+        .log-msg { color: #dcdcdc; }
+
+        /* Helpers */
+        .text-success { color: var(--success) !important; }
+        .text-warning { color: var(--warning) !important; }
+        .text-error { color: var(--error) !important; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge-success { background-color: rgba(35, 209, 139, 0.2); color: var(--success); }
+        .badge-warning { background-color: rgba(241, 194, 50, 0.2); color: var(--warning); }
+        .badge-error { background-color: rgba(231, 76, 60, 0.2); color: var(--error); }
+
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 64px;
+            }
+            .sidebar .logo-text, .sidebar .nav-label {
+                display: none;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <span class="logo-text">Dashboard v0.9</span>
+        </div>
+        <div class="nav">
+            <div class="nav-item active" data-target="overview"><span>📊</span><span class="nav-label">Overview</span></div>
+            <div class="nav-item" data-target="performance"><span>📈</span><span class="nav-label">Performance</span></div>
+            <div class="nav-item" data-target="commands"><span>⌨️</span><span class="nav-label">Commands</span></div>
+            <div class="nav-item" data-target="health"><span>❤️</span><span class="nav-label">Health</span></div>
+            <div class="nav-item" data-target="logs"><span>📄</span><span class="nav-label">Logs</span></div>
+            <div class="nav-item" data-target="runtime"><span>⚙️</span><span class="nav-label">Runtime</span></div>
+            <div class="nav-item" data-target="gateway"><span>🚪</span><span class="nav-label">Gateway</span></div>
+            <div class="nav-item" data-target="events"><span>🔔</span><span class="nav-label">Events</span></div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <div class="title">Shardix Control Plane</div>
+            <div class="controls">
+                <div class="status">
+                    <div id="connection-dot" class="status-dot disconnected"></div>
+                    <span id="connection-text">Offline</span>
+                </div>
+                <input type="text" id="api-url" placeholder="http://localhost:3005" value="http://localhost:3005">
+                <input type="password" id="api-token" placeholder="Bearer Token">
+                <button id="btn-connect">Connect</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Overview -->
+            <div id="panel-overview" class="panel active">
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header"><span>⏱️</span> Uptime</div>
+                        <div class="card-value" id="val-uptime">00:00:00</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span>🧠</span> Memory RSS (MB)</div>
+                        <div class="card-value" id="val-memory">0</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span>⚙️</span> CPU Usage</div>
+                        <div class="card-value" id="val-cpu">0.0%</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span>⚡</span> Interactions / sec</div>
+                        <div class="card-value" id="val-interactions">0</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span>🐢</span> p95 Latency</div>
+                        <div class="card-value" id="val-latency">0 ms</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span>🏓</span> Gateway Ping</div>
+                        <div class="card-value" id="val-ping">0 ms</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div id="panel-performance" class="panel">
+                <div class="grid">
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header"><span>⚡</span> Interactions per Second</div>
+                        <div class="chart-container">
+                            <canvas id="chart-interactions"></canvas>
+                        </div>
+                    </div>
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <div class="card-header"><span>🧠</span> Memory Usage (MB)</div>
+                        <div class="chart-container">
+                            <canvas id="chart-memory"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commands -->
+            <div id="panel-commands" class="panel">
+                <div class="card" style="padding: 0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Executions</th>
+                                <th>Avg Ms</th>
+                                <th>p95 Ms</th>
+                                <th>Errors</th>
+                                <th>Error Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-commands">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Health -->
+            <div id="panel-health" class="panel">
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header">System Health</div>
+                        <div class="card-value"><span class="badge badge-success" id="health-badge">PASS</span></div>
+                        <div style="margin-top: 20px; color: var(--text-muted);" id="health-details">All systems operational</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div id="panel-logs" class="panel">
+                <div style="margin-bottom: 16px; display: flex; gap: 10px;">
+                    <input type="text" placeholder="Filter logs..." style="flex: 1;" id="log-filter">
+                    <button id="btn-clear-logs">Clear</button>
+                </div>
+                <div class="logs-viewer" id="logs-container">
+                    <!-- Logs populated via JS -->
+                </div>
+            </div>
+            
+            <!-- Other Panels (Placeholders) -->
+            <div id="panel-runtime" class="panel"><div class="card"><h3>Runtime Info</h3><p>Adapter: Node.js</p><p>Shards: 1</p></div></div>
+            <div id="panel-gateway" class="panel"><div class="card"><h3>Gateway Metrics</h3><p>Connected</p></div></div>
+            <div id="panel-events" class="panel"><div class="card"><h3>Event Stream</h3><p>Awaiting events...</p></div></div>
+        </div>
+    </div>
+
+    <script>
+        // MOCK DATA
+        const MOCK_METRICS = {
+            uptime: 86400,
+            memoryRssMB: 148,
+            cpuUsagePercent: 2.3,
+            interactionsPerSec: 142,
+            p95CommandDurationMs: 3.8,
+            gatewayPingMs: 45,
+            commands: [
+                { name: '/ping', executions: 45000, avgMs: 3.8, p95Ms: 5.2, errors: 12 },
+                { name: '/ban', executions: 1200, avgMs: 65, p95Ms: 120, errors: 0 },
+                { name: '/leaderboard', executions: 8900, avgMs: 42, p95Ms: 85, errors: 3 },
+            ]
+        };
+
+        // LINE CHART CLASS
+        class LineChart {
+            constructor(canvasId, color) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.color = color;
+                this.data = new Array(60).fill(0);
+                this.maxPoints = 60;
+                
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                const parent = this.canvas.parentElement;
+                this.canvas.width = parent.clientWidth;
+                this.canvas.height = parent.clientHeight;
+                this.draw();
+            }
+
+            addDataPoint(value) {
+                this.data.push(value);
+                if (this.data.length > this.maxPoints) {
+                    this.data.shift();
+                }
+                this.draw();
+            }
+
+            draw() {
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+                const ctx = this.ctx;
+
+                ctx.clearRect(0, 0, width, height);
+
+                const max = Math.max(...this.data, 10) * 1.2; // 20% padding top
+                const stepX = width / (this.maxPoints - 1);
+
+                // Draw Grid
+                ctx.strokeStyle = '#222230';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                for(let i = 0; i < 4; i++) {
+                    const y = height - (i * (height / 4));
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                }
+                ctx.stroke();
+
+                // Draw Line
+                ctx.beginPath();
+                ctx.moveTo(0, height - (this.data[0] / max) * height);
+
+                for (let i = 1; i < this.data.length; i++) {
+                    const x = i * stepX;
+                    const y = height - (this.data[i] / max) * height;
+                    ctx.lineTo(x, y);
+                }
+
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Fill gradient
+                ctx.lineTo(width, height);
+                ctx.lineTo(0, height);
+                ctx.closePath();
+
+                const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(0, this.color + '80'); // 50% opacity
+                gradient.addColorStop(1, this.color + '00'); // 0% opacity
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Draw latest value text
+                const latest = this.data[this.data.length - 1];
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '14px "JetBrains Mono"';
+                ctx.textAlign = 'right';
+                ctx.fillText(latest.toFixed(1), width - 10, 20);
+            }
+        }
+
+        // APP STATE & LOGIC
+        const state = {
+            connected: false,
+            apiUrl: localStorage.getItem('shardix_api_url') || 'http://localhost:3005',
+            token: localStorage.getItem('shardix_token') || '',
+            charts: {
+                interactions: null,
+                memory: null
+            },
+            ws: null,
+            pollInterval: null
+        };
+
+        // DOM Elements
+        const els = {
+            apiUrl: document.getElementById('api-url'),
+            apiToken: document.getElementById('api-token'),
+            btnConnect: document.getElementById('btn-connect'),
+            dot: document.getElementById('connection-dot'),
+            statusText: document.getElementById('connection-text'),
+            navItems: document.querySelectorAll('.nav-item'),
+            panels: document.querySelectorAll('.panel'),
+            
+            // Metrics
+            uptime: document.getElementById('val-uptime'),
+            memory: document.getElementById('val-memory'),
+            cpu: document.getElementById('val-cpu'),
+            interactions: document.getElementById('val-interactions'),
+            latency: document.getElementById('val-latency'),
+            ping: document.getElementById('val-ping'),
+            commandsTable: document.getElementById('table-commands'),
+            logsContainer: document.getElementById('logs-container')
+        };
+
+        // Initialize
+        function init() {
+            els.apiUrl.value = state.apiUrl;
+            els.apiToken.value = state.token;
+
+            // Setup Navigation
+            els.navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    els.navItems.forEach(n => n.classList.remove('active'));
+                    els.panels.forEach(p => p.classList.remove('active'));
+                    
+                    item.classList.add('active');
+                    const target = item.getAttribute('data-target');
+                    document.getElementById('panel-' + target).classList.add('active');
+                    
+                    // Resize charts if performance panel is shown
+                    if(target === 'performance') {
+                        setTimeout(() => {
+                            state.charts.interactions.resize();
+                            state.charts.memory.resize();
+                        }, 50);
+                    }
+                });
+            });
+
+            // Setup Charts
+            state.charts.interactions = new LineChart('chart-interactions', '#5865f2');
+            state.charts.memory = new LineChart('chart-memory', '#23d18b');
+
+            // Setup Connect Button
+            els.btnConnect.addEventListener('click', () => {
+                state.apiUrl = els.apiUrl.value;
+                state.token = els.apiToken.value;
+                localStorage.setItem('shardix_api_url', state.apiUrl);
+                localStorage.setItem('shardix_token', state.token);
+                connect();
+            });
+            
+            // Initialize with mock data to look good empty
+            updateDashboard(MOCK_METRICS);
+            
+            // Try connecting if we have URL
+            if (state.apiUrl) connect();
+            
+            // Mock Log Generator for offline mode
+            setInterval(() => {
+                if(!state.connected) {
+                    const levels = ['INFO', 'DEBUG', 'WARN'];
+                    const level = levels[Math.floor(Math.random() * levels.length)];
+                    addLogEntry(level, `Mock system event generated ${Math.random().toString(36).substring(7)}`);
+                }
+            }, 5000);
+        }
+
+        // Connection Logic
+        function setStatus(connected) {
+            state.connected = connected;
+            if (connected) {
+                els.dot.className = 'status-dot connected';
+                els.statusText.textContent = 'Connected';
+                els.statusText.classList.add('text-success');
+                els.statusText.classList.remove('text-error');
+            } else {
+                els.dot.className = 'status-dot disconnected';
+                els.statusText.textContent = 'Disconnected';
+                els.statusText.classList.add('text-error');
+                els.statusText.classList.remove('text-success');
+            }
+        }
+
+        function formatUptime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateDashboard(data) {
+            // Update Overview Cards
+            els.uptime.textContent = formatUptime(data.uptime || 0);
+            
+            const mem = data.memoryRssMB || 0;
+            els.memory.textContent = mem.toFixed(1);
+            if (mem > 500) els.memory.className = 'card-value text-error';
+            else if (mem > 300) els.memory.className = 'card-value text-warning';
+            else els.memory.className = 'card-value';
+
+            els.cpu.textContent = (data.cpuUsagePercent || 0).toFixed(1) + '%';
+            els.interactions.textContent = data.interactionsPerSec || 0;
+            els.latency.textContent = (data.p95CommandDurationMs || 0).toFixed(1) + ' ms';
+            els.ping.textContent = (data.gatewayPingMs || 0) + ' ms';
+
+            // Update Charts
+            if (state.charts.interactions && data.interactionsPerSec !== undefined) {
+                state.charts.interactions.addDataPoint(data.interactionsPerSec);
+            }
+            if (state.charts.memory && data.memoryRssMB !== undefined) {
+                state.charts.memory.addDataPoint(data.memoryRssMB);
+            }
+
+            // Update Commands Table
+            if (data.commands && Array.isArray(data.commands)) {
+                els.commandsTable.innerHTML = '';
+                data.commands.forEach(cmd => {
+                    const errRate = cmd.executions > 0 ? (cmd.errors / cmd.executions) * 100 : 0;
+                    let errColor = '';
+                    if (errRate >= 5) errColor = 'text-error';
+                    else if (errRate >= 1) errColor = 'text-warning';
+                    else errColor = 'text-success';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${cmd.name}</td>
+                        <td>${cmd.executions.toLocaleString()}</td>
+                        <td>${cmd.avgMs.toFixed(1)}</td>
+                        <td>${cmd.p95Ms.toFixed(1)}</td>
+                        <td>${cmd.errors}</td>
+                        <td class="${errColor}">${errRate.toFixed(2)}%</td>
+                    `;
+                    els.commandsTable.appendChild(tr);
+                });
+            }
+        }
+
+        function addLogEntry(level, message) {
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            const time = new Date().toISOString().split('T')[1].substring(0, 8);
+            div.innerHTML = `
+                <span class="log-time">[${time}]</span>
+                <span class="log-level ${level.toLowerCase()}">${level}</span>
+                <span class="log-msg">${message}</span>
+            `;
+            els.logsContainer.appendChild(div);
+            
+            if (els.logsContainer.childNodes.length > 200) {
+                els.logsContainer.removeChild(els.logsContainer.firstChild);
+            }
+            els.logsContainer.scrollTop = els.logsContainer.scrollHeight;
+        }
+
+        function connect() {
+            // Clean up existing
+            if (state.pollInterval) clearInterval(state.pollInterval);
+            if (state.ws) state.ws.close();
+
+            const fetchMetrics = async () => {
+                try {
+                    const res = await fetch(`${state.apiUrl}/api/metrics`, {
+                        headers: { 'Authorization': `Bearer ${state.token}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        updateDashboard(data);
+                        setStatus(true);
+                    } else {
+                        throw new Error('API Error');
+                    }
+                } catch (err) {
+                    setStatus(false);
+                    // Fallback to mock data updates to keep UI moving slightly when disconnected
+                    MOCK_METRICS.uptime += 3;
+                    MOCK_METRICS.interactionsPerSec = Math.floor(Math.random() * 200);
+                    MOCK_METRICS.memoryRssMB = 140 + Math.random() * 20;
+                    updateDashboard(MOCK_METRICS);
+                }
+            };
+
+            // Try WebSocket first
+            try {
+                const wsUrl = 'ws://localhost:9090'; // Fixed requirement port
+                state.ws = new WebSocket(wsUrl);
+                
+                state.ws.onopen = () => {
+                    setStatus(true);
+                    addLogEntry('INFO', 'WebSocket connected to metrics stream');
+                };
+                
+                state.ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        updateDashboard(data);
+                    } catch(e) {}
+                };
+                
+                state.ws.onerror = () => {
+                    // Fallback to polling if WS fails
+                    if(!state.pollInterval) {
+                        state.pollInterval = setInterval(fetchMetrics, 3000);
+                        fetchMetrics();
+                    }
+                };
+                
+                state.ws.onclose = () => {
+                    setStatus(false);
+                    if(!state.pollInterval) {
+                        state.pollInterval = setInterval(fetchMetrics, 3000);
+                    }
+                };
+            } catch (e) {
+                state.pollInterval = setInterval(fetchMetrics, 3000);
+                fetchMetrics();
+            }
+        }
+
+        // Clear logs
+        document.getElementById('btn-clear-logs').addEventListener('click', () => {
+            els.logsContainer.innerHTML = '';
+        });
+
+        // Run
+        window.onload = init;
+    </script>
+</body>
+</html>

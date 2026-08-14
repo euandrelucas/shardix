@@ -1,4 +1,4 @@
-name: Automated Release & Publish
+name: Release
 
 on:
   push:
@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   release:
-    name: Publish to npm
+    name: Version or Publish
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -18,32 +18,38 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 11.7.0
+          version: 11
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build All Packages
+      - name: Build all packages
         run: pnpm build
 
-      - name: Publish to npm (via changeset publish)
-        run: pnpm changeset publish --no-git-tag
+      - name: Create release PR or publish to npm
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish
+          version: pnpm changeset version
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
         env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
