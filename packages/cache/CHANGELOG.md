@@ -1,5 +1,12 @@
 # @shardix/cache
 
+## 0.8.2
+
+### Patch Changes
+
+- Updated dependencies [e71bb18]
+  - @shardix/common@0.8.2
+
 ## 0.2.0
 
 ### Minor Changes

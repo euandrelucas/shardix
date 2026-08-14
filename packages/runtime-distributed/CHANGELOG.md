@@ -1,5 +1,15 @@
 # @shardix/runtime-distributed
 
+## 0.8.2
+
+### Patch Changes
+
+- Updated dependencies [e71bb18]
+  - @shardix/core@0.8.2
+  - @shardix/common@0.8.2
+  - @shardix/cluster@0.8.2
+  - @shardix/ipc@0.8.2
+
 ## 0.5.0
 
 ### Minor Changes

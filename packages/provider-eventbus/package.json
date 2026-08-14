@@ -1,6 +1,6 @@
 {
   "name": "@shardix/provider-eventbus",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Official EventBus Provider for Shardix Framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,9 @@
     "build": "tsup",
     "clean": "rimraf dist"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@shardix/common": "workspace:*",
     "@shardix/events": "workspace:*"
