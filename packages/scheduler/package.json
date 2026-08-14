@@ -1,6 +1,6 @@
 {
   "name": "@shardix/scheduler",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Official Scheduler Provider for Shardix Framework — @Cron, @Interval, @Timeout decorators",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,9 @@
     "build": "tsup",
     "clean": "rimraf dist"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@shardix/common": "workspace:*",
     "reflect-metadata": "^0.2.2"
