@@ -20,7 +20,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "fastify": "^5.2.0",
+    "fastify": "^5.12.1",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
